@@ -62,7 +62,7 @@ const Login = ({ navigation }) => {
   const checkLogin = async () => {
     // This method is called to check if the user credentials lineup with the dev database data, to check if requests are recieved.
 
-    const apiUrl = 'https://dark-ruby-brown-bear-sock.cyclic.app/';
+    const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
 
     try {
       //set the loading state to true
