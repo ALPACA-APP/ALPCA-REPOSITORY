@@ -44,6 +44,26 @@ app.get('/api/fetchAllProducts/:uuid', (req, res) => {
     }
 });
 
+const reqProductSearch = async (uuid, name) => {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('uuid', uuid)
+        .like('name', `%${name}%`) // get everything that contains what is typed
+    return data;
+}
+
+app.get('/api/fetchProductSearch/:uuid/:name', (req, res) => {
+    const uuid = req.params.uuid;
+    const name = req.params.name;
+    try {
+        const data = reqProductSearch(uuid, name);
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 app.listen(port, () => {
     console.log(`backend is listening at http://localhost:${port}`);
 });
