@@ -26,12 +26,22 @@ app.get('/', (req, res) => {
     }).catch((error) => { console.log(error) });
 });
 
-app.get('/api', (req, res) => {
-    res.json({ message: 'Hello from API side of the app!' });
-});
+const reqProducts = async (uuid) => {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('uuid', uuid)
+    return data;
+}
 
-app.get('/ap/:id', (req, res) => {
-    res.json({ message: `You access the api with id: ${req.params.id}` });
+app.get('/api/fetchAllProducts/:uuid', (req, res) => {
+    const uuid = req.params.uuid;
+    try {
+        const data = reqProducts(uuid);
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 app.listen(port, () => {
