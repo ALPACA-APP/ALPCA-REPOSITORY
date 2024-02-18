@@ -30,12 +30,6 @@
     },
     "plugins": [
       [
-        "expo-camera",
-        {
-          "cameraPermission": "Allow ALPACA to access your camera."
-        }
-      ],
-      [
         "expo-barcode-scanner",
         {
           "cameraPermission": "Allow ALPACA to access camera."
