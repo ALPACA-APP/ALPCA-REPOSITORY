@@ -15,25 +15,21 @@ export default function Scan() {
     getCameraPermissions();
   }, []);
 
-
-
   if (hasPermission === null) {
     return <Text>No access to camera</Text>;
   } else if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
 
+
+
+
+  
   return (
-    <View style={styles.container}>
-      <CameraView style={StyleSheet.absoluteFillObject} />
+    <View style={ScanStyles.absoluteFillObject}>
+      <CameraView style={ScanStyles.absoluteFillObject} />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-});
+
