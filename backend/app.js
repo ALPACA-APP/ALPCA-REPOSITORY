@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const crypto = require('crypto');
 const nuestroCodigo = require("./function.js");
 
 const { createClient } = require('@supabase/supabase-js')
@@ -72,57 +73,23 @@ function uuidv4() {
     );
 }
 
-// //User insertion into the database
-// const insertNewUser = async (newUser) => {
-//     console.log("Entra en la funcion")
-//     const { data, error } = await supabase
-//         .from('users')
-//         .insert({
-//             uuid: uuidv4(),
-//             username: newUser.username,
-//             password_hash: newUser.password_hash,
-//             notifications: true,
-//             autoDelete: true,
-//             colourBlind: 0,
-//             fontSize: 0,
-//             language: 0,
-//         })
-// }
-
-// app.post('/', async (req, res) =>{
-
-//     //create new user object to insert into the database
-//     const newUser = {
-//         username: req.body.username,
-//         password_hash: req.body.password_hash
-//     };
-
-//     await insertNewUser(newUser).catch((error) => { console.log(error) });
-//     res.sendStatus(200);
-// });
-
 const insertNewUser = async (newUser) => {
-    console.log("Entra en la funcion");
-    const { data, error } = await supabase
+    const {error} = await supabase
         .from('users')
         .insert({ uuid: uuidv4(), username: newUser.username, password_hash: newUser.password_hash, notifications: true, autoDelete: true, colourBlind: 0, fontSize: 0, language: 0});
 };
 
 // Handle POST requests to the root endpoint
-app.post('/', async (req, res) => {
-    console.log("Entra en POST");
-
+app.post('/RegisterUser', async (req, res) => {
     // Create a new user object to insert into the database
     const newUser = {
         username: req.body.username,
-        password_hash: req.body.password_hash,
+        password_hash: req.body.hashedPassword
     };
-    console.log(req.body.username);
 
     try {
         // Insert the new user into the database
         await insertNewUser(newUser);
-        console.log("Inserted");
         res.sendStatus(201);
     } catch (error) {
         console.error(error);
