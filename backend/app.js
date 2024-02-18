@@ -27,12 +27,42 @@ app.get('/', (req, res) => {
     }).catch((error) => { console.log(error) });
 });
 
-app.get('/api', (req, res) => {
-    res.json({ message: 'Hello from API side of the app!' });
+const reqProducts = async (uuid) => {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('uuid', uuid)
+    return data;
+}
+
+app.get('/api/fetchAllProducts/:uuid', (req, res) => {
+    const uuid = req.params.uuid;
+    try {
+        const data = reqProducts(uuid);
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
 });
 
-app.get('/api/:id', (req, res) => {
-    res.json({ message: `You access the api with id: ${req.params.id}` });
+const reqProductSearch = async (uuid, name) => {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('uuid', uuid)
+        .like('name', `%${name}%`) // get everything that contains what is typed
+    return data;
+}
+
+app.get('/api/fetchProductSearch/:uuid/:name', (req, res) => {
+    const uuid = req.params.uuid;
+    const name = req.params.name;
+    try {
+        const data = reqProductSearch(uuid, name);
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 
