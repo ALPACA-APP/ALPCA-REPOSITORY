@@ -1,45 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { CameraView, Camera } from "expo-camera/next";
+import React, { useState, useEffect } from 'react';
+import { Alert } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 
+import ScanStyles from './ScanStyles';
 
-import ScanStyles from './ScanStyles'; // Assuming you still need styles
-
-export default function Scan() {
+export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
 
   useEffect(() => {
-    const getCameraPermissions = async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
-    getCameraPermissions();
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
   }, []);
 
-  if (hasPermission === null) {
-    return <Text>No access to camera</Text>;
-  } else if (hasPermission === false) { 
-    return <Text>No access to camera</Text>;
-  }
-
-  const scanned = (data) => {
-    console.log(data);
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    Alert.alert(
+      `${data}`,'',
+      [{
+          text: 'OK',
+          onPress: () => setScanned(false),
+        },],
+    );
   };
 
-
-  
   return (
-    <View style={ScanStyles.absoluteFillObject}>
-      <CameraView style={ScanStyles.absoluteFillObject} 
-
-          barCodeScannerSettings={{
-            barCodeTypes: ["qr" ],
-          }}
-          onBarCodeScanned={scanned}
+      <BarCodeScanner
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        style={ScanStyles.absoluteFillObject}
       />
-    </View>
   );
 }
-
-
