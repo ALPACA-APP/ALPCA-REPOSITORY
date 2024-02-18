@@ -11,6 +11,7 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 const port = 3000;
 
 app.use(cors());
+app.use(express.json());
 
 const resquestDevData = async () => {
     const { data, error } = await supabase
@@ -61,6 +62,72 @@ app.get('/api/fetchProductSearch/:uuid/:name', (req, res) => {
         res.json(data);
     } catch (error) {
         console.log(error);
+    }
+});
+
+
+function uuidv4() {
+    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
+
+// //User insertion into the database
+// const insertNewUser = async (newUser) => {
+//     console.log("Entra en la funcion")
+//     const { data, error } = await supabase
+//         .from('users')
+//         .insert({
+//             uuid: uuidv4(),
+//             username: newUser.username,
+//             password_hash: newUser.password_hash,
+//             notifications: true,
+//             autoDelete: true,
+//             colourBlind: 0,
+//             fontSize: 0,
+//             language: 0,
+//         })
+// }
+
+// app.post('/', async (req, res) =>{
+
+//     //create new user object to insert into the database
+//     const newUser = {
+//         username: req.body.username,
+//         password_hash: req.body.password_hash
+//     };
+
+//     await insertNewUser(newUser).catch((error) => { console.log(error) });
+//     res.sendStatus(200);
+// });
+
+const insertNewUser = async (newUser) => {
+    console.log("Entra en la funcion");
+    const { data, error } = await supabase
+        .from('users')
+        .insert({ uuid: uuidv4(), username: newUser.username, password_hash: newUser.password_hash, notifications: true, autoDelete: true, colourBlind: 0, fontSize: 0, language: 0});
+};
+
+// Handle POST requests to the root endpoint
+app.post('/', async (req, res) => {
+    console.log("Entra en POST");
+
+    // Create a new user object to insert into the database
+    const newUser = {
+        username: req.body.username,
+        password_hash: req.body.password_hash,
+    };
+    console.log(req.body.username);
+
+    try {
+        // Insert the new user into the database
+        await insertNewUser(newUser);
+        console.log("Inserted");
+        res.sendStatus(201);
+    } catch (error) {
+        console.error(error);
+        // Send a 500 (Internal Server Error) status code and an error message
+        res.status(500).send('Internal Server Error');
     }
 });
 

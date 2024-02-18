@@ -24,8 +24,8 @@ export default function MainView({ navigation }) {
   }
 
 
-  const alertTest2 = () => {
-    //navigation.navigate('Register');
+  const GoToRegister = () => {
+    navigation.navigate('Register');
   };
 
   return (
@@ -39,7 +39,7 @@ export default function MainView({ navigation }) {
           </View>
           <View style={styles.front}>
         <LoginButton displayText="Login" IconURI={LoginIcon} clickHandler={GoToLogin} /> 
-        <LoginButton displayText="Register" IconURI={RegIcon} clickHandler={alertTest2} />
+        <LoginButton displayText="Register" IconURI={RegIcon} clickHandler={GoToRegister} />
           </View>
           <Text style={styles.brand}>ALPACA © 2024</Text>
         </SafeAreaView>
