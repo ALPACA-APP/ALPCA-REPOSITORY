@@ -35,10 +35,10 @@ const reqProducts = async (uuid) => {
     return data;
 }
 
-app.get('/api/fetchAllProducts/:uuid', (req, res) => {
+app.get('/api/fetchAllProducts/:uuid', async (req, res) => {
     const uuid = req.params.uuid;
     try {
-        const data = reqProducts(uuid);
+        const data = await reqProducts(uuid);
         res.json(data);
     } catch (error) {
         console.log(error);
@@ -54,11 +54,11 @@ const reqProductSearch = async (uuid, name) => {
     return data;
 }
 
-app.get('/api/fetchProductSearch/:uuid/:name', (req, res) => {
+app.get('/api/fetchProductSearch/:uuid/:name', async (req, res) => {
     const uuid = req.params.uuid;
     const name = req.params.name;
     try {
-        const data = reqProductSearch(uuid, name);
+        const data = await reqProductSearch(uuid, name);
         res.json(data);
     } catch (error) {
         console.log(error);
@@ -68,7 +68,7 @@ app.get('/api/fetchProductSearch/:uuid/:name', (req, res) => {
 
 function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
-      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     );
 }
 
@@ -105,7 +105,7 @@ const insertNewUser = async (newUser) => {
     console.log("Entra en la funcion");
     const { data, error } = await supabase
         .from('users')
-        .insert({ uuid: uuidv4(), username: newUser.username, password_hash: newUser.password_hash, notifications: true, autoDelete: true, colourBlind: 0, fontSize: 0, language: 0});
+        .insert({ uuid: uuidv4(), username: newUser.username, password_hash: newUser.password_hash, notifications: true, autoDelete: true, colourBlind: 0, fontSize: 0, language: 0 });
 };
 
 // Handle POST requests to the root endpoint
