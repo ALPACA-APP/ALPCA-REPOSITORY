@@ -143,7 +143,10 @@ const Login = ({ navigation }) => {
             
 
             <TouchableHighlight style={LoginStyles.button} onPress={() => {
-              checkLogin();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'MainNavigation' }],
+              })
             }}>
               <Text style={LoginStyles.buttonText}>Submit</Text>
             </TouchableHighlight>
