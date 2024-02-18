@@ -1,5 +1,6 @@
 {
   "expo": {
+
     "name": "frontend",
     "slug": "frontend",
     "version": "1.0.0",
@@ -28,7 +29,18 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow ALPACA to access your camera."
+        }
+      ],
+      [
+        "expo-font"
+      ]
+      
+      
+
     ]
   }
 }
