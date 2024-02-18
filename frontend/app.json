@@ -36,6 +36,12 @@
         }
       ],
       [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Allow ALPACA to access camera."
+        }
+      ],
+      [
         "expo-font"
       ]
       
