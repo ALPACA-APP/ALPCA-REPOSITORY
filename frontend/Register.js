@@ -83,31 +83,29 @@ const Register = ({ navigation }) => {
 
   const handleRegister = async () => {
 
-    //const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
-    const apiUrl = 'https://localhost:3000';
+    const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
+    //const apiUrl = 'http://127.0.0.1:3000';
 
     if (password === '' || confirmPassword === '' || username === ''){
         setErrorCode(0);
         setError(true);
     }else{
         if (password === confirmPassword){
-            
+            const hashedPassword = sha256(password);
             try{
                 setLoading(true);
-                const hashedPassword = sha256(password);
-
                 // Make a POST request to the server to register the user
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        username: username,
-                        password_hash: hashedPassword,
-                    })
+                const response = await fetch(apiUrl + '/RegisterUser',{
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    username: username,
+                    hashedPassword: hashedPassword
+                  })
                 });
-                console.log("Hecho el post");
                 if (response.status != 201){
                     setErrorCode(3);
+                    console.log(response.status);
                     setError(true);
                 }else{
                     navigation.reset({
@@ -120,7 +118,6 @@ const Register = ({ navigation }) => {
                 setErrorCode(2);
                 setError(true);
             }
-            console.log("Llega no se ni como");
             setLoading(false);
         }else{
             setErrorCode(1);
