@@ -30,10 +30,45 @@ app.get('/api', (req, res) => {
     res.json({ message: 'Hello from API side of the app!' });
 });
 
-app.get('/ap/:id', (req, res) => {
+app.get('/api/:id', (req, res) => {
     res.json({ message: `You access the api with id: ${req.params.id}` });
 });
 
 app.listen(port, () => {
     console.log(`backend is listening at http://localhost:${port}`);
+});
+
+
+function uuidv4() {
+    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
+
+//User insertion into the database
+const insertNewUser = async (newUser) => {
+    const { data, error } = await supabase
+        .from('users')
+        .insert({
+            uuid: uuidv4(),
+            username: newUser.username,
+            password_hash: newUser.password_hash,
+            notifications: true,
+            autoDelete: true,
+            colourBlind: 0,
+            fontSize: 0,
+            language: 0,
+        })
+}
+
+app.post('/', async (req, res) =>{
+
+    //create new user object to insert into the database
+    const newUser = {
+        username: req.body.username,
+        password_hash: req.body.password_hash,
+    }
+
+    await insertNewUser(newUser).catch((error) => { console.log(error) });
+    res.sendStatus(200);
 });
