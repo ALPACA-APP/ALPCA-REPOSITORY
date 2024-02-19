@@ -16,15 +16,33 @@ export default function App() {
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+
+  const apiUrl = 'https://world.openfoodfacts.org/api/v2/product/'
+  const endURL = '.json'
+
+  const handleBarCodeScanned = ({data}) => {
     setScanned(true);
-    Alert.alert(
-      `${data}`,'',
-      [{
-          text: 'OK',
-          onPress: () => setScanned(false),
-        },],
-    );
+  
+    fetch(apiUrl + data + endURL)
+      .then((response) => response.json())
+      .then((productData) => {
+
+        const productName = productData.product.product_name || null;
+        const brands = productData.product.brands || null;
+        const imageURL = productData.product.image_url || null;
+
+        Alert.alert(
+          "Product Information",
+          productName + "\n " + brands + "\n " + imageURL ,
+          [{
+            text: 'OK',
+            onPress: () => setScanned(false),
+          }],
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
