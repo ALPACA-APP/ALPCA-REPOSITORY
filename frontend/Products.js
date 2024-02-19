@@ -2,6 +2,7 @@ import { SafeAreaView, Button, Text, ScrollView, View, TouchableOpacity } from "
 import { useState } from "react";
 import ProductStyles from "./ProductStyles";
 import SearchBar from "./SearchBar";
+import ProductContainer from "./ProductContainer";
 
 export default Product = ({ navigation }) => {
 
@@ -10,63 +11,73 @@ export default Product = ({ navigation }) => {
     const [productsList, setProductList] = useState([
         {
             id: 1,
+            image: 'https://m.media-amazon.com/images/I/61jEAGLViDL.jpg',
             name: "Product 1",
             brand: "Brand 1",
-            expiration: "2021-12-31"
+            exp_date: "24/02/2024"
         },
         {
             id: 2,
+            image: "https://m.media-amazon.com/images/I/61jEAGLViDL.jpg",
             name: "Product 2",
-            brand: "Brand 2",
-            expiration: "2022-01-01"
+            brand: "Brand 1",
+            exp_date: "24/01/2024"
         },
         {
             id: 3,
+            image: "./assets/splash.png",
             name: "Product 3",
-            brand: "Brand 3",
-            expiration: "2022-01-02"
+            brand: "Brand 1",
+            exp_date: "24/09/2025"
         },
         {
             id: 4,
+            image: "./assets/splash.png",
             name: "Product 4",
-            brand: "Brand 4",
-            expiration: "2022-01-03"
+            brand: "Brand 1",
+            exp_date: "24/09/2025"
         },
         {
             id: 5,
+            image: "./assets/splash.png",
             name: "Product 5",
-            brand: "Brand 5",
-            expiration: "2022-01-04"
+            brand: "Brand 1",
+            exp_date: "24/09/2025"
         },
         {
             id: 6,
+            image: "./assets/splash.png",
             name: "Product 6",
-            brand: "Brand 6",
-            expiration: "2022-01-05"
+            brand: "Brand 1",
+            exp_date: "24/09/2025"
         },
         {
             id: 7,
+            image: "./assets/splash.png",
             name: "Product 7",
-            brand: "Brand 7",
-            expiration: "2022-01-06"
+            brand: "Brand 1",
+            exp_date: "24/09/2025"
         },
         {
             id: 8,
+            image: "./assets/splash.png",
             name: "Product 8",
-            brand: "Brand 8",
-            expiration: "2022-01-07"
+            brand: "Brand 1",
+            exp_date: "24/09/2025"
         },
         {
             id: 9,
+            image: "./assets/splash.png",
             name: "Product 9",
-            brand: "Brand 9",
-            expiration: "2022-01-08"
+            brand: "Brand 1",
+            exp_date: "24/09/2025"
         },
         {
             id: 10,
+            image: "./assets/splash.png",
             name: "Product 10",
-            brand: "Brand 10",
-            expiration: "2022-01-09"
+            brand: "Brand 1",
+            exp_date: "24/09/2025"
         },
     ]);
 
@@ -79,14 +90,14 @@ export default Product = ({ navigation }) => {
     };
 
 
-    const TempProduct = ({ item }) => (
-        <View style={ProductStyles.productContainer} key={item.id}>
-            <Text style={ProductStyles.productText}>{item.name}</Text>
-            <Text style={ProductStyles.productText}>{item.brand}</Text>
-            <Text style={ProductStyles.productText}>{item.expiration}</Text>
-            <Button title="Edit" onPress={() => { console.log("edit item with id " + item.id) }} />
-        </View>
-    );
+    // const TempProduct = ({ item }) => (
+    //     <View style={ProductStyles.productContainer} key={item.id}>
+    //         <Text style={ProductStyles.productText}>{item.name}</Text>
+    //         <Text style={ProductStyles.productText}>{item.brand}</Text>
+    //         <Text style={ProductStyles.productText}>{item.expiration}</Text>
+    //         <Button title="Edit" onPress={() => { console.log("edit item with id " + item.id) }} />
+    //     </View>
+    // );
 
     return (
         <SafeAreaView style={ProductStyles.container}>
@@ -98,13 +109,14 @@ export default Product = ({ navigation }) => {
 
             <ScrollView style={ProductStyles.scrollView}>
 
-                <TouchableOpacity style={ProductStyles.touchable}>
+                {/* <TouchableOpacity style={ProductStyles.touchable}>
                     <Text style={ProductStyles.touchableText}>+ Add a new product</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 {productsList.map((product) => (
-                    TempProduct({ item: product })
+                <ProductContainer key={product.id} product={product} />
                 ))}
+
                 <View style={{ marginBottom: '25%' }} />
             </ScrollView>
 
