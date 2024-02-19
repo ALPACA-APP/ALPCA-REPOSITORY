@@ -1,38 +1,59 @@
 import { StyleSheet } from 'react-native';
 
 const ProdContStyles = StyleSheet.create({
-    container:{
-
+    container: {
+      flexDirection: 'row',
+      backgroundColor: '#ffffff',
+      justifyContent: 'space-between', // Distribute content along the main axis
+      alignItems: 'center', // Align items along the cross axis (vertically in this case)
+      width: '100%',
+      height: 70,
+      marginTop: 20,
+      paddingHorizontal: 20, // Add padding for better spacing
     },
-    containerMain:{
-
+    containerMain: {
+      flexDirection: 'column',
     },
-    containerExpire:{
-
+    containerExpire: {
+      flexDirection: 'row',
     },
-    containerButtons:{
-
+    containerButtons: {
+      flexDirection: 'row',
     },
-    productImage:{
-
+    productImage: {
+      borderColor: 'black',
+      borderWidth: 1,
+      borderRadius: 15,
+      width: 90,
+      height: 70,
     },
-    productName:{
-
+    productName: {
+      color: '#1f1f1f',
+      fontSize: 16,
+      fontWeight: 'bold',
     },
-    daysLeft:{
-
+    daysLeft: {
+      color: '#7c7c7c',
+      fontSize: 11,
     },
-    roundColor:{
-
+    roundColor: {
+      width: 20,
+      height: 20,
+      borderRadius: 50,
+      marginLeft: 20
     },
-    editBtn:{
-
+    editBtn: {
+      width: 25,
+      height: 25,
+      tintColor: 'black',
     },
-    deleteBtn:{
-
-    }
-
-
-});
-
-export default ProdContStyles;
+    deleteBtn: {
+      width: 25,
+      height: 25,
+      tintColor: 'black',
+      marginLeft: 20,
+    },
+  });
+  
+  export default ProdContStyles;
+  

@@ -28,6 +28,8 @@ const Register = ({ navigation }) => {
   const [error, setError] = useState(false);
   const [errorCode, setErrorCode] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [securePassIOs, setSecurePassIOs] = useState(false);
+  const [secureConfPassIOs, setSecureConfPassIOs] = useState(false);
   const sha256 = require('js-sha256').sha256;
 
   const dismissKeyboard = () => {
@@ -36,6 +38,7 @@ const Register = ({ navigation }) => {
 
   const handleFocus = () => {
     setPassFocus(true);
+    setSecurePassIOs(true);
     Animated.timing(inputAnimation, {
       toValue: 1,
       duration: 200,
@@ -54,6 +57,7 @@ const Register = ({ navigation }) => {
 
   const handleConfFocus = () => {
     setConfPassFocus(true);
+    setSecureConfPassIOs(true);
     Animated.timing(inputAnimation, {
       toValue: 1,
       duration: 200,
@@ -162,7 +166,7 @@ const Register = ({ navigation }) => {
                 value={password}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                secureTextEntry={!isPassVisible && true}
+                secureTextEntry={!isPassVisible && securePassIOs}
               />
               {/* This Touchable highlight allows the user to hide/unhide their password to make sure they type it right */}
               {passFocus && <TouchableHighlight underlayColor='rgba(20,20,20,0)' style={RegisterStyles.eyeIconWrapper} onPress={() => setIsPassVisible(!isPassVisible)}>
@@ -178,7 +182,7 @@ const Register = ({ navigation }) => {
                 value={confirmPassword}
                 onFocus={handleConfFocus}
                 onBlur={handleConfBlur}
-                secureTextEntry={!isConfPassVisible && true}
+                secureTextEntry={!isConfPassVisible && secureConfPassIOs}
               />
 
               {confPassFocus && <TouchableHighlight underlayColor='rgba(20,20,20,0)' style={RegisterStyles.eyeIconWrapper} onPress={() => setIsConfPassVisible(!isConfPassVisible)}>
