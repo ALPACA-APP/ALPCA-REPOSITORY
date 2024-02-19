@@ -80,7 +80,7 @@ const insertNewUser = async (newUser) => {
 };
 
 // Handle POST requests to the root endpoint
-app.post('/RegisterUser', async (req, res) => {
+app.post('/api/RegisterUser', async (req, res) => {
     // Create a new user object to insert into the database
     const newUser = {
         username: req.body.username,

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import {View, Image, Text, Button} from 'react-native';
+import {View, Image, Text} from 'react-native';
 import ProdContStyles from './ProdContStyles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const productContainer = (product) =>{
+const ProductContainer = (product) =>{
 
   //PRODUCT
   //This is an object from the database, so it must have:
@@ -70,4 +70,4 @@ const productContainer = (product) =>{
     </View>
   );
 };
-export default productContainer;
+export default ProductContainer;

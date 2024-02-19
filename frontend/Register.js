@@ -95,7 +95,7 @@ const Register = ({ navigation }) => {
             try{
                 setLoading(true);
                 // Make a POST request to the server to register the user
-                const response = await fetch(apiUrl + '/RegisterUser',{
+                const response = await fetch(apiUrl + '/api/RegisterUser',{
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
