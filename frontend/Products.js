@@ -89,16 +89,6 @@ export default Product = ({ navigation }) => {
         console.log("searching for " + text);
     };
 
-
-    // const TempProduct = ({ item }) => (
-    //     <View style={ProductStyles.productContainer} key={item.id}>
-    //         <Text style={ProductStyles.productText}>{item.name}</Text>
-    //         <Text style={ProductStyles.productText}>{item.brand}</Text>
-    //         <Text style={ProductStyles.productText}>{item.expiration}</Text>
-    //         <Button title="Edit" onPress={() => { console.log("edit item with id " + item.id) }} />
-    //     </View>
-    // );
-
     return (
         <SafeAreaView style={ProductStyles.container}>
             <View style={{ height: '20%' }}>

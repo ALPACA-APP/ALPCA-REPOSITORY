@@ -158,7 +158,7 @@ const Register = ({ navigation }) => {
               />
             </InsetShadow>
 
-            <Text style={RegisterStyles.labelInput}>Password</Text>
+            <Text style={RegisterStyles.labelInput}textContextType = 'password'>Password</Text>
             <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
               <TextInput
                 style={RegisterStyles.textInput}
@@ -173,8 +173,8 @@ const Register = ({ navigation }) => {
                 <Image style={RegisterStyles.eyeIcon} source={isPassVisible ? require('./assets/icons8-eye-96.png') : require('./assets/icons8-invisible-90.png')} />
               </TouchableHighlight>}
             </InsetShadow>
-
-            <Text style={RegisterStyles.labelInput}>Confirm Password</Text>
+            <TextInput styles={{height: 0.1}} editable='false'/>
+            <Text style={RegisterStyles.labelInput} textContextType = 'password'>Confirm Password</Text>
             <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
               <TextInput
                 style={RegisterStyles.textInput}
