@@ -10,7 +10,7 @@ const ProdContStyles = StyleSheet.create({
       height: 70,
       marginTop: 20,
       paddingHorizontal: 20, // Add padding for better spacing
-    },
+    }, 
     containerMain: {
       flexDirection: 'column',
     },
@@ -32,6 +32,10 @@ const ProdContStyles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
     },
+    productBrand: {
+      color: '#7c7c7c',
+      fontSize: 11,
+    },
     daysLeft: {
       color: '#7c7c7c',
       fontSize: 11,
@@ -52,6 +56,22 @@ const ProdContStyles = StyleSheet.create({
       height: 25,
       tintColor: 'black',
       marginLeft: 20,
+    },
+    createBtn:{
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      borderColor: 'black',
+      borderRadius: 15,
+      borderStyle: "dashed",
+      height: 35,
+      width: 100,
+      marginTop: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    createBtnText:{
+      color: '#1f1f1f',
+      fontSize: 11,
     },
   });
   

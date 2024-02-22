@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {View, Image, Text} from 'react-native';
 import ProdContStyles from './ProdContStyles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const ProductContainer = ({product}) =>{
 
@@ -14,7 +14,7 @@ const ProductContainer = ({product}) =>{
 
   const [daysLeft, setDaysLeft] = useState(0);
   const [expireColor, setExpireColor] = useState('#ff7c7c');
-
+  const [expanded, setExpanded] = useState(false);
 
   function formatDateString(inputDate) {
     const [day, month, year] = inputDate.split('/');
@@ -55,25 +55,58 @@ const ProductContainer = ({product}) =>{
 
   };
 
+
+  const handleToggleHeight = () =>{
+    setExpanded(!expanded);
+  }
+
+  const containerStyles = {
+    ...ProdContStyles.container,
+    height: expanded ? 150 : 70,
+  }
+  const imageStyles = {
+    ...ProdContStyles.productImage,
+    height: expanded ? 119 : 70,
+    width: expanded ? 153 : 90,
+    borderRadius: expanded ? 25 : 15
+  }
+  const roundColorStyles = {
+    ...ProdContStyles.roundColor,
+    marginLeft: expanded ? 30 : 'auto',
+  }
+  
   return (
-    <View style={ProdContStyles.container} >
-      <Image style={ProdContStyles.productImage} source={{ uri: product.image }} />
-      <View style={ProdContStyles.containerMain}>
-        <Text style={ProdContStyles.productName}>{product.name}</Text>
-        <View style={ProdContStyles.containerExpire}>
-          <Text style={ProdContStyles.daysLeft}> {daysLeft} days </Text>
-          <View style={[ProdContStyles.roundColor, { backgroundColor: expireColor }]}></View>
+    <TouchableWithoutFeedback onPress={handleToggleHeight}>
+      <View style={containerStyles} >
+        <Image style={imageStyles} source={{ uri: product.image }} />
+        <View style={ProdContStyles.containerMain}>
+          <Text style={ProdContStyles.productName}>{product.name}</Text>
+          {expanded && (
+            <Text style={ProdContStyles.productBrand}>{product.brand}</Text>
+          )}
+          <View style={ProdContStyles.containerExpire}>
+            <Text style={ProdContStyles.daysLeft}> {daysLeft} days </Text>
+            <View style={[roundColorStyles, { backgroundColor: expireColor }]}></View>
+          </View>
+          {expanded && (
+            <TouchableOpacity style={ProdContStyles.createBtn}>
+                <Text style={ProdContStyles.createBtnText}>+ Create recipe</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={ProdContStyles.containerButtons}>
+          {!expanded && (
+            <TouchableOpacity onPress={handleEditProduct}>
+              <Image style={ProdContStyles.editBtn} source={require('./assets/icons8-editar-512.png')}></Image>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity onPress={handleDeleteProduct}>
+            <Image style={ProdContStyles.deleteBtn} source={require('./assets/icons8-basura-512.png')}></Image>
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={ProdContStyles.containerButtons}>
-        <TouchableOpacity onPress={handleEditProduct}>
-          <Image style={ProdContStyles.editBtn} source={require('./assets/icons8-editar-512.png')}></Image>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleDeleteProduct}>
-          <Image style={ProdContStyles.deleteBtn} source={require('./assets/icons8-basura-512.png')}></Image>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
+    
   );
 };
 export default ProductContainer;

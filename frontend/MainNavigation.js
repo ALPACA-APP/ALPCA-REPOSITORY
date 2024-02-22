@@ -35,7 +35,7 @@ const screens = [
         icon: require('./assets/icons8-ajustes-144.png'),
     },
 ];
-
+ 
 
 const bottomTabs = createBottomTabNavigator();
 

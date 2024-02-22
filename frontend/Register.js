@@ -33,7 +33,7 @@ const Register = ({ navigation }) => {
   const [usernameExists, setUsernameExists] = useState(false);
   const sha256 = require('js-sha256').sha256;
 
-  const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
+  const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
   //const apiUrl = 'http://127.0.0.1:3000';
 
   const dismissKeyboard = () => {
@@ -87,74 +87,126 @@ const Register = ({ navigation }) => {
       },
     ],
   };
+
+
   const handleUsername = async () => {
     try {
       //fetch the data from the api
-      const response = await fetch(apiUrl + 'api/FetchAllUsers');
+      const response = await fetch(apiUrl + '/api/FetchAllUsers');
       const data = await response.json();
 
+      console.log(data);
       //use the response data to check if the username is repeated
       for (let i=0; i<data.length; i++){
+        console.log(data[i].username);
         if (username === data[i].username){
           setUsernameExists(true);
         }
       }
     }catch(error){
       console.error(error);
-      setErrorCode(3);
-      setError(true);
     }
   };
 
   const handleRegister = async () => {
-
+    setUsernameExists(false);
     await handleUsername();
 
-    if (password === '' || confirmPassword === '' || username === ''){
+    if(!usernameExists){
+      if (password === '' || confirmPassword === '' || username === '') {
         setErrorCode(0);
         setError(true);
-    }else{
-        if (usernameExists){
-          setErrorCode(4);
-          setError(true);
-        }else{
-            if (password === confirmPassword){
-                const hashedPassword = sha256(password);
-                try{
-                    setLoading(true);
-                    // Make a POST request to the server to register the user
-                    const response = await fetch(apiUrl + '/api/RegisterUser',{
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        username: username,
-                        hashedPassword: hashedPassword
-                      })
-                    });
-                    if (response.status != 201){
-                        setErrorCode(3);
-                        console.log(response.status);
-                        setError(true);
-                    }else{
-                        navigation.reset({
-                            index: 0,
-                            routes: [{ name: 'MainNavigation' }],
-                        });
-                    }
-                }catch(error){
-                    console.error(error);
-                    setErrorCode(2);
-                    setError(true);
-                }
-              setLoading(false);
-            }else{
-                setErrorCode(1);
+      }else if (password !== confirmPassword) {
+        setErrorCode(1);
+        setError(true);
+      }else if(usernameExists) {
+        setErrorCode(4);
+        setError(true);
+      }else{
+          try {
+            setLoading(true);
+            const hashedPassword = sha256(password);
+            // Make a POST request to the server to register the user
+            const response = await fetch(apiUrl + '/api/RegisterUser', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: username,
+                    hashedPassword: hashedPassword
+                })
+            });
+
+            if (response.status !== 201) {
+                setErrorCode(3);
                 setError(true);
+
+            } else {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'MainNavigation' }],
+                });
             }
-        }
+          } catch (error) {
+              console.error(error);
+              setErrorCode(2);
+              setError(true);
+
+          } finally {
+              setLoading(false);
+          }
+      }
     }
 
-  };
+    // if (password === '' || confirmPassword === '' || username === '') {
+    //     setErrorCode(0);
+    //     setError(true);
+
+    // } else if (password !== confirmPassword) {
+    //     setErrorCode(1);
+    //     setError(true);
+
+    // } else if (usernameExists) {
+    //     setErrorCode(4);
+    //     setError(true);
+
+    // } else {
+    //     try {
+    //         setLoading(true);
+    //         const hashedPassword = sha256(password);
+    //         // Make a POST request to the server to register the user
+    //         const response = await fetch(apiUrl + '/api/RegisterUser', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 username: username,
+    //                 hashedPassword: hashedPassword
+    //             })
+    //         });
+
+    //         if (response.status !== 201) {
+    //             setErrorCode(3);
+    //             setError(true);
+
+    //         } else {
+    //             navigation.reset({
+    //                 index: 0,
+    //                 routes: [{ name: 'MainNavigation' }],
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         setErrorCode(2);
+    //         setError(true);
+
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
+};
+
+
+
+
 
 
   return (
