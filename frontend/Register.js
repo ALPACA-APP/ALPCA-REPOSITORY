@@ -30,7 +30,11 @@ const Register = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [securePassIOs, setSecurePassIOs] = useState(false);
   const [secureConfPassIOs, setSecureConfPassIOs] = useState(false);
+  const [usernameExists, setUsernameExists] = useState(false);
   const sha256 = require('js-sha256').sha256;
+
+  const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
+  //const apiUrl = 'http://127.0.0.1:3000';
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -83,49 +87,70 @@ const Register = ({ navigation }) => {
       },
     ],
   };
+  const handleUsername = async () => {
+    try {
+      //fetch the data from the api
+      const response = await fetch(apiUrl + 'api/FetchAllUsers');
+      const data = await response.json();
 
+      //use the response data to check if the username is repeated
+      for (let i=0; i<data.length; i++){
+        if (username === data[i].username){
+          setUsernameExists(true);
+        }
+      }
+    }catch(error){
+      console.error(error);
+      setErrorCode(3);
+      setError(true);
+    }
+  };
 
   const handleRegister = async () => {
 
-    const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
-    //const apiUrl = 'http://127.0.0.1:3000';
+    await handleUsername();
 
     if (password === '' || confirmPassword === '' || username === ''){
         setErrorCode(0);
         setError(true);
     }else{
-        if (password === confirmPassword){
-            const hashedPassword = sha256(password);
-            try{
-                setLoading(true);
-                // Make a POST request to the server to register the user
-                const response = await fetch(apiUrl + '/api/RegisterUser',{
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    username: username,
-                    hashedPassword: hashedPassword
-                  })
-                });
-                if (response.status != 201){
-                    setErrorCode(3);
-                    console.log(response.status);
-                    setError(true);
-                }else{
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'MainNavigation' }],
+        if (usernameExists){
+          setErrorCode(4);
+          setError(true);
+        }else{
+            if (password === confirmPassword){
+                const hashedPassword = sha256(password);
+                try{
+                    setLoading(true);
+                    // Make a POST request to the server to register the user
+                    const response = await fetch(apiUrl + '/api/RegisterUser',{
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        username: username,
+                        hashedPassword: hashedPassword
+                      })
                     });
+                    if (response.status != 201){
+                        setErrorCode(3);
+                        console.log(response.status);
+                        setError(true);
+                    }else{
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'MainNavigation' }],
+                        });
+                    }
+                }catch(error){
+                    console.error(error);
+                    setErrorCode(2);
+                    setError(true);
                 }
-            }catch(error){
-                console.error(error);
-                setErrorCode(2);
+              setLoading(false);
+            }else{
+                setErrorCode(1);
                 setError(true);
             }
-            setLoading(false);
-        }else{
-            setErrorCode(1);
-            setError(true);
         }
     }
 
@@ -158,7 +183,7 @@ const Register = ({ navigation }) => {
               />
             </InsetShadow>
 
-            <Text style={RegisterStyles.labelInput}textContextType = 'password'>Password</Text>
+            <Text style={RegisterStyles.labelInput}>Password</Text>
             <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
               <TextInput
                 style={RegisterStyles.textInput}
@@ -173,8 +198,8 @@ const Register = ({ navigation }) => {
                 <Image style={RegisterStyles.eyeIcon} source={isPassVisible ? require('./assets/icons8-eye-96.png') : require('./assets/icons8-invisible-90.png')} />
               </TouchableHighlight>}
             </InsetShadow>
-            <TextInput styles={{height: 0.1}} editable='false'/>
-            <Text style={RegisterStyles.labelInput} textContextType = 'password'>Confirm Password</Text>
+            <TextInput styles={{height: 0.1}} editable={false}/>
+            <Text style={RegisterStyles.labelInput}>Confirm Password</Text>
             <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
               <TextInput
                 style={RegisterStyles.textInput}
@@ -201,7 +226,8 @@ const Register = ({ navigation }) => {
                     {errorCode === 0 && <Text style={RegisterStyles.error}>There are empty fields</Text>}
                     {errorCode === 1 && <Text style={RegisterStyles.error}>Passwords aren't the same</Text>}
                     {errorCode === 2 && <Text style={RegisterStyles.error}>Something went wrong, please try again</Text>}
-                    {errorCode === 3 && <Text style={RegisterStyles.error}>Error</Text>}
+                    {errorCode === 3 && <Text style={RegisterStyles.error}>Serverside error</Text>}
+                    {errorCode === 4 && <Text style={RegisterStyles.error}>The username provided already exists</Text>}
                 </>
                 )}
           </Animated.View>
