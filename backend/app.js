@@ -98,6 +98,24 @@ app.post('/api/RegisterUser', async (req, res) => {
     }
 });
 
+
+const reqUsers = async () => {
+    const { data, error } = await supabase
+        .from('users')
+        .select('*');
+    return data;
+}
+
+app.get('/api/FetchAllUsers', async (req, res) => {
+    try {
+        const data = await reqUsers(); // Wait for the promise to resolve
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error); // Send an error response
+    }
+});
+
 app.listen(port, () => {
     console.log(`backend is listening at http://localhost:${port}`);
 });
