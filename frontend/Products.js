@@ -80,13 +80,24 @@ export default Product = ({ navigation }) => {
             exp_date: "24/09/2025"
         },
     ]);
+    const [filteredProducts, setFilteredProducts] = useState(productsList);
 
-    const handleSearch = (text) => {
-        
-        // in the future change this to a fetch request to the server
-        // to get the products that match the search query
-        // and update the products array with the new data
-        console.log("searching for " + text);
+    const handleSearch = (searchText) => {
+
+        const filtered = searchText !== ''
+            ? productsList.filter((product) => product.name.toLowerCase().includes(searchText.toLowerCase()))
+            : productsList;
+        //Updating the state triggers a re-render
+        setFilteredProducts(filtered);
+    };
+
+
+    //Shows the whole product list when there is no text on the searchbar (without pressing ENTER)
+    const handleChange = (searchText) => {
+
+        if (searchText === ''){
+            setFilteredProducts(productsList);
+        }    
     };
 
     return (
@@ -95,16 +106,19 @@ export default Product = ({ navigation }) => {
                 <Text style={ProductStyles.touchableText}>Simulate header component here</Text>
             </View>
 
-            <SearchBar onChangeText={handleSearch} />
+            <SearchBar onSearchSubmit={handleSearch} onChangeText={handleChange}/>
 
             <ScrollView style={ProductStyles.scrollView}>
 
                 {/* <TouchableOpacity style={ProductStyles.touchable}>
                     <Text style={ProductStyles.touchableText}>+ Add a new product</Text>
                 </TouchableOpacity> */}
+                {/* {errorCode === 0 && <Text style={RegisterStyles.error}>There are empty fields</Text>} */}
 
-                {productsList.map((product) => (
-                <ProductContainer key={product.id} product={product} />
+
+
+                {filteredProducts.map((product) => (
+                    <ProductContainer key={product.id} product={product} />
                 ))}
 
                 <View style={{ marginBottom: '25%' }} />
