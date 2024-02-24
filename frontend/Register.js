@@ -33,8 +33,8 @@ const Register = ({ navigation }) => {
   const [usernameExists, setUsernameExists] = useState(false);
   const sha256 = require('js-sha256').sha256;
 
-  //const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-  const apiUrl = 'http://127.0.0.1:3000';
+  const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
+  //const apiUrl = 'http://127.0.0.1:3000';
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
