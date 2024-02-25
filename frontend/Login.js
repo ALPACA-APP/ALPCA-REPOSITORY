@@ -116,7 +116,7 @@ const Login = ({ navigation }) => {
         >
           <Animated.View style={[LoginStyles.inputView, inputStyle]}>
             <Text style={LoginStyles.labelInput}>Username</Text>
-            <InsetShadow containerStyle={LoginStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
+            <InsetShadow containerStyle={LoginStyles.innerShadow} shadowRadius={4} shadowOpacity={0.8}>
               <TextInput
                 style={LoginStyles.textInput}
                 onChangeText={(text) => setUsername(text)}
@@ -140,7 +140,7 @@ const Login = ({ navigation }) => {
               </TouchableHighlight>}
 
             </InsetShadow>
-            
+
 
             <TouchableHighlight style={LoginStyles.button} onPress={() => {
               navigation.reset({

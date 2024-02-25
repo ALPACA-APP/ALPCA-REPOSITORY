@@ -92,7 +92,6 @@ const LoginStyles = StyleSheet.create({
         borderRightColor: 'transparent',
         width: '90%',
 
-
     },
     innerShadow: {
         width: '100%',
