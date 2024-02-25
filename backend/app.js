@@ -28,6 +28,49 @@ app.get('/', (req, res) => {
     }).catch((error) => { console.log(error) });
 });
 
+const reqUser = async (uuid) => {
+
+    // supabase code for sql query -> select * from users where uuid = uuid
+    const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('uuid', uuid)
+    return data;
+}
+
+app.get("/api/getUser/:uuid", async (req, res) => {
+    const uuid = req.params.uuid;
+    try {
+        const data = await reqUser(uuid);
+        res.json(data);
+    } catch (error) {
+        res.status(404).send("Error: User not found");
+    }
+});
+
+app.post('/api/updateUserSettings', async (req, res) => {
+
+    const uuid = req.body.uuid;
+    const notifications = req.body.notifications;
+    const autoDelete = req.body.autoDelete;
+    const colourBlind = req.body.colourBlind;
+    const fontSize = req.body.fontSize;
+    const language = req.body.language;
+
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .update({ notifications: notifications, autoDelete: autoDelete, colourBlind: colourBlind, fontSize: fontSize, language: language })
+            .eq('uuid', uuid)
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+
+});
+
+
 const reqProducts = async (uuid) => {
     const { data, error } = await supabase
         .from('products')
