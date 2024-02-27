@@ -147,6 +147,14 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Color Blindes</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
+                            style={{
+                                inputIOS: {
+                                    paddingVertical: 12,
+                                    paddingHorizontal: 10,
+                                    color: 'black',
+                                    paddingRight: 30, // to ensure the text is never behind the icon
+                                }
+                            }}
                             placeholder={{}}
                             value={colorBlind}
                             onValueChange={(value, index) => { setColorBlind(value); updateUserSettings(); }}
@@ -164,6 +172,14 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Font Size</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
+                            style={{
+                                inputIOS: {
+                                    paddingVertical: 12,
+                                    paddingHorizontal: 10,
+                                    color: 'black',
+                                    paddingRight: 30, // to ensure the text is never behind the icon
+                                }
+                            }}
                             placeholder={{}}
                             value={fontSize}
                             onValueChange={(value, index) => { setFontSize(value); updateUserSettings(); }}
@@ -180,6 +196,14 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Language</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
+                            style={{
+                                inputIOS: {
+                                    paddingVertical: 12,
+                                    paddingHorizontal: 10,
+                                    color: 'black',
+                                    paddingRight: 30, // to ensure the text is never behind the icon
+                                }
+                            }}
                             placeholder={{}}
                             value={language}
                             onValueChange={(value) => { setLanguage(value); updateUserSettings(); }}
