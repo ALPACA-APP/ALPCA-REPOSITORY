@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import {View, Image, Text} from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { View, Image, Text, Animated } from 'react-native';
 import ProdContStyles from './ProdContStyles';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-const ProductContainer = ({product}) =>{
+const ProductContainer = ({ product }) => {
 
   //PRODUCT
   //This is an object from the database, so it must have:
@@ -15,6 +15,7 @@ const ProductContainer = ({product}) =>{
   const [daysLeft, setDaysLeft] = useState(0);
   const [expireColor, setExpireColor] = useState('#ff7c7c');
   const [expanded, setExpanded] = useState(false);
+  const animated = useRef(new Animated.Value(0)).current;
 
   function formatDateString(inputDate) {
     const [day, month, year] = inputDate.split('/');
@@ -34,51 +35,84 @@ const ProductContainer = ({product}) =>{
 
     // Assign colors based on daysDifference
     switch (true) {
-        case (daysDifference >= 15):
-            setExpireColor('#7cffc0');
-            break;
-        case (daysDifference < 15 && daysDifference > 3):
-            setExpireColor('#ffd88b');
-            break;
-        default:
-            setExpireColor('#ff7c7c');
-            break;
+      case (daysDifference >= 15):
+        setExpireColor('#7cffc0');
+        break;
+      case (daysDifference < 15 && daysDifference > 3):
+        setExpireColor('#ffd88b');
+        break;
+      default:
+        setExpireColor('#ff7c7c');
+        break;
     }
-}, [product.exp_date]);
+  }, [product.exp_date]);
 
-  
-  const handleEditProduct = () =>{
-    
-  };
 
-  const handleDeleteProduct = () =>{
+  const handleEditProduct = () => {
 
   };
 
+  const handleDeleteProduct = () => {
 
-  const handleToggleHeight = () =>{
+  };
+
+
+  const handleToggleHeight = () => {
     setExpanded(!expanded);
+    Animated.timing(animated, {
+      toValue: expanded ? 0 : 1,
+      duration: 300,
+      useNativeDriver: false
+    }).start();
   }
 
-  const containerStyles = {
-    ...ProdContStyles.container,
-    height: expanded ? 150 : 70,
+  const animatedContainer = {
+    height: animated.interpolate({
+      inputRange: [0, 1],
+      outputRange: [70, 150]
+    })
   }
-  const imageStyles = {
-    ...ProdContStyles.productImage,
-    height: expanded ? 119 : 70,
-    width: expanded ? 153 : 90,
-    borderRadius: expanded ? 25 : 15
+  const animatedImage = {
+    height: animated.interpolate({
+      inputRange: [0, 1],
+      outputRange: [70, 119]
+    }),
+    width: animated.interpolate({
+      inputRange: [0, 1],
+      outputRange: [90, 153]
+    }),
+    borderRadius: animated.interpolate({
+      inputRange: [0, 1],
+      outputRange: [15, 25]
+    }),
+    borderColor: 'black',
+    borderWidth: 2,
   }
   const roundColorStyles = {
     ...ProdContStyles.roundColor,
-    marginLeft: expanded ? 30 : 'auto',
+    marginLeft: [20, 'auto'],
   }
-  
+
+  // animate the opacity of the edit button
+  const animatedEditBtn = {
+    opacity: animated.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0]
+    })
+  }
+
+  // animate the opacity of the Create Recipe button
+  const animatedCreateBtn = {
+    opacity: animated.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1]
+    })
+  }
+
   return (
     <TouchableWithoutFeedback onPress={handleToggleHeight}>
-      <View style={containerStyles} >
-        <Image style={imageStyles} source={{ uri: product.image }} />
+      <Animated.View style={[ProdContStyles.container, animatedContainer]} >
+        <Animated.Image style={[ProdContStyles.imageStyles, animatedImage]} source={{ uri: product.image }} />
         <View style={ProdContStyles.containerMain}>
           <Text style={ProdContStyles.productName}>{product.name}</Text>
           {expanded && (
@@ -90,23 +124,23 @@ const ProductContainer = ({product}) =>{
           </View>
           {expanded && (
             <TouchableOpacity style={ProdContStyles.createBtn}>
-                <Text style={ProdContStyles.createBtnText}>+ Create recipe</Text>
+              <Animated.Text style={[ProdContStyles.createBtnText, animatedCreateBtn]}>+ Create recipe</Animated.Text>
             </TouchableOpacity>
           )}
         </View>
         <View style={ProdContStyles.containerButtons}>
           {!expanded && (
             <TouchableOpacity onPress={handleEditProduct}>
-              <Image style={ProdContStyles.editBtn} source={require('./assets/icons8-editar-512.png')}></Image>
+              <Animated.Image style={[ProdContStyles.editBtn, animatedEditBtn]} source={require('./assets/icons8-editar-512.png')}></Animated.Image>
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={handleDeleteProduct}>
             <Image style={ProdContStyles.deleteBtn} source={require('./assets/icons8-basura-512.png')}></Image>
           </TouchableOpacity>
         </View>
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
-    
+
   );
 };
 export default ProductContainer;
