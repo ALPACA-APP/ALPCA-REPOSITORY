@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Text,
   KeyboardAvoidingView,
@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import RegisterStyles from './RegisterStyles';
 import InsetShadow from 'react-native-inset-shadow';
-import App from './App';
 
 const Register = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -30,7 +29,6 @@ const Register = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [securePassIOs, setSecurePassIOs] = useState(false);
   const [secureConfPassIOs, setSecureConfPassIOs] = useState(false);
-  const [usernameExists, setUsernameExists] = useState(false);
   const sha256 = require('js-sha256').sha256;
 
   const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
@@ -92,6 +90,7 @@ const Register = ({ navigation }) => {
         }),
       },
     ],
+    flex: 1,
   };
 
   const handleRegister = async () => {
@@ -149,8 +148,9 @@ const Register = ({ navigation }) => {
 
 
   return (
+
     <SafeAreaView style={RegisterStyles.container}>
-      <Animated.View style={[RegisterStyles.container, inputStyle]}>
+      <Animated.View style={inputStyle}>
         <View style={RegisterStyles.header}>
           <TouchableHighlight style={RegisterStyles.backIconWrapper} onPress={() => navigation.navigate('MainView')}>
             <Image style={RegisterStyles.backIcon} source={require('./assets/icons8-left-arrow-100.png')} />
@@ -159,63 +159,66 @@ const Register = ({ navigation }) => {
         </View>
 
         <TouchableWithoutFeedback onPress={() => { dismissKeyboard(); setPassFocus(false) }}>
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={RegisterStyles.textWrapper}>
-            <View style={RegisterStyles.front}>
-              <View style={RegisterStyles.inputView}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === !'ios' ? 'height' : 'none'}
+            style={RegisterStyles.front}
+          >
+            <View style={RegisterStyles.inputView}>
 
-                <Text style={RegisterStyles.labelInput}>Username</Text>
-                <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
-                  <TextInput
-                    style={RegisterStyles.textInput}
-                    onChangeText={(text) => setUsername(text)}
-                    value={username}
-                  />
-                </InsetShadow>
-                <Text style={RegisterStyles.labelInput}>Password</Text>
-                <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
-                  <TextInput
-                    style={RegisterStyles.textInput}
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    secureTextEntry={!isPassVisible && securePassIOs}
-                  />
-                  {/* This Touchable highlight allows the user to hide/unhide their password to make sure they type it right */}
-                  {passFocus && <TouchableHighlight underlayColor='rgba(20,20,20,0)' style={RegisterStyles.eyeIconWrapper} onPress={() => setIsPassVisible(!isPassVisible)}>
-                    <Image style={RegisterStyles.eyeIcon} source={isPassVisible ? require('./assets/icons8-eye-96.png') : require('./assets/icons8-invisible-90.png')} />
-                  </TouchableHighlight>}
-                </InsetShadow>
-                <Text style={RegisterStyles.labelInput}>Confirm Password</Text>
-                <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
-                  <TextInput
-                    style={RegisterStyles.textInput}
-                    onChangeText={(text) => setConfirmPassword(text)}
-                    value={confirmPassword}
-                    onFocus={handleConfFocus}
-                    onBlur={handleConfBlur}
-                    secureTextEntry={!isConfPassVisible && secureConfPassIOs}
-                  />
+              <Text style={RegisterStyles.labelInput}>Username</Text>
+              <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
+                <TextInput
+                  style={RegisterStyles.textInput}
+                  onChangeText={(text) => setUsername(text)}
+                  value={username}
+                />
+              </InsetShadow>
 
-                  {confPassFocus && <TouchableHighlight underlayColor='rgba(20,20,20,0)' style={RegisterStyles.eyeIconWrapper} onPress={() => setIsConfPassVisible(!isConfPassVisible)}>
-                    <Image style={RegisterStyles.eyeIcon} source={isConfPassVisible ? require('./assets/icons8-eye-96.png') : require('./assets/icons8-invisible-90.png')} />
-                  </TouchableHighlight>}
-                </InsetShadow>
+              <Text style={RegisterStyles.labelInput}>Password</Text>
+              <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
+                <TextInput
+                  style={RegisterStyles.textInput}
+                  onChangeText={(text) => setPassword(text)}
+                  value={password}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                  secureTextEntry={!isPassVisible && securePassIOs}
+                />
+                {/* This Touchable highlight allows the user to hide/unhide their password to make sure they type it right */}
+                {passFocus && <TouchableHighlight underlayColor='rgba(20,20,20,0)' style={RegisterStyles.eyeIconWrapper} onPress={() => setIsPassVisible(!isPassVisible)}>
+                  <Image style={RegisterStyles.eyeIcon} source={isPassVisible ? require('./assets/icons8-eye-96.png') : require('./assets/icons8-invisible-90.png')} />
+                </TouchableHighlight>}
+              </InsetShadow>
+              <Text style={RegisterStyles.labelInput}>Confirm Password</Text>
+              <InsetShadow containerStyle={RegisterStyles.innerShadow} shadowRadius={4} shadowOpacity={0.4}>
+                <TextInput
+                  style={RegisterStyles.textInput}
+                  onChangeText={(text) => setConfirmPassword(text)}
+                  value={confirmPassword}
+                  onFocus={handleConfFocus}
+                  onBlur={handleConfBlur}
+                  secureTextEntry={!isConfPassVisible && secureConfPassIOs}
+                />
 
-                <TouchableHighlight style={RegisterStyles.button} disabled={loading} onPress={() => {
-                  handleRegister();
-                }}>
-                  <Text style={RegisterStyles.buttonText}>Submit</Text>
-                </TouchableHighlight>
-                {error && (
-                  <>
-                    {errorCode === 0 && <Text style={RegisterStyles.error}>There are empty fields</Text>}
-                    {errorCode === 1 && <Text style={RegisterStyles.error}>Passwords aren't the same</Text>}
-                    {errorCode === 2 && <Text style={RegisterStyles.error}>Something went wrong, please try again</Text>}
-                    {errorCode === 3 && <Text style={RegisterStyles.error}>The username provided already exists</Text>}
-                  </>
-                )}
-              </View>
+                {confPassFocus && <TouchableHighlight underlayColor='rgba(20,20,20,0)' style={RegisterStyles.eyeIconWrapper} onPress={() => setIsConfPassVisible(!isConfPassVisible)}>
+                  <Image style={RegisterStyles.eyeIcon} source={isConfPassVisible ? require('./assets/icons8-eye-96.png') : require('./assets/icons8-invisible-90.png')} />
+                </TouchableHighlight>}
+              </InsetShadow>
+
+
+              <TouchableHighlight style={RegisterStyles.button} disabled={loading} onPress={() => {
+                handleRegister();
+              }}>
+                <Text style={RegisterStyles.buttonText}>Submit</Text>
+              </TouchableHighlight>
+              {error && (
+                <>
+                  {errorCode === 0 && <Text style={RegisterStyles.error}>There are empty fields</Text>}
+                  {errorCode === 1 && <Text style={RegisterStyles.error}>Passwords aren't the same</Text>}
+                  {errorCode === 2 && <Text style={RegisterStyles.error}>Something went wrong, please try again</Text>}
+                  {errorCode === 3 && <Text style={RegisterStyles.error}>The username provided already exists</Text>}
+                </>
+              )}
             </View>
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
