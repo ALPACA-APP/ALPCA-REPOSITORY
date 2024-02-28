@@ -4,7 +4,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import Checkmark from './assets/icons8-checkmark-100.png';
 import InsetShadow from 'react-native-inset-shadow';
 import Loader from './assets/SpinLoader.gif';
-
+import Header from './Header';
 
 const UserSettings = () => {
 
@@ -117,9 +117,7 @@ const UserSettings = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={{ height: '20%' }}>
-                <Text style={styles.touchableText}>Simulate header component here</Text>
-            </View>
+            <Header />
 
             <View style={styles.content}>
 

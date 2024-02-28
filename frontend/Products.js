@@ -3,6 +3,7 @@ import { useState } from "react";
 import ProductStyles from "./ProductStyles";
 import SearchBar from "./SearchBar";
 import ProductContainer from "./ProductContainer";
+import Header from "./Header";
 
 export default Product = ({ navigation }) => {
 
@@ -102,9 +103,7 @@ export default Product = ({ navigation }) => {
 
     return (
         <SafeAreaView style={ProductStyles.container}>
-            <View style={{ height: '20%' }}>
-                <Text style={ProductStyles.touchableText}>Simulate header component here</Text>
-            </View>
+            <Header />
 
             <SearchBar onSearchSubmit={handleSearch} onChangeText={handleChange} />
 
