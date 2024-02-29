@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import RegisterStyles from './RegisterStyles';
 import InsetShadow from 'react-native-inset-shadow';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Register = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -127,10 +128,17 @@ const Register = ({ navigation }) => {
           }),
         });
 
+        console.log(registerResponse);
+
+        console.log(registerResponse.statusText);
+
         if (registerResponse.status !== 201) {
           setErrorCode(2);
           setError(true);
         } else {
+          const userUuid = await registerResponse.text()
+          AsyncStorage.setItem('UUID', ""+userUuid);
+          console.log(userUuid);
           navigation.reset({
             index: 0,
             routes: [{ name: 'MainNavigation' }],
