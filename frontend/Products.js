@@ -1,11 +1,32 @@
 import { SafeAreaView, Button, Text, ScrollView, View, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductStyles from "./ProductStyles";
 import SearchBar from "./SearchBar";
 import ProductContainer from "./ProductContainer";
 import Header from "./Header";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default Product = ({ navigation }) => {
+
+    const [uuid, setUuid] = useState('');
+
+    const getUuid = async () => {
+        try {
+            const value = await AsyncStorage.getItem('UUID');
+            if (value !== null) {
+                setUuid(""+value);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
+    useEffect(() => {
+        getUuid();
+    }, []);
+
 
     // in the future change this to a list of products from the database
     // using a useEffect to fetch the data from the server and store it in the products array in a useState

@@ -117,9 +117,11 @@ function uuidv4() {
 }
 
 const insertNewUser = async (newUser) => {
+    const uuid = uuidv4();
     const {error} = await supabase
         .from('users')
-        .insert({ uuid: uuidv4(), username: newUser.username, password_hash: newUser.password_hash, notifications: true, autoDelete: true, colourBlind: 0, fontSize: 0, language: 0});
+        .insert({ uuid: uuid, username: newUser.username, password_hash: newUser.password_hash, notifications: true, autoDelete: true, colourBlind: 0, fontSize: 0, language: 0});
+    return uuid;
 };
 
 // Handle POST requests to the root endpoint
@@ -132,8 +134,9 @@ app.post('/api/RegisterUser', async (req, res) => {
 
     try {
         // Insert the new user into the database
-        await insertNewUser(newUser);
-        res.sendStatus(201);
+        const uuid = await insertNewUser(newUser);
+        
+        res.status(201).send(uuid);
     } catch (error) {
         console.error(error);
         // Send a 500 (Internal Server Error) status code and an error message

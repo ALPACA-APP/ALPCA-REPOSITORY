@@ -5,11 +5,11 @@ import Checkmark from './assets/icons8-checkmark-100.png';
 import InsetShadow from 'react-native-inset-shadow';
 import Loader from './assets/SpinLoader.gif';
 import Header from './Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserSettings = () => {
 
     const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
-    const uuid = '72165bb3-14e1-4b5e-9dbf-4316d26a9941';
     const upadateUserSettingsEndpoint = 'updateUserSettings/';
     const getUserEndpoint = 'getUser/';
 
@@ -20,6 +20,7 @@ const UserSettings = () => {
     const [language, setLanguage] = useState(0);
     const [colorBlind, setColorBlind] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [uuid, setUuid] = useState(''); // This should be set to the user's uuid when the user logs in
 
 
     const openPicker = () => {
@@ -77,7 +78,7 @@ const UserSettings = () => {
 
     };
 
-    const LoadSettings = async () => {
+    const LoadSettings = async (uuid) => {
         setIsLoading(true);
         console.log('Loading settings');
 
@@ -91,9 +92,9 @@ const UserSettings = () => {
 
             setNotifications(userData.notifications);
             setAutoDeleteExpired(userData.autoDelete);
-            setColorBlind(userData.colourBlind);
-            setFontSize(userData.fontSize);
-            setLanguage(userData.language);
+            setColorBlind("" + userData.colourBlind);
+            setFontSize("" + userData.fontSize);
+            setLanguage("" + userData.language);
 
         } catch (error) {
             console.error(error);
@@ -102,8 +103,22 @@ const UserSettings = () => {
         }
     };
 
+    loadUserUuid = async () => {
+        try {
+            const value = await AsyncStorage.getItem('UUID');
+            if (value !== null) {
+                setUuid(""+value);
+            }
+            LoadSettings(value);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
     useEffect(() => {
-        LoadSettings();
+        loadUserUuid();
+
     }, []);
 
 
