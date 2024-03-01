@@ -2,22 +2,35 @@ import { StyleSheet } from 'react-native';
 
 const ScanStyles = StyleSheet.create({
     topPart:{
-        justifyContent: 'center',
-        alignItems: 'center',
         width: '100%',
     },
     name:{ 
-        width: '80%',
         height: 50,
+        marginLeft: 50,
+        marginTop: 10,
+        marginBottom: 20,
+        marginRight: 50,
         padding: 10,
         borderColor: 'black',
         borderWidth: 1, 
         borderRadius: 10,
     },
 
-    calendarWrap:{
-        flexDirection: 'row', alignItems: 'center', justifyContent: 'center'
+    text:{
+        marginTop: 50,
+        marginLeft: 50,
+        marginRight: 50,
+        fontSize: 15,
+        color: 'black',
+    }, 
 
+    calendarWrap:{
+        flexDirection: 'row', 
+        alignItems: 'center',
+        alignContent: 'center',
+        verticalAlign: 'center',
+        marginLeft: 50,
+        marginRight: 50,
     },
     holePage:{
         width: '100%',
@@ -26,7 +39,7 @@ const ScanStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1,
-
+ 
     },
     calendarIos:{
         center: 'center', 
@@ -36,7 +49,6 @@ const ScanStyles = StyleSheet.create({
         borderWidth: 1,
         color: 'white',
         padding: 20,
-        
     },
 
 
@@ -47,21 +59,27 @@ const ScanStyles = StyleSheet.create({
     },
     ascendingBox: {
         position: 'absolute',
-        bottom: 0,
         width: '100%',
-        height: '100%',
+        bottom: 0,
         backgroundColor: 'white',
         borderRadius: 40,
-        paddingTop: 30,
     },
     buttonWrapper:{
         
         flexDirection: 'row',
         
         justifyContent: 'center',
+        marginRight: 50,  
+        marginLeft: 50,
+        marginTop: 20,
         
     },
-    buttonBox:{
+    icon:{
+        height: 40,
+        width: 40, 
+    },
+
+    buttonBox:{ 
         margin: 20,
         width: 100,
         height: 50,
@@ -78,8 +96,8 @@ const ScanStyles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 5,
 
-
-    },
+ 
+    }, 
     button:{
 
         justifyContent: 'center',
@@ -88,8 +106,9 @@ const ScanStyles = StyleSheet.create({
     },
 
     calendarText:{
-        width: '40%',
-        margin: 20,
+        width: '50%',
+        marginTop: 10,
+        marginRight: 50,
         padding: 15,
         borderColor: 'black',
         borderWidth: 1,
@@ -98,9 +117,7 @@ const ScanStyles = StyleSheet.create({
     
     calendarButton:{
         width: '100%',
-        borderColor: 'black',
-        borderWidth: 1,
-        borderRadius: 10,
+        marginTop: 10,
     },
 
 
