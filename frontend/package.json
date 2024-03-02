@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo-google-fonts/lexend": "^0.2.3",
     "@expo/metro-runtime": "~3.1.1",
+    "@react-native-async-storage/async-storage": "^1.22.3",
     "@react-native-masked-view/masked-view": "0.3.0",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/stack": "^6.3.20",

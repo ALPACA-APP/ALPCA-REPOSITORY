@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Text,
   KeyboardAvoidingView,
@@ -80,6 +81,8 @@ const Login = ({ navigation }) => {
 
       //if they are correct, navigate to the main view
       if (username === resUsername && hashedPassword === resPassword) {
+        // store the UUID in the async storage to keep the user logged in.
+
         navigation.reset({
           index: 0,
           routes: [{ name: 'MainNavigation' }],
@@ -143,6 +146,9 @@ const Login = ({ navigation }) => {
 
 
             <TouchableHighlight style={LoginStyles.button} onPress={() => {
+              //AsyncStorage.setItem('key', 'value')
+              AsyncStorage.setItem('UUID', '72165bb3-14e1-4b5e-9dbf-4316d26a9941');
+
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'MainNavigation' }],

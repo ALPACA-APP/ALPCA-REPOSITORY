@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import Checkmark from './assets/icons8-checkmark-100.png';
 import InsetShadow from 'react-native-inset-shadow';
 import Loader from './assets/SpinLoader.gif';
-
+import Header from './Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserSettings = () => {
 
     const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
-    const uuid = '72165bb3-14e1-4b5e-9dbf-4316d26a9941';
     const upadateUserSettingsEndpoint = 'updateUserSettings/';
     const getUserEndpoint = 'getUser/';
 
@@ -20,6 +20,27 @@ const UserSettings = () => {
     const [language, setLanguage] = useState(0);
     const [colorBlind, setColorBlind] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [uuid, setUuid] = useState(''); // This should be set to the user's uuid when the user logs in
+
+
+    const openPicker = () => {
+        setPickerVisible(true);
+    };
+
+    const closePicker = () => {
+        setPickerVisible(false);
+    };
+
+    const handleLanguageSelect = (value) => {
+        setLanguage(value);
+    };
+
+    const languages = [
+        { label: 'English', value: 0 },
+        { label: 'Spanish', value: 1 },
+        { label: 'Portuguese', value: 2 },
+    ];
+
 
     const updateUserSettings = async () => {
         // currently this method gets called on every change of a setting.
@@ -28,7 +49,17 @@ const UserSettings = () => {
         // This can be done by using the useEffect hook to call this method when the component unmounts.
         // But i am not sure how to do that in react native yet.
 
-        console.log('Updating settings');
+        if (colorBlind === null || fontSize === null || language === null) {
+            console.log('One or more settings are null, not updating');
+            return;
+        }
+
+        // convert string numbers to integers
+        const colorBlindInt = parseInt(colorBlind);
+        const fontSizeInt = parseInt(fontSize);
+        const languageInt = parseInt(language);
+
+
         const response = await fetch(apiUrl + upadateUserSettingsEndpoint,
             {
                 method: 'POST',
@@ -39,17 +70,18 @@ const UserSettings = () => {
                     uuid: uuid,
                     notifications: notifications,
                     autoDelete: autoDeleteExpired,
-                    colourBlind: colorBlind,
-                    fontSize: fontSize,
-                    language: language,
+                    colourBlind: colorBlindInt,
+                    fontSize: fontSizeInt,
+                    language: languageInt,
                 }),
             });
 
     };
 
-    const LoadSettings = async () => {
+    const LoadSettings = async (uuid) => {
         setIsLoading(true);
         console.log('Loading settings');
+
         try {
             const response = await fetch(apiUrl + getUserEndpoint + uuid);
             const data = await response.json();
@@ -60,9 +92,9 @@ const UserSettings = () => {
 
             setNotifications(userData.notifications);
             setAutoDeleteExpired(userData.autoDelete);
-            setColorBlind(userData.colourBlind);
-            setFontSize(userData.fontSize);
-            setLanguage(userData.language);
+            setColorBlind("" + userData.colourBlind);
+            setFontSize("" + userData.fontSize);
+            setLanguage("" + userData.language);
 
         } catch (error) {
             console.error(error);
@@ -71,8 +103,22 @@ const UserSettings = () => {
         }
     };
 
+    loadUserUuid = async () => {
+        try {
+            const value = await AsyncStorage.getItem('UUID');
+            if (value !== null) {
+                setUuid(""+value);
+            }
+            LoadSettings(value);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
     useEffect(() => {
-        LoadSettings();
+        loadUserUuid();
+
     }, []);
 
 
@@ -85,10 +131,8 @@ const UserSettings = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={{ height: '20%' }}>
-                <Text style={styles.touchableText}>Simulate header component here</Text>
-            </View>
+        <SafeAreaView style={styles.container}>
+            <Header />
 
             <View style={styles.content}>
 
@@ -116,23 +160,13 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Color Blindes</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
-                            style={{
-                                inputIOS: {
-                                    paddingVertical: 12,
-                                    paddingHorizontal: 10,
-                                    borderWidth: 1,
-                                    borderColor: 'gray',
-                                    borderRadius: 8,
-                                    color: 'black',
-                                    paddingRight: 30, // to ensure the text is never behind the icon
-                                },
-                            }}
+                            placeholder={{}}
                             value={colorBlind}
-                            onValueChange={(value) => { setColorBlind(value); updateUserSettings(); }}
+                            onValueChange={(value, index) => { setColorBlind(value); updateUserSettings(); }}
                             items={[
-                                { label: 'Default', value: 0 },
-                                { label: 'Deuteranopia', value: 1 },
-                                { label: 'Tritanopia', value: 2 },
+                                { label: 'Default', value: '0' },
+                                { label: 'Deuteranopia', value: '1' },
+                                { label: 'Tritanopia', value: '2' },
                             ]}
                         />
                     </InsetShadow>
@@ -143,23 +177,13 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Font Size</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
-                            style={{
-                                inputIOS: {
-                                    paddingVertical: 12,
-                                    paddingHorizontal: 10,
-                                    borderWidth: 1,
-                                    borderColor: 'gray',
-                                    borderRadius: 8,
-                                    color: 'black',
-                                    paddingRight: 30, // to ensure the text is never behind the icon
-                                },
-                            }}
+                            placeholder={{}}
                             value={fontSize}
-                            onValueChange={(value) => { setFontSize(value); updateUserSettings(); }}
+                            onValueChange={(value, index) => { setFontSize(value); updateUserSettings(); }}
                             items={[
-                                { label: 'Small', value: 0 },
-                                { label: 'Medium', value: 1 },
-                                { label: 'Large', value: 2 },
+                                { label: 'Small', value: '0' },
+                                { label: 'Medium', value: '1' },
+                                { label: 'Large', value: '2' },
                             ]}
                         />
                     </InsetShadow>
@@ -169,30 +193,20 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Language</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
-                            style={{
-                                inputIOS: {
-                                    paddingVertical: 12,
-                                    paddingHorizontal: 10,
-                                    borderWidth: 1,
-                                    borderColor: 'gray',
-                                    borderRadius: 8,
-                                    color: 'black',
-                                    paddingRight: 30, // to ensure the text is never behind the icon
-                                },
-                            }}
+                            placeholder={{}}
                             value={language}
                             onValueChange={(value) => { setLanguage(value); updateUserSettings(); }}
                             items={[
-                                { label: 'English', value: 0 },
-                                { label: 'Spanish', value: 1 },
-                                { label: 'Portugese', value: 2 },
+                                { label: 'English', value: '0' },
+                                { label: 'Spanish', value: '1' },
+                                { label: 'Portuguese', value: '2' },
                             ]}
                         />
                     </InsetShadow>
                 </View>
 
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
