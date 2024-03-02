@@ -6,7 +6,7 @@ import account from './assets/icons8-account-96.png';
 
 const Header = () => {
     return (
-        <View style={[styles.header, { height: '17%' }]}>
+        <View style={[styles.header, { height: '14%' }]}>
             <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { /* Handle left press */ }}>
                 <View style={styles.leftContent}>
                     <Image source={logout} style={styles.sideImage} />

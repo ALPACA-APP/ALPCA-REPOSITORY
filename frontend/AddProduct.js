@@ -119,7 +119,7 @@ export default function App() {
     let postDate = formatDate(date);
     
     try{
-    const response = fetch(api + 'api/AddProduct',
+    const response = fetch(api + 'AddProduct',
       { 
           method: 'POST',
           headers: {
