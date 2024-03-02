@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
         borderColor: '#EBEBEB',
         borderBottomWidth: 1,
         borderTopWidth: 1,
+        marginTop: 20,
     },
     leftContent: {
         flexDirection: 'column',
