@@ -70,6 +70,47 @@ app.post('/api/updateUserSettings', async (req, res) => {
 
 });
 
+app.post('/api/AddProduct', async (req, res) => {
+    try{
+    const uuid = req.body.uuid;
+    const product_id = req.body.product_id;
+    const img_url = req.body.img_url;
+    const name = req.body.name;
+    const brand = req.body.brand;
+    const exp_date = req.body.exp_date;
+    let id = 0;
+
+    const { data, error } = await supabase
+    .from('products')
+    .select('product_id')
+    .eq('uuid', uuid)
+    .order('product_id', { ascending: false })
+    .limit(1); 
+
+    if (error) {
+        console.log(error);
+    }
+    
+    if (data.length === 0) {
+        id = 1;
+    }
+    else{
+        
+        id = data[0].product_id;
+        id++;
+    }
+
+    const {} = await supabase
+        .from('products')
+        .insert({ uuid: uuid, product_id: id, img_url: img_url, name: name, brand: brand, exp_date: exp_date });
+        
+    res.sendStatus(201);
+    } catch (error) {
+        console.log("-->",error);
+        res.status(500).send(error);
+    }
+});
+
 
 const reqProducts = async (uuid) => {
     const { data, error } = await supabase
