@@ -71,7 +71,6 @@ app.post('/api/updateUserSettings', async (req, res) => {
 });
 
 app.post('/api/AddProduct', async (req, res) => {
-    console.log(req.body);
     try{
     const uuid = req.body.uuid;
     const product_id = req.body.product_id;

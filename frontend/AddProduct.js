@@ -17,8 +17,8 @@ export default function App() {
   const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
   const apiUrl = 'https://world.openfoodfacts.org/api/v2/product/';
   const endURL = '.json';
-  //const api = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
-  const api = 'http://localhost:3000'
+  const api = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
+  //const api = 'http://localhost:3000'
   let data = date.toDateString();
   const uuid = '72165bb3-14e1-4b5e-9dbf-4316d26a9941';
 
@@ -28,7 +28,6 @@ export default function App() {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
-      toggleAnimationToHalf();
     })();
   }, []);
   const toggleAnimationHide = () => {
@@ -119,10 +118,8 @@ export default function App() {
     }
     let postDate = formatDate(date);
     
-    console.log(uuid, product, brands, postDate, url);
     try{
-    console.log("aqui 1");
-    const response = fetch("http://10.90.1.133:3000/api/AddProduct/",
+    const response = fetch(api + 'api/AddProduct',
       { 
           method: 'POST',
           headers: {
@@ -137,7 +134,8 @@ export default function App() {
               exp_date: postDate,
           }),
       });
-      console.log("aqui 2");
+
+      toggleAnimationHide();
 
     } catch (error) {
       console.error(error);
