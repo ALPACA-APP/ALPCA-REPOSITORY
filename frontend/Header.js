@@ -3,13 +3,14 @@ import { View, Image, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import logo from './assets/logo.png';
 import logout from './assets/icons8-logout-96.png';
 import account from './assets/icons8-account-96.png';
+import leftArrow from './assets/icons8-left-arrow-100.png';
 
-const Header = () => {
+const Header = ({ isLogout = "true", onGoBack = () => { console.log("default go back method") } }) => {
     return (
-        <View style={[styles.header, { height: '14%' }]}>
-            <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { /* Handle left press */ }}>
+        <View style={styles.header}>
+            <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { onGoBack(); }}>
                 <View style={styles.leftContent}>
-                    <Image source={logout} style={styles.sideImage} />
+                    <Image source={isLogout === "true" ? logout : leftArrow} style={styles.sideImage} />
                     <Text style={styles.sideText}>Go Back</Text>
                 </View>
             </TouchableHighlight>
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderTopWidth: 1,
         marginTop: 20,
+        height: '14%'
     },
     leftContent: {
         flexDirection: 'column',
@@ -51,9 +53,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     sideImage: {
-        width: 50,
-        height: 50,
+        width: 40,
+        height: 40,
         alignSelf: 'center',
+        tintColor: '#000000',
     },
     sideText: {
         fontSize: 16,

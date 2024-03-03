@@ -1,6 +1,7 @@
 import { SafeAreaView, View, ScrollView, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 
 import Header from "./Header";
@@ -9,10 +10,10 @@ import arrow from "./assets/icons8-right-arrow-100.png";
 import trashCan from "./assets/icons8-basura-512.png";
 import loadingSpinner from "./assets/SpinLoader.gif";
 
-const Recipes = () => {
+const Recipes = ({ navigation }) => {
 
-    //const apiUrl = "https://thoughtful-cod-sweatshirt.cyclic.app/api/"
-    const apiUrl = "127.0.0.1:3000/api/";
+    // const apiUrl = "https://thoughtful-cod-sweatshirt.cyclic.app/api/"
+    const apiUrl = "http://192.168.0.15:3000/api/";
     const endpoint = "GetRecipes/";
 
     const [uuid, setUuid] = useState('');
@@ -117,7 +118,7 @@ const Recipes = () => {
     }
 
     const generateRecipe = () => {
-        console.log("Generate Recipe");
+        navigation.navigate('Ingredient Select');
     }
 
     if (loading) {
@@ -126,7 +127,7 @@ const Recipes = () => {
                 <Header />
                 <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
                 <ScrollView style={RecipeStyles.scrollView}>
-                    <Image source={loadingSpinner} style={{ width: 100, height: 100, alignSelf: 'center', marginTop: '50%' }} />
+                    <Image source={loadingSpinner} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
                 </ScrollView>
             </SafeAreaView>
         );
