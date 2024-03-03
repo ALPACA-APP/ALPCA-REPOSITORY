@@ -13,6 +13,7 @@ const ProdContStyles = StyleSheet.create({
     }, 
     containerMain: {
       flexDirection: 'column',
+      marginLeft: 10,
     },
     containerExpire: {
       flexDirection: 'row',
@@ -29,7 +30,7 @@ const ProdContStyles = StyleSheet.create({
     },
     productName: {
       color: '#1f1f1f',
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: 'bold',
     },
     productBrand: {

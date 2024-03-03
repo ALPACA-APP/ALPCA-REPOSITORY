@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Image } from 'react-native'
 import SearchIcon from './assets/search-100.png';
 
-const SearchBar = ({ onSearchSubmit, onChangeText }) => {
+const SearchBar = ({ onChangeText }) => {
     const [text, setText] = useState('');
 
     const handleChangeText = (newText) => {
@@ -10,9 +10,6 @@ const SearchBar = ({ onSearchSubmit, onChangeText }) => {
         onChangeText(newText);
     };
 
-    const handleSubmitEditing = () =>{
-        onSearchSubmit(text);
-    }
 
     return (
         <View style={styles.container}>
@@ -22,7 +19,6 @@ const SearchBar = ({ onSearchSubmit, onChangeText }) => {
                 placeholder="Search"
                 value={text}
                 onChangeText={handleChangeText}
-                onSubmitEditing={handleSubmitEditing}
             />
         </View>
     );

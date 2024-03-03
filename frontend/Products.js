@@ -16,32 +16,10 @@ export default Product = ({ navigation }) => {
     const [uuid, setUuid] = useState('');
     const [loading, setLoading] = useState(true);
 
-    // const getUuid = async () => {
-    //     try {
-    //         const value = await AsyncStorage.getItem('UUID');
-    //         if (value !== null) {
-    //             console.log(value);
-    //             setUuid(""+value);
-    //         }
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-
-    //     const response = await fetch(apiUrl + '/api/fetchAllProducts/' + uuid);
-    //     const data = await response.json();
-  
-    //     let prodList = []; //Empty array for loading the products in it
-    //     for (let i = 0; i < data.length; i++) {
-    //       prodList[i] = data[i];
-    //     }
-    //     setProductList(prodList);
-    // }
-
     const getUuid = async () => {
         try {
             const value = await AsyncStorage.getItem('UUID');
             if (value !== null) {
-                console.log(value);
                 setUuid("" + value);
     
                 const response = await fetch(apiUrl + '/api/fetchAllProducts/' + value);
@@ -65,8 +43,14 @@ export default Product = ({ navigation }) => {
     useEffect(() => {
         getUuid();
     }, []);
+    useEffect(() => {
+        // Update filtered products whenever productsList changes
+        setFilteredProducts(productsList);
+    }, [productsList]);
 
-    const handleSearch = (searchText) => {
+
+    //Shows the whole product list when there is no text on the searchbar (without pressing ENTER)
+    const handleChange = (searchText) => {
 
         const filtered = searchText !== ''
             ? productsList.filter((product) => product.name.toLowerCase().includes(searchText.toLowerCase()))
@@ -75,20 +59,11 @@ export default Product = ({ navigation }) => {
         setFilteredProducts(filtered);
     };
 
-
-    //Shows the whole product list when there is no text on the searchbar (without pressing ENTER)
-    const handleChange = (searchText) => {
-
-        if (searchText === '') {
-            setFilteredProducts(productsList);
-        }
-    };
-
     return (
         <SafeAreaView style={ProductStyles.container}>
             <Header />
 
-            <SearchBar onSearchSubmit={handleSearch} onChangeText={handleChange} />
+            <SearchBar onChangeText={handleChange} />
 
             <ScrollView style={ProductStyles.scrollView}>
 

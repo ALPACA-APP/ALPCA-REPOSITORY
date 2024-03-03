@@ -75,11 +75,11 @@ const ProductContainer = ({ product }) => {
   const animatedImage = {
     height: animated.interpolate({
       inputRange: [0, 1],
-      outputRange: [70, 119]
+      outputRange: [70, 93]
     }),
     width: animated.interpolate({
       inputRange: [0, 1],
-      outputRange: [90, 153]
+      outputRange: [90, 120]
     }),
     borderRadius: animated.interpolate({
       inputRange: [0, 1],
@@ -112,9 +112,9 @@ const ProductContainer = ({ product }) => {
   return (
     <TouchableWithoutFeedback onPress={handleToggleHeight}>
       <Animated.View style={[ProdContStyles.container, animatedContainer]} >
-        <Animated.Image style={[ProdContStyles.imageStyles, animatedImage]} source={{ uri: product.image }} />
+        <Animated.Image style={[ProdContStyles.imageStyles, animatedImage]} source={{ uri: product.img_url }} />
         <View style={ProdContStyles.containerMain}>
-          <Text style={ProdContStyles.productName}>{product.name}</Text>
+          <Text style={ProdContStyles.productName}>{product.name.length > 20 ? product.name.substring(0,20) + '...' : product.name}</Text>
           {expanded && (
             <Text style={ProdContStyles.productBrand}>{product.brand}</Text>
           )}

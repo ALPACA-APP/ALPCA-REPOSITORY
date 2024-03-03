@@ -120,11 +120,10 @@ const reqProducts = async (uuid) => {
     return data;
 }
 
-app.get('/api/fetchAllProducts/:uuid', (req, res) => {
+app.get('/api/fetchAllProducts/:uuid', async (req, res) => {
     const uuid = req.params.uuid;
     try {
-        const data = reqProducts(uuid);
-        console.log(data);
+        const data = await reqProducts(uuid);
         res.json(data);
     } catch (error) {
         console.log(error);
