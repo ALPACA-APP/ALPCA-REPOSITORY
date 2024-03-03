@@ -14,6 +14,7 @@ const ProductContainer = ({ product }) => {
 
   const [daysLeft, setDaysLeft] = useState(0);
   const [expireColor, setExpireColor] = useState('#ff7c7c');
+  const [expireColorBorder, setExpireColorBorder] = useState('#ff7c7c');
   const [expanded, setExpanded] = useState(false);
   const animated = useRef(new Animated.Value(0)).current;
 
@@ -37,12 +38,15 @@ const ProductContainer = ({ product }) => {
     switch (true) {
       case (daysDifference >= 15):
         setExpireColor('#7cffc0');
+        setExpireColorBorder('#198E56');
         break;
       case (daysDifference < 15 && daysDifference > 3):
         setExpireColor('#ffd88b');
+        setExpireColorBorder('#A73C00');
         break;
       default:
         setExpireColor('#ff7c7c');
+        setExpireColorBorder('#BA4646');
         break;
     }
   }, [product.exp_date]);
@@ -120,7 +124,7 @@ const ProductContainer = ({ product }) => {
           )}
           <View style={ProdContStyles.containerExpire}>
             <Text style={ProdContStyles.daysLeft}> {daysLeft} days </Text>
-            <View style={[roundColorStyles, { backgroundColor: expireColor }]}></View>
+            <View style={[roundColorStyles, { backgroundColor: expireColor, borderColor: expireColorBorder }]}></View>
           </View>
           {expanded && (
             <TouchableOpacity style={ProdContStyles.createBtn}>

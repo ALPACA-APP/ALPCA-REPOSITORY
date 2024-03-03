@@ -60,6 +60,23 @@ const ProductStyles = StyleSheet.create({
         right: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontFamily: "lexend-regular",
+
+    },
+    button: {
+        backgroundColor: '#0075FF',
+        borderRadius: 25,
+        padding: 10,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
 });
 
 export default ProductStyles;

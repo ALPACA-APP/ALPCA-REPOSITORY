@@ -71,42 +71,42 @@ app.post('/api/updateUserSettings', async (req, res) => {
 });
 
 app.post('/api/AddProduct', async (req, res) => {
-    try{
-    const uuid = req.body.uuid;
-    const product_id = req.body.product_id;
-    const img_url = req.body.img_url;
-    const name = req.body.name;
-    const brand = req.body.brand;
-    const exp_date = req.body.exp_date;
-    let id = 0;
+    try {
+        const uuid = req.body.uuid;
+        const product_id = req.body.product_id;
+        const img_url = req.body.img_url;
+        const name = req.body.name;
+        const brand = req.body.brand;
+        const exp_date = req.body.exp_date;
+        let id = 0;
 
-    const { data, error } = await supabase
-    .from('products')
-    .select('product_id')
-    .eq('uuid', uuid)
-    .order('product_id', { ascending: false })
-    .limit(1); 
+        const { data, error } = await supabase
+            .from('products')
+            .select('product_id')
+            .eq('uuid', uuid)
+            .order('product_id', { ascending: false })
+            .limit(1);
 
-    if (error) {
-        console.log(error);
-    }
-    
-    if (data.length === 0) {
-        id = 1;
-    }
-    else{
-        
-        id = data[0].product_id;
-        id++;
-    }
+        if (error) {
+            console.log(error);
+        }
 
-    const {} = await supabase
-        .from('products')
-        .insert({ uuid: uuid, product_id: id, img_url: img_url, name: name, brand: brand, exp_date: exp_date });
-        
-    res.sendStatus(201);
+        if (data.length === 0) {
+            id = 1;
+        }
+        else {
+
+            id = data[0].product_id;
+            id++;
+        }
+
+        const { } = await supabase
+            .from('products')
+            .insert({ uuid: uuid, product_id: id, img_url: img_url, name: name, brand: brand, exp_date: exp_date });
+
+        res.sendStatus(201);
     } catch (error) {
-        console.log("-->",error);
+        console.log("-->", error);
         res.status(500).send(error);
     }
 });
@@ -153,15 +153,15 @@ app.get('/api/fetchProductSearch/:uuid/:name', (req, res) => {
 
 function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
-      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     );
 }
 
 const insertNewUser = async (newUser) => {
     const uuid = uuidv4();
-    const {error} = await supabase
+    const { error } = await supabase
         .from('users')
-        .insert({ uuid: uuid, username: newUser.username, password_hash: newUser.password_hash, notifications: true, autoDelete: true, colourBlind: 0, fontSize: 0, language: 0});
+        .insert({ uuid: uuid, username: newUser.username, password_hash: newUser.password_hash, notifications: true, autoDelete: true, colourBlind: 0, fontSize: 0, language: 0 });
     return uuid;
 };
 
@@ -176,7 +176,7 @@ app.post('/api/RegisterUser', async (req, res) => {
     try {
         // Insert the new user into the database
         const uuid = await insertNewUser(newUser);
-        
+
         res.status(201).send(uuid);
     } catch (error) {
         console.error(error);
@@ -203,6 +203,29 @@ app.get('/api/FetchAllUsers', async (req, res) => {
     }
 });
 
+const reqRecipes = async (uuid) => {
+    const { data, error } = await supabase
+        .from('recipes')
+        .select('*')
+        .eq('uuid', uuid)
+    return data;
+}
+
+app.get('/api/GetRecipes/:uuid', async (req, res) => {
+    const uuid = req.params.uuid;
+
+    try {
+        if (uuid === "") {
+            res.status(404).send("Error: User not found");
+        }
+        const data = await reqRecipes(uuid);
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+        res.status(404).send("Error: User not found");
+    }
+});
+
 app.listen(port, () => {
-    console.log(`backend is listening at http://localhost:${port}`);
+    console.log(`backend is listening at http://192.168.0.15:3000:${port}`);
 });
