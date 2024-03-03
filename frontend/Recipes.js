@@ -12,8 +12,7 @@ import loadingSpinner from "./assets/SpinLoader.gif";
 
 const Recipes = ({ navigation }) => {
 
-    // const apiUrl = "https://thoughtful-cod-sweatshirt.cyclic.app/api/"
-    const apiUrl = "http://192.168.0.15:3000/api/";
+    const apiUrl = "https://thoughtful-cod-sweatshirt.cyclic.app/api/"
     const endpoint = "GetRecipes/";
 
     const [uuid, setUuid] = useState('');
