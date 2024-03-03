@@ -124,6 +124,7 @@ app.get('/api/fetchAllProducts/:uuid', (req, res) => {
     const uuid = req.params.uuid;
     try {
         const data = reqProducts(uuid);
+        console.log(data);
         res.json(data);
     } catch (error) {
         console.log(error);
