@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // import the pages
-import Recipes from './Recipes';
+import RecipeStack from './RecipeStack';
 import Products from './Products';
 import ProductSelect from './ProductSelect';
 import ReciperViewer from './RecipeViewer';
@@ -26,7 +26,7 @@ const screens = [
     },
     {
         name: 'Recipes',
-        component: Recipes,
+        component: RecipeStack,
         icon: require('./assets/icons8-libro-de-cocina-100.png'),
     },
     {
