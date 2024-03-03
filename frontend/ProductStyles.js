@@ -45,6 +45,21 @@ const ProductStyles = StyleSheet.create({
         textAlignVertical: 'center', // Center vertically
         fontFamily: "lexend-bold",
     },
+    loader: {
+        width: 50,
+        height: 50,
+    },
+    loaderWrapper: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    },
     buttonText: {
         color: '#fff',
         fontSize: 16,
