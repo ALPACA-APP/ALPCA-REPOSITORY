@@ -6,30 +6,11 @@ import ProductContainer from "./ProductContainer";
 import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
+const apiUrl = 'http://127.0.0.1:3000';
 
 export default Product = ({ navigation }) => {
 
-    const [uuid, setUuid] = useState('');
-
-    const getUuid = async () => {
-        try {
-            const value = await AsyncStorage.getItem('UUID');
-            if (value !== null) {
-                setUuid(""+value);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-
-    useEffect(() => {
-        getUuid();
-    }, []);
-
-
-    // in the future change this to a list of products from the database
-    // using a useEffect to fetch the data from the server and store it in the products array in a useState
     const [productsList, setProductList] = useState([
         {
             id: 1,
@@ -103,6 +84,34 @@ export default Product = ({ navigation }) => {
         },
     ]);
     const [filteredProducts, setFilteredProducts] = useState(productsList);
+
+    const [uuid, setUuid] = useState('');
+
+    const getUuid = async () => {
+        try {
+            const value = await AsyncStorage.getItem('UUID');
+            if (value !== null) {
+                console.log(value);
+                setUuid(""+value);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+        const response = await fetch(apiUrl + '/api/fetchAllProducts/' + uuid);
+        const data = await response.json();
+  
+        let prodList = []; //Empty array for loading the products in it
+        for (let i = 0; i < data.length; i++) {
+          prodList[i] = data[i];
+        }
+        setProductList(prodList);
+    }
+
+
+    useEffect(() => {
+        getUuid();
+    }, []);
 
     const handleSearch = (searchText) => {
 
