@@ -246,5 +246,5 @@ app.get('/api/GetRecipes/:uuid', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`backend is listening at http://192.168.0.15:3000:${port}`);
+    console.log(`backend is listening at http://192.168.0.15:${port}`);
 });

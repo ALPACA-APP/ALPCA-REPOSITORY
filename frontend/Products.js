@@ -58,6 +58,10 @@ export default Product = ({ navigation }) => {
         setFilteredProducts(filtered);
     };
 
+    const goToSelectIngredients = () => {
+        navigation.navigate('Recipes', { screen: 'Ingredient Select' });
+    }
+
     return (
         <SafeAreaView style={ProductStyles.container}>
             <Header />
@@ -67,7 +71,7 @@ export default Product = ({ navigation }) => {
             <ScrollView style={ProductStyles.scrollView}>
 
                 {filteredProducts.map((product) => (
-                    <ProductContainer key={product.id} product={product} onProductDelete={getProducts}/>
+                    <ProductContainer key={product.id} product={product} onProductDelete={getProducts} onGenerateRecipe={goToSelectIngredients } />
                 ))}
 
                 <View style={{ marginBottom: '25%' }} />
