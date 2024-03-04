@@ -45,7 +45,8 @@ const ProdContStyles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 50,
-    marginLeft: 20
+    marginLeft: 20,
+    borderWidth: 1,
   },
   editBtn: {
     width: 25,
