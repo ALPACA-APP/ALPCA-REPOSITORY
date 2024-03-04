@@ -130,6 +130,25 @@ app.get('/api/fetchAllProducts/:uuid', async (req, res) => {
     }
 });
 
+const deleteProducts = async (id, uuid) =>{
+    return await supabase  
+        .from('products')
+        .delete()
+        .eq('product_id', id)
+        .eq('uuid', uuid)
+}
+
+app.delete('/api/deleteProducts/:uuid/:product_id', async (req, res) =>{
+    const uuid = req.params.uuid;
+    const id = req.params.product_id;
+    try{
+        await deleteProducts(id, uuid);
+        res.sendStatus(204);
+    }catch(error){
+        console.log(error);
+    }
+});
+
 const reqProductSearch = async (uuid, name) => {
     const { data, error } = await supabase
         .from('products')

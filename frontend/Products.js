@@ -6,8 +6,8 @@ import ProductContainer from "./ProductContainer";
 import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-const apiUrl = 'http://192.168.1.58:3000';
+ const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
+//const apiUrl = 'http://IP:3000';
 
 export default Product = ({ navigation }) => {
 
@@ -16,7 +16,7 @@ export default Product = ({ navigation }) => {
     const [uuid, setUuid] = useState('');
     const [loading, setLoading] = useState(true);
 
-    const getUuid = async () => {
+    const getProducts = async () => {
         try {
             const value = await AsyncStorage.getItem('UUID');
             if (value !== null) {
@@ -39,9 +39,8 @@ export default Product = ({ navigation }) => {
     };
     
 
-
     useEffect(() => {
-        getUuid();
+        getProducts();
     }, []);
     useEffect(() => {
         // Update filtered products whenever productsList changes
@@ -68,7 +67,7 @@ export default Product = ({ navigation }) => {
             <ScrollView style={ProductStyles.scrollView}>
 
                 {filteredProducts.map((product) => (
-                    <ProductContainer key={product.id} product={product} />
+                    <ProductContainer key={product.id} product={product} onProductDelete={getProducts}/>
                 ))}
 
                 <View style={{ marginBottom: '25%' }} />
