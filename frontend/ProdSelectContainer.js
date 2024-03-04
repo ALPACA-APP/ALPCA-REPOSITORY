@@ -55,30 +55,18 @@ const ProdSelectContainer = ({ product, onCheckboxChange }) => {
     }, [product.exp_date]);
 
     const animatedContainer = {
-        height: animated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [70, 70]
-        })
+        height: 70, 
     }
     const animatedImage = {
-        height: animated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [70, 70]
-        }),
-        width: animated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [90, 90]
-        }),
-        borderRadius: animated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [15, 15]
-        }),
+        height: 70,
+        width: 90,
+        borderRadius: 15,
         borderColor: 'black',
         borderWidth: 2,
     }
     const roundColorStyles = {
         ...ProdContStyles.roundColor,
-        marginLeft: [20, 'auto'],
+        marginLeft: 20,
     }
 
     const toggle = () => {
@@ -89,7 +77,7 @@ const ProdSelectContainer = ({ product, onCheckboxChange }) => {
     return (
         <TouchableOpacity activeOpacity={0.4}  onPress={() => { toggle(); }}>
             <Animated.View style={[ProdContStyles.container, animatedContainer]} >
-                <Animated.Image style={[ProdContStyles.imageStyles, animatedImage]} source={{ uri: product.image }} />
+                <Animated.Image style={[ProdContStyles.imageStyles, animatedImage]} source={{ uri: product.img_url }} />
                 <View style={ProdContStyles.containerMain}>
                     <Text style={ProdContStyles.productName}>{product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name}</Text>
                     {expanded && (

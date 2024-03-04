@@ -13,6 +13,7 @@ import loadingSpinner from "./assets/SpinLoader.gif";
 const Recipes = ({ navigation }) => {
 
     const apiUrl = "https://thoughtful-cod-sweatshirt.cyclic.app/api/"
+    //const apiUrl = "http://IP:3000/api/";
     const endpoint = "GetRecipes/";
 
     const [uuid, setUuid] = useState('');
@@ -53,15 +54,10 @@ const Recipes = ({ navigation }) => {
             console.log(e);
         }
 
-
-        console.log("Fetching recipes for user with uuid: " + localUuid);
-        console.log(apiUrl + endpoint + localUuid);
         //fetch all the recipes
         try {
             const response = await fetch(apiUrl + endpoint + localUuid);
-            console.log(response);
             const data = await response.json();
-            console.log(data);
             setRecipes(data);
             setSearchResults(data);
         } catch (error) {
