@@ -6,8 +6,8 @@ import ProductContainer from "./ProductContainer";
 import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
- //const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-const apiUrl = 'http://192.168.0.15:3000';
+ const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
+//const apiUrl = 'http://IP:3000';
 
 export default Product = ({ navigation }) => {
 
