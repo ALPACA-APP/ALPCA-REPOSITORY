@@ -91,7 +91,7 @@ const ProdSelectContainer = ({ product, onCheckboxChange }) => {
             <Animated.View style={[ProdContStyles.container, animatedContainer]} >
                 <Animated.Image style={[ProdContStyles.imageStyles, animatedImage]} source={{ uri: product.image }} />
                 <View style={ProdContStyles.containerMain}>
-                    <Text style={ProdContStyles.productName}>{product.name}</Text>
+                    <Text style={ProdContStyles.productName}>{product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name}</Text>
                     {expanded && (
                         <Text style={ProdContStyles.productBrand}>{product.brand}</Text>
                     )}

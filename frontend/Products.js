@@ -6,8 +6,8 @@ import ProductContainer from "./ProductContainer";
 import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
- const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-//const apiUrl = 'http://IP:3000';
+ //const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
+const apiUrl = 'http://192.168.0.15:3000';
 
 export default Product = ({ navigation }) => {
 
@@ -58,6 +58,10 @@ export default Product = ({ navigation }) => {
         setFilteredProducts(filtered);
     };
 
+    const goToSelectIngredients = () => {
+        navigation.navigate('Recipes', { screen: 'Ingredient Select' });
+    }
+
     return (
         <SafeAreaView style={ProductStyles.container}>
             <Header />
@@ -67,7 +71,7 @@ export default Product = ({ navigation }) => {
             <ScrollView style={ProductStyles.scrollView}>
 
                 {filteredProducts.map((product) => (
-                    <ProductContainer key={product.id} product={product} onProductDelete={getProducts}/>
+                    <ProductContainer key={product.id} product={product} onProductDelete={getProducts} onGenerateRecipe={goToSelectIngredients } />
                 ))}
 
                 <View style={{ marginBottom: '25%' }} />

@@ -3,7 +3,7 @@
   import ProdContStyles from './ProdContStyles';
   import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-  const ProductContainer = ({ product, onProductDelete }) => {
+  const ProductContainer = ({ product, onProductDelete, onGenerateRecipe }) => {
 
     //PRODUCT
     //This is an object from the database, so it must have:
@@ -139,7 +139,7 @@
               <View style={[roundColorStyles, { backgroundColor: expireColor, borderColor: expireColorBorder }]}></View>
             </View>
             {expanded && (
-              <TouchableOpacity style={ProdContStyles.createBtn}>
+              <TouchableOpacity style={ProdContStyles.createBtn} onPress={onGenerateRecipe}>
                 <Animated.Text style={[ProdContStyles.createBtnText, animatedCreateBtn]}>+ Create recipe</Animated.Text>
               </TouchableOpacity>
             )}
