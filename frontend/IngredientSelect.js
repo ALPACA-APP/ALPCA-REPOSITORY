@@ -41,7 +41,6 @@ export default IngredientSelect = ({ navigation }) => {
                 throw new Error('Network request failed');
             }
             const data = await response.json();
-            console.log(data);
             setProductList(data);
         } catch (e) {
             console.log(e);
