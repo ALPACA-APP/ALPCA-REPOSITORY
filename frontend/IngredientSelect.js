@@ -1,6 +1,6 @@
 import { SafeAreaView, Button, Text, ScrollView, View, TouchableOpacity, Animated, Image } from "react-native";
-
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useFocusEffect } from '@react-navigation/native';  // Add this import
 import ProductStyles from "./ProductStyles";
 import SearchBar from "./SearchBar";
 import Header from "./Header";
@@ -58,6 +58,12 @@ export default IngredientSelect = ({ navigation }) => {
         // Update filtered products whenever productsList changes
         setFilteredProducts(productsList);
     }, [productsList]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            getUuid();
+        }, [])
+      );
 
     const handleSearch = (searchText) => {
 

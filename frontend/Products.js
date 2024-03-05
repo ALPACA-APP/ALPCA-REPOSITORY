@@ -1,13 +1,14 @@
-import { SafeAreaView, Button, Text, ScrollView, View, TouchableOpacity, Image} from "react-native";
-import { useState, useEffect } from "react";
+import { SafeAreaView, ScrollView, View, Image} from "react-native";
+import React, { useState, useEffect} from "react";
+import { useFocusEffect } from '@react-navigation/native';  // Add this import
 import ProductStyles from "./ProductStyles";
 import SearchBar from "./SearchBar";
 import ProductContainer from "./ProductContainer";
 import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
- const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-//const apiUrl = 'http://IP:3000';
+    const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
+    //const apiUrl = 'http://192.168.1.58:3000';
 
 export default Product = ({ navigation }) => {
 
@@ -47,6 +48,11 @@ export default Product = ({ navigation }) => {
         setFilteredProducts(productsList);
     }, [productsList]);
 
+    useFocusEffect(
+        React.useCallback(() => {
+          getProducts();
+        }, [])
+      );
 
     //Shows the whole product list when there is no text on the searchbar (without pressing ENTER)
     const handleChange = (searchText) => {

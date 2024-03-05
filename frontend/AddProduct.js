@@ -15,6 +15,7 @@ export default function App() {
   const [url, setUrl] = useState(''); // Initialize state variable
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
+  
   const apiUrl = 'https://world.openfoodfacts.org/api/v2/product/';
   const endURL = '.json';
   const api = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
@@ -29,7 +30,7 @@ export default function App() {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
-  }, []);
+  },[]);
   const toggleAnimationHide = () => {
     Animated.timing(animation, {
       toValue: 0, // Toggle between 0 and 1 
@@ -88,9 +89,7 @@ export default function App() {
         console.error(error);
       });
   };
-  const updateUsername = (newValue) => {
-    setProduct(newValue);
-  };
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowPicker(Platform.OS === 'ios'); // Only close if it's iOS platform
