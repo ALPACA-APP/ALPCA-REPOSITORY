@@ -1,6 +1,6 @@
 import { SafeAreaView, Button, Text, ScrollView, View, TouchableOpacity, Animated, Image } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
-import { useFocusEffect } from '@react-navigation/native';  // Add this import
+import { useFocusEffect } from '@react-navigation/native';
 import ProductStyles from "./ProductStyles";
 import SearchBar from "./SearchBar";
 import Header from "./Header";
