@@ -83,7 +83,8 @@ const ProductStyles = StyleSheet.create({
         //center elements vertically and horizontally
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1,
+        zIndex: 10,
+        paddingBottom: 50,
  
     },
     calendarIos:{
@@ -152,20 +153,15 @@ const ProductStyles = StyleSheet.create({
         width: 40, 
     },
     buttonWrapper:{
-        
         flexDirection: 'row',
-        
         justifyContent: 'center',
         marginRight: 50,  
         marginLeft: 50,
         marginTop: 20,
-        
     },
     buttonOption:{
-
         justifyContent: 'center',
         alignItems: 'center',
-        
     },
     buttonBox:{ 
         margin: 20,
@@ -183,9 +179,7 @@ const ProductStyles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 2,
         elevation: 5,
-
- 
-    }, 
+    },
 });
 
 export default ProductStyles;

@@ -75,6 +75,8 @@ export default Product = ({ navigation }) => {
     const [productName, setProductName] = useState(''); // Initialize state variable
     const [brand, setBrand] = useState(''); // Initialize state variable
     const [expDate, setExpDate] = useState(new Date());
+    const [id, setId] = useState(0);
+    const [productUid, setProductUid] = useState(0);
     const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
     const [modal, setModal] = useState(false);
 
@@ -117,13 +119,13 @@ export default Product = ({ navigation }) => {
     };
 
     const handleEdit = (product) =>{
-        console.log(product.exp_date)
         toggleAnimationToHalf();
         setProductName(product.name);
         dateFormat = formatDateString(product.exp_date);
-        console.log(dateFormat);
         setExpDate(dateFormat);
         setBrand(product.brand);
+        setId(product.product_id);
+        setProductUid(product.uuid);
     };
     const formatDateString = (inputDate) => {
         const [day, month, year] = inputDate.split('/');
@@ -134,13 +136,34 @@ export default Product = ({ navigation }) => {
         const formattedDate = inputDate.toLocaleDateString('en-GB');
         return formattedDate;
     };
+    const updateProducts = async () =>{
+        const newId = id;
+        const newUuid = productUid;
+        const newName = productName;
+        const newBrand = brand;
+        const newDate = formatBack(expDate);
+
+        const response = await fetch(apiUrl + '/api/updateProducts', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                uuid: newUuid,
+                product_id: newId,
+                name: newName,
+                brand: newBrand,
+                exp_date: newDate,
+            }),
+        })
+
+        toggleAnimationHide();
+        getProducts();
+
+    };
 
     return (
         <SafeAreaView style={ProductStyles.container}>
             <Header />
-
             <SearchBar onChangeText={handleChange} />
-
             <ScrollView style={ProductStyles.scrollView}>
 
                 {filteredProducts.map((product) => (
@@ -185,10 +208,10 @@ export default Product = ({ navigation }) => {
                 </View>
 
                 <View style={ProductStyles.buttonWrapper}> 
-                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor:'#7cffc0'}]} onPress={() => {/*PUT FUNCTION HERE*/ }}>
+                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor:'#7cffc0'}]} onPress={() => {updateProducts()}}>
                     <Text style={ProductStyles.buttonOption}>Save</Text>
                 </TouchableHighlight> 
-                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor: '#ff7c7c'}]} onPress={() => {toggleAnimationHide() }}>
+                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor: '#ff7c7c'}]} onPress={() => {toggleAnimationHide()}}>
                     <Text style={ProductStyles.buttonOption}>Cancel</Text>
                 </TouchableHighlight>
                 </View>

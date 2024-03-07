@@ -59,10 +59,13 @@ const ScanStyles = StyleSheet.create({
     },
     ascendingBox: {
         position: 'absolute',
-        width: '100%',
-        bottom: 0,
+        width: '90%', // Adjust the width as needed
+        alignSelf: 'center', // Center horizontally
+        bottom: '15%', // Adjust the positioning as needed
         backgroundColor: 'white',
-        borderRadius: 40,
+        borderRadius: 20,
+        borderColor: 'black',
+        zIndex: 1,
     },
     buttonWrapper:{
         
