@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const UserSettings = () => {
 
     const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
-    const upadateUserSettingsEndpoint = 'updateUserSettings/';
+    const updateUserSettingsEndpoint = 'updateUserSettings/';
     const getUserEndpoint = 'getUser/';
 
 
@@ -60,9 +60,9 @@ const UserSettings = () => {
         const languageInt = parseInt(language);
 
 
-        const response = await fetch(apiUrl + upadateUserSettingsEndpoint,
+        const response = await fetch(apiUrl + updateUserSettingsEndpoint,
             {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },

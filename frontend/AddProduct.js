@@ -31,6 +31,7 @@ export default function App() {
       setHasPermission(status === 'granted');
     })();
   },[]);
+
   const toggleAnimationHide = () => {
     Animated.timing(animation, {
       toValue: 0, // Toggle between 0 and 1 

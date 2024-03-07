@@ -48,7 +48,7 @@ app.get("/api/getUser/:uuid", async (req, res) => {
     }
 });
 
-app.post('/api/updateUserSettings', async (req, res) => {
+app.put('/api/updateUserSettings', async (req, res) => {
 
     const uuid = req.body.uuid;
     const notifications = req.body.notifications;
@@ -149,6 +149,25 @@ app.delete('/api/deleteProducts/:uuid/:product_id', async (req, res) =>{
     }
 });
 
+app.put('/api/updateProducts', async (req, res) =>{
+    const uuid = req.body.uuid;
+    const product_id = req.body.product_id;
+    const name = req.body.name;
+    const brand = req.body.brand;
+    const exp_date = req.body.exp_date;
+    try {
+        const { data, error } = await supabase
+            .from('products')
+            .update({ name: name, brand: brand, exp_date: exp_date })
+            .eq('uuid', uuid)
+            .eq('product_id', product_id)
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+});
+
 const reqProductSearch = async (uuid, name) => {
     const { data, error } = await supabase
         .from('products')
@@ -184,22 +203,17 @@ const insertNewUser = async (newUser) => {
     return uuid;
 };
 
-// Handle POST requests to the root endpoint
+
 app.post('/api/RegisterUser', async (req, res) => {
-    // Create a new user object to insert into the database
     const newUser = {
         username: req.body.username,
         password_hash: req.body.hashedPassword
     };
-
     try {
-        // Insert the new user into the database
         const uuid = await insertNewUser(newUser);
-
         res.status(201).send(uuid);
     } catch (error) {
         console.error(error);
-        // Send a 500 (Internal Server Error) status code and an error message
         res.status(500).send('Internal Server Error');
     }
 });

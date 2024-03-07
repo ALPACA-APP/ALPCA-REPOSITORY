@@ -3,7 +3,7 @@
   import ProdContStyles from './ProdContStyles';
   import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-  const ProductContainer = ({ product, onProductDelete, onGenerateRecipe }) => {
+  const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProductEdit }) => {
 
     //PRODUCT
     //This is an object from the database, so it must have:
@@ -56,7 +56,7 @@
 
 
     const handleEditProduct = () => {
-
+      onProductEdit(product);
     };
 
     const handleDeleteProduct = async () => {
@@ -146,7 +146,7 @@
           </View>
           <View style={ProdContStyles.containerButtons}>
             {!expanded && (
-              <TouchableOpacity onPress={handleEditProduct}>
+              <TouchableOpacity onPress={() =>handleEditProduct(product)}>
                 <Animated.Image style={[ProdContStyles.editBtn, animatedEditBtn]} source={require('./assets/icons8-editar-512.png')}></Animated.Image>
               </TouchableOpacity>
             )}
