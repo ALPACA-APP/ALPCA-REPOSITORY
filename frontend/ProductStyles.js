@@ -84,8 +84,7 @@ const ProductStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 10,
-        paddingBottom: 50,
- 
+        position: 'absolute',
     },
     calendarIos:{
         center: 'center', 

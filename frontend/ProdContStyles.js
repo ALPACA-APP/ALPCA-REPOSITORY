@@ -4,7 +4,7 @@ const ProdContStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: '#ffffff',
-    justifyContent: 'space-between', // Distribute content along the main axis
+    //justifyContent: '', // Distribute content along the main axis
     alignItems: 'center', // Align items along the cross axis (vertically in this case)
     width: '100%',
     height: 70,
@@ -14,12 +14,15 @@ const ProdContStyles = StyleSheet.create({
   containerMain: {
     flexDirection: 'column',
     marginLeft: 10,
+    
   },
   containerExpire: {
     flexDirection: 'row',
   },
   containerButtons: {
     flexDirection: 'row',
+    position: 'absolute',
+    right: 20,
   },
   productImage: {
     borderColor: 'black',
@@ -32,6 +35,9 @@ const ProdContStyles = StyleSheet.create({
     color: '#1f1f1f',
     fontSize: 15,
     fontWeight: 'bold',
+    width: '100%',
+
+    textAlign: 'left',
   },
   productBrand: {
     color: '#7c7c7c',

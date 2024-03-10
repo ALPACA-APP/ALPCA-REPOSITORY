@@ -118,7 +118,7 @@ const Recipes = ({ navigation }) => {
 
     if (loading) {
         return (
-            <SafeAreaView style={{ height: '100%' }}>
+            <SafeAreaView style={{ height: '100%',  backgroundColor:'white'}}>
                 <Header />
                 <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
                 <ScrollView style={RecipeStyles.scrollView}>
@@ -131,7 +131,7 @@ const Recipes = ({ navigation }) => {
 
     return (
 
-        <SafeAreaView style={{ height: '100%' }}>
+        <SafeAreaView style={{ height: '100%' , backgroundColor:'white'}}>
             <Header />
             <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
             <ScrollView style={RecipeStyles.scrollView}>
@@ -163,6 +163,7 @@ const RecipeStyles = StyleSheet.create({
     AddButton: {
         backgroundColor: "transparent",
         borderWidth: 2,
+        flexDirection: "row",
         borderColor: "#000",
         borderRadius: 10,
         padding: 10,

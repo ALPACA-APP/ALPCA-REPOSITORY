@@ -55,7 +55,7 @@ export default function App() {
   };
   const heightInterpolate = animation.interpolate({
     inputRange: [0, 0.5, 1],
-    outputRange: ['0%', '50%', '60%'],
+    outputRange: ['0%', '60%', '70%'],
   });
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
