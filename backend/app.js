@@ -259,6 +259,36 @@ app.get('/api/GetRecipes/:uuid', async (req, res) => {
     }
 });
 
+
+
+
+const reqRecipe = async (uuid, recipe_id) => {
+    const { data, error } = await supabase
+        .from('recipes')
+        .select('*')
+        .eq('uuid', uuid)
+        .eq('recipe_id', recipe_id)
+    return data;
+}
+
+app.get('/api/GetRecipe/:uuid/:recipe_id', async (req, res) => {
+    const uuid = req.params.uuid;
+    const recipe_id = req.params.recipe_id;
+    try {
+        if (uuid === "") {
+            res.status(404).send("Error: User not found");
+        }
+        else if (recipe_id === "") {
+            res.status(404).send("Error: Recipe not found");
+        }
+        const data = await reqRecipe(uuid, recipe_id);
+        res.json(data);
+    } catch (error) {
+        console.log(error);
+        res.status(404).send("Error: Recipe or User not found");
+    }
+});
+
 app.listen(port, () => {
     console.log(`backend is listening at http://192.168.0.15:${port}`);
 });

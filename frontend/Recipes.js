@@ -89,6 +89,7 @@ const Recipes = ({ navigation }) => {
 
     const openRecipe = (id) => {
         console.log("opening recipe with id: " + id);
+        navigation.navigate('Recipe Viewer', { recipeId: id, userObject: userObject });
     }
 
     const deleteRecipe = (id) => {
