@@ -5,7 +5,8 @@ import logout from './assets/icons8-logout-96.png';
 import account from './assets/icons8-account-96.png';
 import leftArrow from './assets/icons8-left-arrow-100.png';
 
-const Header = ({ isLogout = "true", onGoBack = () => { console.log("default go back method") } }) => {
+const Header = ({ isLogout = "true", onGoBack = () => { console.log("default go back method") }, userObject }) => {
+    
     return (
         <View style={styles.header}>
             <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { onGoBack(); }}>
@@ -20,7 +21,7 @@ const Header = ({ isLogout = "true", onGoBack = () => { console.log("default go 
             <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { /* Handle right press */ }}>
                 <View style={styles.rightContent}>
                     <Image source={account} style={styles.sideImage} />
-                    <Text style={styles.sideText}>Username</Text>
+                    <Text style={styles.sideText}>{userObject.username}</Text>
                 </View>
             </TouchableHighlight>
         </View>

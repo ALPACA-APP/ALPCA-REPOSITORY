@@ -21,6 +21,7 @@ const UserSettings = () => {
     const [colorBlind, setColorBlind] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [uuid, setUuid] = useState(''); // This should be set to the user's uuid when the user logs in
+    const [userObject, setUserObject] = useState('');
 
 
     const openPicker = () => {
@@ -59,6 +60,18 @@ const UserSettings = () => {
         const fontSizeInt = parseInt(fontSize);
         const languageInt = parseInt(language);
 
+        const newUser = {
+            uuid: userObject.uuid,
+            username: userObject.username,
+            pasword_hash: userObject.pasword_hash,
+            notifications: notifications,
+            autoDelete: autoDeleteExpired,
+            colourBlind: colorBlindInt,
+            fontSize: fontSizeInt,
+            language: languageInt,
+        }
+        const userString = JSON.stringify(newUser);
+        AsyncStorage.setItem('user', userString);
 
         const response = await fetch(apiUrl + updateUserSettingsEndpoint,
             {
@@ -105,11 +118,13 @@ const UserSettings = () => {
 
     loadUserUuid = async () => {
         try {
-            const value = await AsyncStorage.getItem('UUID');
-            if (value !== null) {
-                setUuid(""+value);
+            const userStoredString = await AsyncStorage.getItem('user');
+            const userStored = JSON.parse(userStoredString);
+            if (userStored !== null) {
+                setUuid(""+userStored.uuid);
             }
-            LoadSettings(value);
+            setUserObject(userStored);
+            LoadSettings(userStored.uuid);
         } catch (error) {
             console.error(error);
         }
@@ -118,7 +133,6 @@ const UserSettings = () => {
 
     useEffect(() => {
         loadUserUuid();
-
     }, []);
 
 
@@ -132,7 +146,7 @@ const UserSettings = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header />
+            <Header userObject={userObject}/>
 
             <View style={styles.content}>
 
@@ -157,7 +171,7 @@ const UserSettings = () => {
 
 
                 <View style={styles.settingItem}>
-                    <Text style={styles.settingLabel}>Color Blindes</Text>
+                    <Text style={styles.settingLabel}>Color Blindness</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
                             placeholder={{}}

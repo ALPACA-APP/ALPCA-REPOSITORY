@@ -19,6 +19,7 @@ const Recipes = ({ navigation }) => {
     const [uuid, setUuid] = useState('');
     const [searchText, setSearchText] = useState('');
     const [loading, setLoading] = useState(true);
+    const [userObject, setUserObject] = useState('');
     const [recipes, setRecipes] = useState([
         {
             "uuid": "72165bb3-14e1-4b5e-9dbf-4316d26a9941",
@@ -44,11 +45,12 @@ const Recipes = ({ navigation }) => {
 
     const InitView = async () => {
         setLoading(true);
-        let localUuid = '';
         try {
-            localUuid = await AsyncStorage.getItem('UUID');
-            if (localUuid !== null) {
-                setUuid("" + localUuid);
+            const userStoredString = await AsyncStorage.getItem('user');
+            const userStored = JSON.parse(userStoredString);
+            if (userStored.uuid !== null) {
+                setUuid("" + userStored.uuid);
+                setUserObject(userStored);
             }
         } catch (e) {
             console.log(e);
@@ -56,7 +58,7 @@ const Recipes = ({ navigation }) => {
 
         //fetch all the recipes
         try {
-            const response = await fetch(apiUrl + endpoint + localUuid);
+            const response = await fetch(apiUrl + endpoint + userStored.uuid);
             const data = await response.json();
             setRecipes(data);
             setSearchResults(data);
@@ -119,7 +121,7 @@ const Recipes = ({ navigation }) => {
     if (loading) {
         return (
             <SafeAreaView style={{ height: '100%',  backgroundColor:'white'}}>
-                <Header />
+                <Header userObject={userObject} />
                 <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
                 <ScrollView style={RecipeStyles.scrollView}>
                     <Image source={loadingSpinner} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
@@ -132,7 +134,7 @@ const Recipes = ({ navigation }) => {
     return (
 
         <SafeAreaView style={{ height: '100%' , backgroundColor:'white'}}>
-            <Header />
+            <Header userObject={userObject} />
             <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
             <ScrollView style={RecipeStyles.scrollView}>
                 <TouchableOpacity style={RecipeStyles.AddButton} onPress={() => { generateRecipe(); }}>
