@@ -27,6 +27,8 @@ const Login = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const sha256 = require('js-sha256').sha256;
 
+  const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
+
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
@@ -63,8 +65,6 @@ const Login = ({ navigation }) => {
   const checkLogin = async () => {
     // This method is called to check if the user credentials lineup with the dev database data, to check if requests are recieved.
 
-    const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
-
     try {
       //set the loading state to true
       setLoading(true);
@@ -82,7 +82,7 @@ const Login = ({ navigation }) => {
       //if they are correct, navigate to the main view
       if (username === resUsername && hashedPassword === resPassword) {
         // store the UUID in the async storage to keep the user logged in.
-
+        
         navigation.reset({
           index: 0,
           routes: [{ name: 'MainNavigation' }],
@@ -101,6 +101,19 @@ const Login = ({ navigation }) => {
     //set the loading state to false
     setLoading(false);
   };
+
+//WE SHOULD TAKE THIS OFF AND PLACE IT INTO THE CHECKLOGIN
+  const userObject = {
+    uuid: '72165bb3-14e1-4b5e-9dbf-4316d26a9941',
+    username: 'a',
+    pasword_hash: 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb',
+    notifications: true,
+    autoDelete: true,
+    colourBlind: 1,
+    fontSize: 0,
+    language: 0
+  }
+  const userString = JSON.stringify(userObject);
 
   return (
     <SafeAreaView style={LoginStyles.container}>
@@ -147,7 +160,8 @@ const Login = ({ navigation }) => {
 
             <TouchableHighlight style={LoginStyles.button} onPress={() => {
               //AsyncStorage.setItem('key', 'value')
-              AsyncStorage.setItem('UUID', '72165bb3-14e1-4b5e-9dbf-4316d26a9941');
+
+              AsyncStorage.setItem('user', userString);
 
               navigation.reset({
                 index: 0,

@@ -19,6 +19,7 @@ export default IngredientSelect = ({ navigation }) => {
     const animated = useRef(new Animated.Value(0)).current;
     const [checkedAtLeastOnce, setCheckedAtLeastOnce] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [userObject, setUserObject] = useState('');
 
     // in the future change this to a list of products from the database
     // using a useEffect to fetch the data from the server and store it in the products array in a useState
@@ -30,17 +31,19 @@ export default IngredientSelect = ({ navigation }) => {
     const getUuid = async () => {
         setIsLoading(true);
         try {
-            const value = await AsyncStorage.getItem('UUID');
-            if (value !== null) {
-                setUuid("" + value);
+            const userStoredString = await AsyncStorage.getItem('user');
+            const userStored = JSON.parse(userStoredString);
+            if (userStored !== null) {
+                setUuid("" + userStored.uuid);
             }
 
             // fetch the products from the server
-            const response = await fetch(apiUrl + 'fetchAllProducts/' + value);
+            const response = await fetch(apiUrl + 'fetchAllProducts/' + userStored.uuid);
             if (!response.ok) {
                 throw new Error('Network request failed');
             }
             const data = await response.json();
+            setUserObject(userStored);
             setProductList(data);
         } catch (e) {
             console.log(e);
@@ -151,7 +154,7 @@ export default IngredientSelect = ({ navigation }) => {
 
     return (
         <SafeAreaView style={ProductStyles.container}>
-            <Header isLogout="false" onGoBack={() => { goBack(); }} />
+            <Header isLogout="false" onGoBack={() => { goBack(); }} userObject={userObject} />
 
             <SearchBar onSearchSubmit={handleSearch} onChangeText={handleChange} />
             {<Animated.View style={animatedYtranslate}>
@@ -162,7 +165,7 @@ export default IngredientSelect = ({ navigation }) => {
 
             <ScrollView style={ProductStyles.scrollView}>
                 {filteredProducts.map((product) => (
-                    <ProdSelectContainer key={product.id} product={product} onCheckboxChange={onCheckboxChange} />
+                    <ProdSelectContainer key={product.id} product={product} onCheckboxChange={onCheckboxChange} userObject={userObject}/>
                 ))}
 
                 <View style={{ marginBottom: '50%' }} />

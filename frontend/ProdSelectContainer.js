@@ -5,14 +5,7 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture
 
 import Checkmark from './assets/icons8-checkmark-100.png';
 
-const ProdSelectContainer = ({ product, onCheckboxChange }) => {
-
-    //PRODUCT
-    //This is an object from the database, so it must have:
-    //img_url
-    //name
-    //brand
-    //exp_date
+const ProdSelectContainer = ({ product, onCheckboxChange, userObject }) => {
 
     const [daysLeft, setDaysLeft] = useState(0);
     const [expireColor, setExpireColor] = useState('#ff7c7c');
@@ -33,26 +26,50 @@ const ProdSelectContainer = ({ product, onCheckboxChange }) => {
         const expirationDate = formatDateString(product.exp_date);
         const timeDifference = expirationDate - currentDate;
         const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-
+  
         // Update daysLeft with daysDifference
         setDaysLeft(daysDifference);
-
+  
         // Assign colors based on daysDifference
         switch (true) {
-            case (daysDifference >= 15):
-                setExpireColor('#7cffc0');
-                setExpireColorBorder('#198E56');
-                break;
-            case (daysDifference < 15 && daysDifference > 3):
-                setExpireColor('#ffd88b');
-                setExpireColorBorder('#A73C00');
-                break;
-            default:
-                setExpireColor('#ff7c7c');
-                setExpireColorBorder('#BA4646');
-                break;
+          case (daysDifference >= 15):
+            if (userObject.colourBlind === 0){
+              setExpireColor('#7cffc0');
+              setExpireColorBorder('#198e56');
+            }else if(userObject.colourBlind === 1){
+              setExpireColor('#ffdfd2');
+              setExpireColorBorder('#92765e');
+            }else if(userObject.colourBlind === 2){
+              setExpireColor('#b0f0ff');
+              setExpireColorBorder('#3d8590');
+            }
+            break;
+          case (daysDifference < 15 && daysDifference > 3):
+            if (userObject.colourBlind === 0){
+              setExpireColor('#ffd88b');
+              setExpireColorBorder('#a73c00');
+            }else if(userObject.colourBlind === 1){
+              setExpireColor('#ffd4a7');
+              setExpireColorBorder('#795a00');
+            }else if(userObject.colourBlind === 2){
+              setExpireColor('#ffd0dc');
+              setExpireColorBorder('#a73a3d');
+            }
+            break;
+          default:
+            if (userObject.colourBlind === 0){
+              setExpireColor('#ff7c7c');
+              setExpireColorBorder('#ba4646');
+            }else if(userObject.colourBlind === 1){
+              setExpireColor('#c39b73');
+              setExpireColorBorder('#856741');
+            }else if(userObject.colourBlind === 2){
+              setExpireColor('#ff7a83');
+              setExpireColorBorder('#b9474b');
+            }
+            break;
         }
-    }, [product.exp_date]);
+      }, [product.exp_date, userObject.colourBlind]);
 
     const animatedContainer = {
         height: 70, 

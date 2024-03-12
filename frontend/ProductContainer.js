@@ -3,7 +3,7 @@
   import ProdContStyles from './ProdContStyles';
   import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-  const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProductEdit }) => {
+  const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProductEdit, userObject}) => {
 
     //PRODUCT
     //This is an object from the database, so it must have:
@@ -40,19 +40,43 @@
       // Assign colors based on daysDifference
       switch (true) {
         case (daysDifference >= 15):
-          setExpireColor('#7cffc0');
-          setExpireColorBorder('#198E56');
+          if (userObject.colourBlind === 0){
+            setExpireColor('#7cffc0');
+            setExpireColorBorder('#198e56');
+          }else if(userObject.colourBlind === 1){
+            setExpireColor('#ffdfd2');
+            setExpireColorBorder('#92765e');
+          }else if(userObject.colourBlind === 2){
+            setExpireColor('#b0f0ff');
+            setExpireColorBorder('#3d8590');
+          }
           break;
         case (daysDifference < 15 && daysDifference > 3):
-          setExpireColor('#ffd88b');
-          setExpireColorBorder('#A73C00');
+          if (userObject.colourBlind === 0){
+            setExpireColor('#ffd88b');
+            setExpireColorBorder('#a73c00');
+          }else if(userObject.colourBlind === 1){
+            setExpireColor('#ffd4a7');
+            setExpireColorBorder('#795a00');
+          }else if(userObject.colourBlind === 2){
+            setExpireColor('#ffd0dc');
+            setExpireColorBorder('#a73a3d');
+          }
           break;
         default:
-          setExpireColor('#ff7c7c');
-          setExpireColorBorder('#BA4646');
+          if (userObject.colourBlind === 0){
+            setExpireColor('#ff7c7c');
+            setExpireColorBorder('#ba4646');
+          }else if(userObject.colourBlind === 1){
+            setExpireColor('#c39b73');
+            setExpireColorBorder('#856741');
+          }else if(userObject.colourBlind === 2){
+            setExpireColor('#ff7a83');
+            setExpireColorBorder('#b9474b');
+          }
           break;
       }
-    }, [product.exp_date]);
+    }, [product.exp_date, userObject.colourBlind]);
 
 
     const handleEditProduct = () => {

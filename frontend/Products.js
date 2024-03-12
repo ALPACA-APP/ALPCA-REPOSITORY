@@ -10,28 +10,39 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
     const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-    //const apiUrl = 'http://192.168.1.58:3000';
+    //const apiUrl = 'http://IP:3000';
 
 export default Product = ({ navigation }) => {
 
     const [productsList, setProductList] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [uuid, setUuid] = useState('');
     const [loading, setLoading] = useState(true);
+    const [userObject, setUserObject] = useState('');
+    //EDIT
+    const [animation] = useState(new Animated.Value(0)); // Initialize animated value
+    const [productName, setProductName] = useState(''); // Initialize state variable
+    const [brand, setBrand] = useState(''); // Initialize state variable
+    const [expDate, setExpDate] = useState(new Date());
+    const [id, setId] = useState(0);
+    const [productUid, setProductUid] = useState(0);
+    const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
+    const [modal, setModal] = useState(false);
 
     const getProducts = async () => {
         try {
-            const value = await AsyncStorage.getItem('UUID');
-            if (value !== null) {
-                setUuid("" + value);
-    
-                const response = await fetch(apiUrl + '/api/fetchAllProducts/' + value);
+            const userStoredString = await AsyncStorage.getItem('user');
+            const userStored = JSON.parse(userStoredString);
+
+            if (userStored !== null) {
+
+                const response = await fetch(apiUrl + '/api/fetchAllProducts/' + userStored.uuid);
     
                 if (!response.ok) {
                     throw new Error('Network request failed');
                 }
     
                 const data = await response.json();
+                setUserObject(userStored);
                 setProductList(data);
                 setLoading(false);
             }
@@ -39,6 +50,7 @@ export default Product = ({ navigation }) => {
             console.error(error.message);
             setLoading(false);
         }
+
     };
     
 
@@ -69,16 +81,6 @@ export default Product = ({ navigation }) => {
     const goToSelectIngredients = () => {
         navigation.navigate('Recipes', { screen: 'Ingredient Select' });
     }
-
-    //EDIT
-    const [animation] = useState(new Animated.Value(0)); // Initialize animated value
-    const [productName, setProductName] = useState(''); // Initialize state variable
-    const [brand, setBrand] = useState(''); // Initialize state variable
-    const [expDate, setExpDate] = useState(new Date());
-    const [id, setId] = useState(0);
-    const [productUid, setProductUid] = useState(0);
-    const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
-    const [modal, setModal] = useState(false);
 
     const toggleAnimationHide = () => {
         setModal(false);
@@ -162,12 +164,12 @@ export default Product = ({ navigation }) => {
 
     return (
         <SafeAreaView style={ProductStyles.container}>
-            <Header />
+            <Header userObject={userObject} />
             <SearchBar onChangeText={handleChange} />
             <ScrollView style={ProductStyles.scrollView}>
 
                 {filteredProducts.map((product) => (
-                    <ProductContainer key={product.id} product={product} onProductDelete={getProducts} onProductEdit={handleEdit} onGenerateRecipe={goToSelectIngredients } />
+                    <ProductContainer key={product.id} product={product} onProductDelete={getProducts} onProductEdit={handleEdit} onGenerateRecipe={goToSelectIngredients} userObject={userObject} />
                 ))}
 
                 <View style={{ marginBottom: '25%' }} />

@@ -33,7 +33,7 @@ const Register = ({ navigation }) => {
   const sha256 = require('js-sha256').sha256;
 
   const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-  //const apiUrl = 'http://127.0.0.1:3000';
+  //const apiUrl = 'http://IP:3000';
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -131,17 +131,24 @@ const Register = ({ navigation }) => {
           }),
         });
 
-        console.log(registerResponse);
-
-        console.log(registerResponse.statusText);
-
         if (registerResponse.status !== 201) {
           setErrorCode(2);
           setError(true);
         } else {
           const userUuid = await registerResponse.text()
-          AsyncStorage.setItem('UUID', ""+userUuid);
-          console.log(userUuid);
+          const userObject = {
+            uuid: userUuid,
+            username: username,
+            pasword: hashedPassword,
+            notifications: true,
+            autoDelete: true,
+            colourBlind: 0,
+            fontSize: 0,
+            language: 0
+          }
+
+          const userString = JSON.stringify(userObject);
+          AsyncStorage.setItem('user', userString);
           navigation.reset({
             index: 0,
             routes: [{ name: 'MainNavigation' }],
