@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView} from 'react-native';
 import Header from "./Header";
 import RecipeViewerStyles from './RecipeViewerStyles';
+import { ScrollView } from "react-native-gesture-handler";
 
 export default RecipeViewer = ({ route, navigation }) => {
     const { recipeId, userObject } = route.params;
@@ -33,13 +34,13 @@ export default RecipeViewer = ({ route, navigation }) => {
     return (
         <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
             <Header isLogout="false" onGoBack={() => { goBack(); }} userObject={userObject} />
-            <View>
-                <Text>RecipeViewer</Text>
-                <Text>Recipe ID: {recipeId}</Text>
-                <Text>User UUID: {userObject.uuid}</Text>
-                <Text>Recipe Name: {recipe.title}</Text>
-                <Text>Recipe Content: {recipe.content}</Text>
-            </View>
+            <ScrollView style={RecipeViewerStyles.scrollContainer}>
+                <View style={RecipeViewerStyles.titleContainer}>
+                    <Text style={RecipeViewerStyles.titleText}>{recipe.title}</Text>
+                </View>
+                <Text>{recipe.content}</Text>
+                <View style={{ marginBottom: '25%' }} />
+            </ScrollView>
         </SafeAreaView>
     );
 }
