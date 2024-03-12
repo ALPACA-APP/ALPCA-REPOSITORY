@@ -4,6 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import ScanStyles from './ScanStyles';
 import { TextInput, TouchableHighlight } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from 'react-native-inset-shadow/src/styles';
 
 export default function App() {
@@ -15,20 +16,23 @@ export default function App() {
   const [url, setUrl] = useState(''); // Initialize state variable
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
+  const [userObject, setUserObject] = useState('');
   
   const apiUrl = 'https://world.openfoodfacts.org/api/v2/product/';
   const endURL = '.json';
   const api = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
   //const api = 'http://localhost:3000'
   let data = date.toDateString();
-  const uuid = '72165bb3-14e1-4b5e-9dbf-4316d26a9941';
-
-
 
   useEffect(() => {
     (async () => {
+      const userStoredString = await AsyncStorage.getItem('user');
+      const userStored = JSON.parse(userStoredString);
+      setUserObject(userStored);
+
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
+
     })();
   },[]);
 
@@ -126,7 +130,7 @@ export default function App() {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-              uuid: uuid,
+              uuid: userObject.uuid,
               product_id: 0, 
               img_url: url,
               name: product,
@@ -134,12 +138,31 @@ export default function App() {
               exp_date: postDate,
           }),
       });
-
       toggleAnimationHide();
 
     } catch (error) {
       console.error(error);
     }
+  };
+
+
+  const setGreen = (colourBlind) => {
+    if(colourBlind === 0){
+        return '#7cffc0';
+    }else if (colourBlind === 1){
+        return '#ffdfd2';
+    }else if (colourBlind === 2){
+        return '#b0f0ff';
+    }
+  };
+  const setRed = (colourBlind) => {
+      if(colourBlind === 0){
+          return '#ff7c7c';
+      }else if (colourBlind === 1){
+          return '#c39b73';
+      }else if (colourBlind === 2){
+          return '#ff7a83';
+      }
   };
 
   
@@ -181,10 +204,10 @@ export default function App() {
         </View>
 
         <View style={ScanStyles.buttonWrapper}> 
-          <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ScanStyles.buttonBox, {backgroundColor:'rgb(105, 255, 172)'}]} onPress={() => {setScanned(false); manageScan()}}>
+          <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ScanStyles.buttonBox, {backgroundColor: setGreen(userObject.colourBlind)}]} onPress={() => {setScanned(false); manageScan()}}>
             <Text style={ScanStyles.button}>Save</Text>
           </TouchableHighlight> 
-          <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ScanStyles.buttonBox, {backgroundColor: 'rgb(247, 126, 104)'}]} onPress={() => { setScanned(false); toggleAnimationHide() }}>
+          <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ScanStyles.buttonBox, {backgroundColor: setRed(userObject.colourBlind)}]} onPress={() => { setScanned(false); toggleAnimationHide() }}>
             <Text style={ScanStyles.button}>Cancel</Text>
           </TouchableHighlight>
         </View>
