@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
     const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-    //const apiUrl = 'http://IP:3000';
+    //const apiUrl = 'http://192.168.43.146:3000';
 
 export default Product = ({ navigation }) => {
 
@@ -162,6 +162,25 @@ export default Product = ({ navigation }) => {
 
     };
 
+    const setGreen = (colourBlind) => {
+        if(colourBlind === 0){
+            return '#7cffc0';
+        }else if (colourBlind === 1){
+            return '#ffdfd2';
+        }else if (colourBlind === 2){
+            return '#b0f0ff';
+        }
+    };
+    const setRed = (colourBlind) => {
+        if(colourBlind === 0){
+            return '#ff7c7c';
+        }else if (colourBlind === 1){
+            return '#c39b73';
+        }else if (colourBlind === 2){
+            return '#ff7a83';
+        }
+    };
+
     return (
         <SafeAreaView style={ProductStyles.container}>
             <Header userObject={userObject} />
@@ -210,10 +229,10 @@ export default Product = ({ navigation }) => {
                 </View>
 
                 <View style={ProductStyles.buttonWrapper}> 
-                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor:'#7cffc0'}]} onPress={() => {updateProducts()}}>
+                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor: setGreen(userObject.colourBlind)}]} onPress={() => {updateProducts()}}>
                     <Text style={ProductStyles.buttonOption}>Save</Text>
                 </TouchableHighlight> 
-                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor: '#ff7c7c'}]} onPress={() => {toggleAnimationHide()}}>
+                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor: setRed(userObject.colourBlind)}]} onPress={() => {toggleAnimationHide()}}>
                     <Text style={ProductStyles.buttonOption}>Cancel</Text>
                 </TouchableHighlight>
                 </View>
