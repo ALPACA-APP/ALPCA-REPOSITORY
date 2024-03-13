@@ -45,9 +45,10 @@ const Recipes = ({ navigation }) => {
 
     const InitView = async () => {
         setLoading(true);
+        let userStored;
         try {
             const userStoredString = await AsyncStorage.getItem('user');
-            const userStored = JSON.parse(userStoredString);
+            userStored = JSON.parse(userStoredString);
             if (userStored.uuid !== null) {
                 setUuid("" + userStored.uuid);
                 setUserObject(userStored);
