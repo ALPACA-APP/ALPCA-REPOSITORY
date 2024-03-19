@@ -184,7 +184,7 @@ export default Product = ({ navigation }) => {
 
     return (
         <SafeAreaView style={ProductStyles.container}>
-            <Header userObject={userObject} />
+            <Header userObject={userObject} navigation={navigation} />
             <SearchBar onChangeText={handleChange} />
             <ScrollView style={ProductStyles.scrollView}>
 
