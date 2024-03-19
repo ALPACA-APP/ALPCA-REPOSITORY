@@ -8,7 +8,7 @@ import Header from './Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CONSTANTS } from './global.js';
 
-const UserSettings = () => {
+const UserSettings = ({navigation}) => {
 
     const apiUrl = CONSTANTS.API_URL;
     const updateUserSettingsEndpoint = 'updateUserSettings/';
@@ -147,7 +147,7 @@ const UserSettings = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header userObject={userObject}/>
+            <Header userObject={userObject} navigation={navigation}  />
 
             <View style={styles.content}>
 

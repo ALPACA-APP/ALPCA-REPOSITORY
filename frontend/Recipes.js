@@ -124,7 +124,7 @@ const Recipes = ({ navigation }) => {
     if (loading) {
         return (
             <SafeAreaView style={{ height: '100%',  backgroundColor:'white'}}>
-                <Header userObject={userObject} />
+                <Header userObject={userObject} navigation={navigation}/>
                 <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
                 <ScrollView style={RecipeStyles.scrollView}>
                     <Image source={loadingSpinner} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
@@ -137,7 +137,7 @@ const Recipes = ({ navigation }) => {
     return (
 
         <SafeAreaView style={{ height: '100%' , backgroundColor:'white'}}>
-            <Header userObject={userObject} />
+            <Header userObject={userObject} navigation={navigation}/>
             <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
             <ScrollView style={RecipeStyles.scrollView}>
                 <TouchableOpacity style={RecipeStyles.AddButton} onPress={() => { generateRecipe(); }}>
