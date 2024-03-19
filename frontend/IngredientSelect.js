@@ -7,12 +7,12 @@ import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ProdSelectContainer from "./ProdSelectContainer";
-
+import { CONSTANTS } from './global.js';
 
 export default IngredientSelect = ({ navigation }) => {
 
-    //const apiUrl = 'http://IP:3000/api/';
-    const apiUrl = "https://thoughtful-cod-sweatshirt.cyclic.app/api/";
+
+    const apiUrl = CONSTANTS.API_URL;
 
     const [uuid, setUuid] = useState('');
     const [selectedProducts, setSelectedProducts] = useState([])

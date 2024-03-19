@@ -8,8 +8,9 @@ import ProductContainer from "./ProductContainer";
 import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { CONSTANTS } from './global.js';
 
-    const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
+    const apiUrl = CONSTANTS.API_URL ;
     //const apiUrl = 'http://192.168.43.146:3000';
 
 export default Product = ({ navigation }) => {
@@ -35,7 +36,7 @@ export default Product = ({ navigation }) => {
 
             if (userStored !== null) {
 
-                const response = await fetch(apiUrl + '/api/fetchAllProducts/' + userStored.uuid);
+                const response = await fetch(apiUrl + 'fetchAllProducts/' + userStored.uuid);
     
                 if (!response.ok) {
                     throw new Error('Network request failed');
@@ -145,7 +146,7 @@ export default Product = ({ navigation }) => {
         const newBrand = brand;
         const newDate = formatBack(expDate);
 
-        const response = await fetch(apiUrl + '/api/updateProducts', {
+        const response = await fetch(apiUrl + 'updateProducts', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

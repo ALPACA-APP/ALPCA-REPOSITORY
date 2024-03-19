@@ -6,6 +6,7 @@ import { TextInput, TouchableHighlight } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from 'react-native-inset-shadow/src/styles';
+import { CONSTANTS } from './global.js';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -17,11 +18,12 @@ export default function App() {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
   const [userObject, setUserObject] = useState('');
+
   
   const apiUrl = 'https://world.openfoodfacts.org/api/v2/product/';
   const endURL = '.json';
-  const api = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
-  //const api = 'http://localhost:3000'
+  const api = CONSTANTS.API_URL;
+
   let data = date.toDateString();
 
   useEffect(() => {

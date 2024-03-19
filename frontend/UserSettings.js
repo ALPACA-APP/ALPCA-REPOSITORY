@@ -6,10 +6,11 @@ import InsetShadow from 'react-native-inset-shadow';
 import Loader from './assets/SpinLoader.gif';
 import Header from './Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CONSTANTS } from './global.js';
 
 const UserSettings = () => {
 
-    const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/api/';
+    const apiUrl = CONSTANTS.API_URL;
     const updateUserSettingsEndpoint = 'updateUserSettings/';
     const getUserEndpoint = 'getUser/';
 
@@ -174,6 +175,7 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Color Blindness</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
+                            style={pickerSelectStyles}
                             placeholder={{}}
                             value={colorBlind}
                             onValueChange={(value, index) => { setColorBlind(value); updateUserSettings(); }}
@@ -191,6 +193,7 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Font Size</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
+                            style={pickerSelectStyles}
                             placeholder={{}}
                             value={fontSize}
                             onValueChange={(value, index) => { setFontSize(value); updateUserSettings(); }}
@@ -207,6 +210,7 @@ const UserSettings = () => {
                     <Text style={styles.settingLabel}>Language</Text>
                     <InsetShadow containerStyle={styles.picker} shadowRadius={4} shadowOpacity={0.4}>
                         <RNPickerSelect
+                            style={pickerSelectStyles}
                             placeholder={{}}
                             value={language}
                             onValueChange={(value) => { setLanguage(value); updateUserSettings(); }}
@@ -223,6 +227,18 @@ const UserSettings = () => {
         </SafeAreaView>
     );
 }
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+});
 
 
 const styles = StyleSheet.create({

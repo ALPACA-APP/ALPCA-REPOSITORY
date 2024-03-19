@@ -2,6 +2,7 @@ import { SafeAreaView, View, ScrollView, StyleSheet, TouchableOpacity, Text, Ima
 import { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { CONSTANTS } from './global.js';
 
 
 import Header from "./Header";
@@ -12,8 +13,8 @@ import loadingSpinner from "./assets/SpinLoader.gif";
 
 const Recipes = ({ navigation }) => {
 
-    const apiUrl = "https://thoughtful-cod-sweatshirt.cyclic.app/api/"
-    //const apiUrl = "http://IP:3000/api/";
+    const apiUrl = CONSTANTS.API_URL;
+    
     const endpoint = "GetRecipes/";
 
     const [uuid, setUuid] = useState('');

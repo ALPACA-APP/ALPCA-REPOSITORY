@@ -3,13 +3,13 @@ import { View, Text, SafeAreaView} from 'react-native';
 import Header from "./Header";
 import RecipeViewerStyles from './RecipeViewerStyles';
 import { ScrollView } from "react-native-gesture-handler";
+import { CONSTANTS } from './global.js';
 
 export default RecipeViewer = ({ route, navigation }) => {
     const { recipeId, userObject } = route.params;
     const [recipe, setRecipe] = useState({});
 
-    const apiUrl = "https://thoughtful-cod-sweatshirt.cyclic.app/api/"
-    //const apiUrl = "http://10.90.1.133:3000/api/";
+    const apiUrl = CONSTANTS.API_URL;
 
     const goBack = () => {
         navigation.navigate('Recipes View');

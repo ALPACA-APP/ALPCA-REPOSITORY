@@ -61,8 +61,8 @@ const screenOptionStyle = {
     tabBarStyle: [{ 
         height: '12%',
         backgroundColor: '#ccc',
-        borderTopRightRadius: 200,
-        borderTopLeftRadius: 200,
+        borderTopRightRadius: 70,
+        borderTopLeftRadius: 70,
         paddingTop: 25,
         paddingRight: 35,
         paddingLeft: 35,

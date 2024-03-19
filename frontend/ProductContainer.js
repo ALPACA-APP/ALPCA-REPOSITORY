@@ -2,6 +2,7 @@
   import { View, Image, Text, Animated } from 'react-native';
   import ProdContStyles from './ProdContStyles';
   import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+  import { CONSTANTS } from './global.js';
 
   const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProductEdit, userObject}) => {
 
@@ -11,9 +12,8 @@
     //name
     //brand
     //exp_date
+    const apiUrl = CONSTANTS.API_URL;
 
-    const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-    //const apiUrl = 'http://IP:3000';
 
     const [daysLeft, setDaysLeft] = useState(0);
     const [expireColor, setExpireColor] = useState('#ff7c7c');
@@ -85,7 +85,7 @@
 
     const handleDeleteProduct = async () => {
       try {
-        const response = await fetch(apiUrl + '/api/deleteProducts/' + product.uuid + '/' + product.product_id, {
+        const response = await fetch(apiUrl + 'deleteProducts/' + product.uuid + '/' + product.product_id, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
         });

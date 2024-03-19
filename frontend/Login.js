@@ -16,6 +16,7 @@ import {
 import LoginStyles from './LoginStyles';
 import InsetShadow from 'react-native-inset-shadow';
 import App from './App';
+import { CONSTANTS } from './global.js';
 
 const Login = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -27,7 +28,7 @@ const Login = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const sha256 = require('js-sha256').sha256;
 
-  const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app/';
+  const apiUrl = CONSTANTS.API_URL; 
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -109,7 +110,7 @@ const Login = ({ navigation }) => {
     pasword_hash: 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb',
     notifications: true,
     autoDelete: true,
-    colourBlind: 1,
+    colourBlind: 0,
     fontSize: 0,
     language: 0
   }

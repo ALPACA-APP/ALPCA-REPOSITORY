@@ -5,6 +5,7 @@ import logout from './assets/icons8-logout-96.png';
 import account from './assets/icons8-account-96.png';
 import leftArrow from './assets/icons8-left-arrow-100.png';
 
+
 const Header = ({ isLogout = "true", onGoBack = () => { console.log("default go back method") }, userObject }) => {
     
     return (

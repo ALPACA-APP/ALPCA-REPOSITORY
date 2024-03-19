@@ -15,6 +15,7 @@ import {
 import RegisterStyles from './RegisterStyles';
 import InsetShadow from 'react-native-inset-shadow';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CONSTANTS } from './global.js';
 
 const Register = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -32,8 +33,7 @@ const Register = ({ navigation }) => {
   const [secureConfPassIOs, setSecureConfPassIOs] = useState(false);
   const sha256 = require('js-sha256').sha256;
 
-  const apiUrl = 'https://thoughtful-cod-sweatshirt.cyclic.app';
-  //const apiUrl = 'http://IP:3000';
+  const apiUrl = CONSTANTS.API_URL;
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -101,7 +101,7 @@ const Register = ({ navigation }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(apiUrl + '/api/FetchAllUsers');
+      const response = await fetch(apiUrl + 'FetchAllUsers');
       const data = await response.json();
 
       let userList = []; //Empty array for loading the usernames in it
@@ -122,7 +122,7 @@ const Register = ({ navigation }) => {
         setError(true);
       } else {
         const hashedPassword = sha256(password);
-        const registerResponse = await fetch(apiUrl + '/api/RegisterUser', {
+        const registerResponse = await fetch(apiUrl + 'RegisterUser', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
