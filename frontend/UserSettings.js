@@ -139,8 +139,9 @@ const UserSettings = ({navigation}) => {
 
     if (isLoading) {
         return (
-            <View style={styles.loaderWrapper}>
-                <Image source={Loader} style={styles.loader} />
+            <View style={styles.container}>
+                <Header userObject={userObject} navigation={navigation} />
+                <Image source={Loader} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
             </View>
         );
     }
