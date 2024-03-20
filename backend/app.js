@@ -335,6 +335,21 @@ app.delete('/api/DeleteRecipe/:uuid/:recipe_id', async (req, res) => {
     }
 });
 
+
+app.delete('/api/DeleteUser/:uuid', async (req, res) => {
+    const uuid = req.params.uuid;
+    console.log(uuid);
+    try {
+        const { data1, error1 } = await supabase.from('products').delete().eq('uuid', uuid);
+        const { data2, error2 } = await supabase.from('recipes').delete().eq('uuid', uuid);
+        const { data3, error3 } = await supabase.from('users').delete().eq('uuid', uuid);
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+});
+
 app.listen(port, () => {
     console.log(`backend is listening at http://192.168.196.85:${port}`);
 }); 

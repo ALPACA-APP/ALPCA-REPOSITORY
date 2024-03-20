@@ -4,28 +4,49 @@ import logo from './assets/logo.png';
 import logout from './assets/icons8-logout-96.png';
 import account from './assets/icons8-account-96.png';
 import leftArrow from './assets/icons8-left-arrow-100.png';
+import { CONSTANTS } from './global.js';
+
+const apiUrl = CONSTANTS.API_URL; 
 
 
-
-
-const Header = ({ isLogout = "true", onGoBack = () => { 
+const Header = ({ isLogout = "true", 
+onGoBack = () => { 
 
     navigation.reset({
         index: 0,
         routes: [{ name: 'MainView' }],
     });
 
-}, userObject, navigation }) => {
+}, userObject, navigation }) => 
+
+{
+
+    const onGoBackDelete = async() => {
+        try {
+            console.log('Deleting user with uuid: ' + userObject.uuid);
+            await fetch(apiUrl + 'DeleteUser/' + userObject.uuid, {
+                method: 'DELETE',
+            });
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'MainView' }],
+            });
+        }catch (error) {
+            console.error(error);
+        }
+    }
 
     const [pressedLogout, setPressedLogout] = useState(false);
+    const [pressedAccount, setPressedAccount] = useState(false);
     
     
     return (
         <>
         { pressedLogout &&
-        <View style = {styles.darkBackground}>
+        <TouchableHighlight style = {styles.darkBackground}  underlayColor='rgba(0,0,0,0.6)' onPress={()=>{setPressedLogout(false)}}>
             <View style = {styles.confirmBox}>
-                <Text style = {styles.logoutText}>Are you sure you want to log out?</Text>
+                <Text style = {styles.logoutText}>Are you sure you want to log out?</Text> 
                 <View style = {styles.buttonsWrapper}>
                     <TouchableHighlight style={styles.confirmButton} onPress={() => { onGoBack()}}>
                         <Text style={styles.confirmText}>Yes, Log Me Out</Text>
@@ -35,36 +56,50 @@ const Header = ({ isLogout = "true", onGoBack = () => {
                     </TouchableHighlight>
                 </View>
             </View>
-        </View>
+        </TouchableHighlight>
         }
-        <View style={styles.header}>
-            { isLogout === "true" &&
-            <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { setPressedLogout(true); }}>
-                <View style={styles.leftContent}>
-                    <Image source={isLogout === "true" ? logout : leftArrow} style={styles.sideImage} />
-                    <Text style={styles.sideText}>Go Back</Text>
-                </View>
-            </TouchableHighlight>
-            }
-            { isLogout != "true" &&
-            <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { onGoBack() }}>
-                <View style={styles.leftContent}>
-                    <Image source={leftArrow} style={styles.sideImage} />
-                    <Text style={styles.sideText}>Go Back</Text>
-                </View>
-            </TouchableHighlight>
-            }            
+            <View style={styles.header}>
+                { isLogout === "true" &&
+                <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { setPressedLogout(true); }}>
+                    <View style={styles.leftContent}>
+                        <Image source={isLogout === "true" ? logout : leftArrow} style={styles.sideImage} />
+                        <Text style={styles.sideText}>Go Back</Text>
+                    </View>
+                </TouchableHighlight>
+                }
+                { isLogout != "true" &&
+                <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { onGoBack() }}>
+                    <View style={styles.leftContent}>
+                        <Image source={leftArrow} style={styles.sideImage} />
+                        <Text style={styles.sideText}>Go Back</Text>
+                    </View>
+                </TouchableHighlight>
+                }            
 
-            <Image source={logo} style={styles.logoImage} />
+                <Image source={logo} style={styles.logoImage} />
 
-            <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { /* Handle right press */ }}>
-                <View style={styles.rightContent}>
-                    <Image source={account} style={styles.sideImage} />
-                    <Text style={styles.sideText}>{userObject.username}</Text>
+                <TouchableHighlight style={{ borderRadius: 5, }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { setPressedAccount(true) }}>
+                    <View style={styles.rightContent}>
+                        <Image source={account} style={styles.sideImage} />
+                        <Text style={styles.sideText}>{userObject.username}</Text>
+                    </View>
+                </TouchableHighlight>
+            </View>
+        { pressedAccount &&
+        <TouchableHighlight style = {styles.darkBackground}  underlayColor='rgba(0,0,0,0.6)' onPress={()=>{setPressedAccount(false)}}>
+            <View style = {styles.confirmBox}>
+                <Text style = {styles.logoutText}>Are you sure you want to DELETE this Account?</Text> 
+                <View style = {styles.buttonsWrapper}>
+                    <TouchableHighlight style={styles.confirmButton} onPress={() => { onGoBackDelete()}}>
+                        <Text style={styles.confirmText}>Yes, delete it</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight style={styles.cancelButton} onPress={() => { setPressedAccount(false) }}>
+                        <Text style={styles.cancelText}>Nah, Just Kidding</Text>
+                    </TouchableHighlight>
                 </View>
-            </TouchableHighlight>
-        </View>
-        <View></View>
+            </View>
+        </TouchableHighlight>
+        }
         </>
     );
 };
