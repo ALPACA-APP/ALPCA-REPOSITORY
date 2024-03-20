@@ -130,26 +130,26 @@ app.get('/api/fetchAllProducts/:uuid', async (req, res) => {
     }
 });
 
-const deleteProducts = async (id, uuid) =>{
-    return await supabase  
+const deleteProducts = async (id, uuid) => {
+    return await supabase
         .from('products')
         .delete()
         .eq('product_id', id)
         .eq('uuid', uuid)
 }
 
-app.delete('/api/deleteProducts/:uuid/:product_id', async (req, res) =>{
+app.delete('/api/deleteProducts/:uuid/:product_id', async (req, res) => {
     const uuid = req.params.uuid;
     const id = req.params.product_id;
-    try{
+    try {
         await deleteProducts(id, uuid);
         res.sendStatus(204);
-    }catch(error){
+    } catch (error) {
         console.log(error);
     }
 });
 
-app.put('/api/updateProducts', async (req, res) =>{
+app.put('/api/updateProducts', async (req, res) => {
     const uuid = req.body.uuid;
     const product_id = req.body.product_id;
     const name = req.body.name;
@@ -289,6 +289,36 @@ app.get('/api/GetRecipe/:uuid/:recipe_id', async (req, res) => {
     }
 });
 
+
+const generateNewIdForRecipe = async () => {
+    const { data, error } = await supabase
+        .from('recipes')
+        .select('recipe_id')
+        .order('recipe_id', { ascending: false })
+        .limit(1);
+    return data[0].recipe_id + 1;
+}
+
+app.post('/api/CreateRecipe', async (req, res) => {
+    const uuid = req.body.uuid;
+    const title = req.body.title;
+    const content = req.body.content;
+    const recipe_id = await generateNewIdForRecipe();
+
+    try {
+        const { data, error } = await supabase
+            .from('recipes')
+            .insert({ uuid: uuid, recipe_id: recipe_id, title: title, content: content });
+        //return the id of the new recipe as a json response
+        res.json(recipe_id).status(201);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+
+})
+
 app.listen(port, () => {
-    console.log(`backend is listening at http://192.168.0.15:${port}`);
+    console.log(`backend is listening at http://192.168.196.85:${port}`);
 }); 

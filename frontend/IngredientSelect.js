@@ -159,9 +159,41 @@ export default IngredientSelect = ({ navigation }) => {
         );
     }
 
-    const generateRecipe = () => {
-        console.log("generating a reicpe using prodructs with id: " + selectedProducts);
+    const generateRecipe = async () => {
+        setIsLoading(true);
+        let data;
+
         requestGPT();
+
+        const createBody = {
+            uuid: userObject.uuid,
+            title: 'Default Recipe',
+            content: 'This is a default recipe. Please replace it with the generated recipe from the AI. UwU' 
+        }
+
+        try {
+            const response = await fetch(apiUrl + 'CreateRecipe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(createBody)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch response');
+            }
+
+            data = await response.json();
+            console.log("data: " + data);
+
+            //load the recipe viewer with the new recipe id
+            navigation.navigate('Recipe Viewer', { recipeId: data, userObject: userObject });
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
+        setIsLoading(false);
     }
 
     const getProductNames = () => {
@@ -196,9 +228,7 @@ export default IngredientSelect = ({ navigation }) => {
 
 
             when you respond, try to be token efficient
-            (max tokens: 250)`
-
-            console.log(prompt);
+            (max tokens: 250)`;
 
             const headers = {
                 'Content-Type': 'application/json',
@@ -224,7 +254,7 @@ export default IngredientSelect = ({ navigation }) => {
             const responseData = await response.json();
             setResponse(responseData.choices[0].text);
         } catch (error) {
-            console.error('Error:', error);
+            console.error('[GPT] Error:', error);
         }
     };
 
