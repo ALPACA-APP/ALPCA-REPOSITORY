@@ -1,8 +1,19 @@
-import { SafeAreaView, View, ScrollView, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
+import {
+    SafeAreaView,
+    View,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    Text,
+    Image,
+    TouchableHighlight,
+} from "react-native";
+import React from "react";
 import { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { CONSTANTS } from './global.js';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 import Header from "./Header";
@@ -14,13 +25,18 @@ import loadingSpinner from "./assets/SpinLoader.gif";
 const Recipes = ({ navigation }) => {
 
     const apiUrl = CONSTANTS.API_URL;
-    
+
     const endpoint = "GetRecipes/";
 
     const [uuid, setUuid] = useState('');
     const [searchText, setSearchText] = useState('');
     const [loading, setLoading] = useState(true);
     const [userObject, setUserObject] = useState('');
+
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+    const [currentPendingDelete, setCurrentPendingDelete] = useState('');
+    const [recipeIdToDelete, setRecipeIdToDelete] = useState(0);
+
     const [recipes, setRecipes] = useState([
         {
             "uuid": "72165bb3-14e1-4b5e-9dbf-4316d26a9941",
@@ -65,10 +81,10 @@ const Recipes = ({ navigation }) => {
             setRecipes(data);
             setSearchResults(data);
         } catch (error) {
-            console.log(error);
+            console.log("[VIEW RECIPE]:" + error);
         }
 
-        
+
         setLoading(false);
     }
 
@@ -76,6 +92,14 @@ const Recipes = ({ navigation }) => {
     useEffect(() => {
         InitView();
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            InitView();
+        }, [])
+    );
+
+
 
     const searchSubmit = (text) => {
         const results = recipes.filter((recipe) => {
@@ -94,8 +118,17 @@ const Recipes = ({ navigation }) => {
         navigation.navigate('Recipe Viewer', { recipeId: id, userObject: userObject });
     }
 
-    const deleteRecipe = (id) => {
-        console.log("deleting recipe with id: " + id);
+    const deleteRecipe = async (id) => {
+        
+        try {
+            const response = await fetch(apiUrl + 'DeleteRecipe/' + userObject.uuid + '/' + id, {
+                method: 'DELETE',
+            });
+            setShowConfirmDelete(false);
+            InitView();
+        } catch (error) {
+            console.log("[VIEW RECIPE]:" + error);
+        }
     }
 
     const limitDisplayChars = (text, limit) => {
@@ -110,7 +143,7 @@ const Recipes = ({ navigation }) => {
             <TouchableOpacity style={RecipeStyles.recipe} activeOpacity={0.3} onPress={() => { openRecipe(props.id) }}>
                 <Image source={arrow} style={{ width: 30, height: 30 }} />
                 <Text style={RecipeStyles.BoldInteract}>{limitDisplayChars(props.title, 20)}</Text>
-                <TouchableOpacity activeOpacity={0.2} onPress={() => { deleteRecipe(props.id) }}>
+                <TouchableOpacity activeOpacity={0.2} onPress={() => { showDeleteRecipeModal(props.id, props.title) }}>
                     <Image source={trashCan} style={RecipeStyles.trashCan} />
                 </TouchableOpacity>
             </TouchableOpacity>
@@ -123,8 +156,8 @@ const Recipes = ({ navigation }) => {
 
     if (loading) {
         return (
-            <SafeAreaView style={{ height: '100%',  backgroundColor:'white'}}>
-                <Header userObject={userObject} navigation={navigation}/>
+            <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+                <Header userObject={userObject} navigation={navigation} />
                 <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
                 <ScrollView style={RecipeStyles.scrollView}>
                     <Image source={loadingSpinner} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
@@ -133,25 +166,49 @@ const Recipes = ({ navigation }) => {
         );
     }
 
+    const showDeleteRecipeModal = (id, title) => {
+        setCurrentPendingDelete(title);
+        setRecipeIdToDelete(id);
+        setShowConfirmDelete(true);
+    }
+
 
     return (
 
-        <SafeAreaView style={{ height: '100%' , backgroundColor:'white'}}>
-            <Header userObject={userObject} navigation={navigation}/>
-            <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
-            <ScrollView style={RecipeStyles.scrollView}>
-                <TouchableOpacity style={RecipeStyles.AddButton} onPress={() => { generateRecipe(); }}>
-                    <Text style={RecipeStyles.BoldInteract}>+ Create new recipe</Text>
-                </TouchableOpacity>
-                {searchResults.map((recipe) => {
-                    return (
-                        <RecipeContainer key={recipe.recipe_id} id={recipe.recipe_id} title={recipe.title} />
-                    );
-                })}
-                <View style={{ marginBottom: '25%' }} />
-            </ScrollView>
+        <>
+            {showConfirmDelete &&
+                <TouchableHighlight activeOpacity={1} underlayColor={'rgba(0,0,0,0.6)'} style={RecipeStyles.darkBackground} onPress={() => { setShowConfirmDelete(false) }}>
+                    <View style={RecipeStyles.confirmBox}>
+                        <Text style={RecipeStyles.logoutText}>Are you sure you want to delete: {currentPendingDelete}?</Text>
+                        <View style={RecipeStyles.buttonsWrapper}>
+                            <TouchableHighlight style={RecipeStyles.confirmButton} onPress={() => { deleteRecipe(recipeIdToDelete) }}>
+                                <Text style={RecipeStyles.confirmText}>Delete</Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight style={RecipeStyles.cancelButton} onPress={() => { setShowConfirmDelete(false) }}>
+                                <Text style={RecipeStyles.cancelText}>Cancel</Text>
+                            </TouchableHighlight>
+                        </View>
+                    </View>
+                </TouchableHighlight>
+            }
 
-        </SafeAreaView >
+            <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+                <Header userObject={userObject} navigation={navigation} />
+                <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
+                <ScrollView style={RecipeStyles.scrollView}>
+                    <TouchableOpacity style={RecipeStyles.AddButton} onPress={() => { generateRecipe(); }}>
+                        <Text style={RecipeStyles.BoldInteract}>+ Create new recipe</Text>
+                    </TouchableOpacity>
+                    {searchResults.map((recipe) => {
+                        return (
+                            <RecipeContainer key={recipe.recipe_id} id={recipe.recipe_id} title={recipe.title} />
+                        );
+                    })}
+                    <View style={{ marginBottom: '25%' }} />
+                </ScrollView>
+
+            </SafeAreaView >
+        </>
     );
 }
 
@@ -213,7 +270,67 @@ const RecipeStyles = StyleSheet.create({
         width: 35,
         height: 35,
         tintColor: "black"
-    }
+    },
+
+    darkBackground: {
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 20,
+    },
+    confirmBox: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        paddingBottom: 30,
+        paddingTop: 30,
+        width: '80%',
+        position: 'absolute',
+        zIndex: 30,
+    },
+    logoutText: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    buttonsWrapper: {
+        marginTop: 20,
+        flexDirection: 'column',
+    },
+    confirmButton: {
+        color: '#000',
+        alignSelf: 'center',
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20,
+        borderColor: 'red',
+        borderWidth: 1,
+        width: '70%',
+        alignItems: 'center',
+    },
+    confirmText: {
+        color: 'red',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    cancelButton: {
+        backgroundColor: 'red',
+        color: '#fff',
+        alignSelf: 'center',
+        padding: 20,
+        borderRadius: 10,
+        width: '70%',
+        alignItems: 'center',
+    },
+    cancelText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
 
 });
 
