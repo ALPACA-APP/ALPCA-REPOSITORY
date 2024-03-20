@@ -21,7 +21,7 @@ export default RecipeViewer = ({ route, navigation }) => {
             const data = await response.json();
             setRecipe(data[0]);
         } catch (error) {
-            console.error(error);
+            console.error("[recipe viewer] Error: " + error);
         }
     }
 
