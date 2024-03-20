@@ -9,6 +9,7 @@ import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CONSTANTS } from './global.js';
+import loadingSpinner from "./assets/SpinLoader.gif";
 
     const apiUrl = CONSTANTS.API_URL ;
     //const apiUrl = 'http://192.168.43.146:3000';
@@ -182,6 +183,18 @@ export default Product = ({ navigation }) => {
         }
     };
 
+    if (loading) {
+        return (
+            <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+                <Header userObject={userObject} navigation={navigation} />
+                <SearchBar onChangeText={handleChange} />
+                <ScrollView style={ProductStyles.scrollView}>
+                    <Image source={loadingSpinner} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
+                </ScrollView>
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style={ProductStyles.container}>
             <Header userObject={userObject} navigation={navigation} />
@@ -194,9 +207,6 @@ export default Product = ({ navigation }) => {
 
                 <View style={{ marginBottom: '25%' }} />
             </ScrollView>
-            {loading && <View style={ProductStyles.loaderWrapper}>
-                <Image style={ProductStyles.loader} source={require('./assets/SpinLoader.gif')} />
-            </View>}
 
             { showPicker &&
                 <View style={ProductStyles.holePage}>

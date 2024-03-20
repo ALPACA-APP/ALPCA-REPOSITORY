@@ -5,6 +5,7 @@ import ProductStyles from "./ProductStyles";
 import SearchBar from "./SearchBar";
 import Header from "./Header";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import loadingSpinner from "./assets/SpinLoader.gif";
 
 import ProdSelectContainer from "./ProdSelectContainer";
 import { CONSTANTS } from './global.js';
@@ -149,15 +150,7 @@ export default IngredientSelect = ({ navigation }) => {
         height: 'auto',
         zIndex: 100,
         borderRadius: 25,
-    }
-
-    if (isLoading) {
-        return (
-            <View style={ProductStyles.loaderWrapper}>
-                <Image style={ProductStyles.loader} source={require('./assets/SpinLoader.gif')} />
-            </View>
-        );
-    }
+    };
 
     const generateRecipe = async () => {
         setIsLoading(true);
@@ -257,6 +250,18 @@ export default IngredientSelect = ({ navigation }) => {
             console.error('[GPT] Error:', error);
         }
     };
+
+    if (isLoading) {
+        return (
+            <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+                <Header isLogout="false" onGoBack={() => { goBack(); }} userObject={userObject} />
+                <SearchBar onSearchSubmit={handleSearch} onChangeText={handleChange} />
+                <ScrollView style={ProductStyles.scrollView}>
+                    <Image source={loadingSpinner} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
+                </ScrollView>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={ProductStyles.container}>
