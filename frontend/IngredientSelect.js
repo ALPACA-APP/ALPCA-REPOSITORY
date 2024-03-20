@@ -20,6 +20,7 @@ export default IngredientSelect = ({ navigation }) => {
     const [checkedAtLeastOnce, setCheckedAtLeastOnce] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [userObject, setUserObject] = useState('');
+    const [response, setResponse] = useState('');
 
     // in the future change this to a list of products from the database
     // using a useEffect to fetch the data from the server and store it in the products array in a useState
@@ -60,13 +61,19 @@ export default IngredientSelect = ({ navigation }) => {
     useEffect(() => {
         // Update filtered products whenever productsList changes
         setFilteredProducts(productsList);
+        setCheckedAtLeastOnce(false);
+        Animated.timing(animated, {
+            toValue: 0,
+            duration: 1,
+            useNativeDriver: true
+        }).start();
     }, [productsList]);
 
     useFocusEffect(
         React.useCallback(() => {
             getUuid();
         }, [])
-      );
+    );
 
     const handleSearch = (searchText) => {
 
@@ -144,7 +151,7 @@ export default IngredientSelect = ({ navigation }) => {
         borderRadius: 25,
     }
 
-    if(isLoading){
+    if (isLoading) {
         return (
             <View style={ProductStyles.loaderWrapper}>
                 <Image style={ProductStyles.loader} source={require('./assets/SpinLoader.gif')} />
@@ -152,20 +159,89 @@ export default IngredientSelect = ({ navigation }) => {
         );
     }
 
+    const generateRecipe = () => {
+        console.log("generating a reicpe using prodructs with id: " + selectedProducts);
+        requestGPT();
+    }
+
+    const getProductNames = () => {
+        let productNames = [];
+        selectedProducts.forEach((productId) => {
+            const product = productsList.find((product) => product.product_id === productId);
+            productNames.push(product.name);
+        });
+
+        return productNames;
+    }
+
+    const requestGPT = async () => {
+        try {
+            const apiKey = 'YOUR_API_KEY';
+            const url = 'https://api.openai.com/v1/completions';
+
+
+            const products = getProductNames();
+
+            const prompt = `
+            Can you generate a recipe that uses exclusively the following resources:${products}. Add as optional, common spices that most people have at home. Use the following structure for your response:
+            ## Tittle ##
+
+            ## list of must-have ingredients (name this main ingredients) ##
+            -
+
+            ## List of optional spices ##
+            -
+
+            ## preparation steps ##
+
+
+            when you respond, try to be token efficient
+            (max tokens: 250)`
+
+            console.log(prompt);
+
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            };
+
+            const data = {
+                model: 'text-davinci-003', // or other models you want to use
+                prompt: prompt,
+                max_tokens: 250,
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch response');
+            }
+
+            const responseData = await response.json();
+            setResponse(responseData.choices[0].text);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
     return (
         <SafeAreaView style={ProductStyles.container}>
             <Header isLogout="false" onGoBack={() => { goBack(); }} userObject={userObject} />
 
             <SearchBar onSearchSubmit={handleSearch} onChangeText={handleChange} />
             {<Animated.View style={animatedYtranslate}>
-                <TouchableOpacity style={ProductStyles.button} onPress={() => { console.log("generating a reicpe using prodructs with id: " + selectedProducts); }}>
+                <TouchableOpacity style={ProductStyles.button} onPress={() => { generateRecipe(); }}>
                     <Text style={ProductStyles.buttonText}>Generate Recipe</Text>
                 </TouchableOpacity>
             </Animated.View>}
 
             <ScrollView style={ProductStyles.scrollView}>
                 {filteredProducts.map((product) => (
-                    <ProdSelectContainer key={product.id} product={product} onCheckboxChange={onCheckboxChange} userObject={userObject}/>
+                    <ProdSelectContainer key={product.product_id} product={product} onCheckboxChange={onCheckboxChange} userObject={userObject} />
                 ))}
 
                 <View style={{ marginBottom: '50%' }} />
