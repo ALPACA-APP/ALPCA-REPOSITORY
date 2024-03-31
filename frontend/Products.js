@@ -12,7 +12,6 @@ import { CONSTANTS } from './global.js';
 import loadingSpinner from "./assets/SpinLoader.gif";
 
     const apiUrl = CONSTANTS.API_URL ;
-    //const apiUrl = 'http://192.168.43.146:3000';
 
 export default Product = ({ navigation }) => {
 

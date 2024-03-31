@@ -350,6 +350,25 @@ app.delete('/api/DeleteUser/:uuid', async (req, res) => {
     }
 });
 
+
+app.put('/api/UpdateRecipe/:uuid/:recipe_id', async (req, res) => {
+    const uuid = req.params.uuid;
+    const recipe_id = req.params.recipe_id;
+    const title = req.body.title;
+    const content = req.body.content;
+    try {
+        const { data, error } = await supabase
+            .from('recipes')
+            .update({ title: title, content: content })
+            .eq('uuid', uuid)
+            .eq('recipe_id', recipe_id);
+        res.sendStatus(200);
+    } catch (error) {
+        console.log("[Update recipe] " + error);
+        res.status(500).send("[Update recipe] " + error + "(recieved" + title + "\n" + content + ")");
+    }
+});
+
 app.listen(port, () => {
-    console.log(`backend is listening at http://192.168.196.85:${port}`);
+    console.log(`backend is listening at http://IP:${port}`);
 }); 
