@@ -95,6 +95,9 @@ export default function MainNavigation() {
             position: 'absolute',
             bottom: 15,
             justifyContent: 'space-between',
+            borderTopWidth: 1,
+            borderWidth: 1,
+            borderColor: '#ddd',
 
             // IOS shadow 
             shadowColor: '#000',
