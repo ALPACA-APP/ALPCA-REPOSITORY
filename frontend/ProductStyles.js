@@ -4,7 +4,6 @@ const ProductStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        padding: 10,
     },
     scrollView: {
         width: "100%",
