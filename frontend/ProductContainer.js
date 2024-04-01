@@ -48,7 +48,7 @@ const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProduc
     }
 
     if (daysDifference < 0) {
-      daysLeft = 'Expired!';
+      daysLeft = 'Expired ' + Math.abs(daysDifference) + ' days ago';
     }
 
 
