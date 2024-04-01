@@ -34,12 +34,30 @@ const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProduc
     const timeDifference = expirationDate - currentDate;
     const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
+
+
+    let daysLeft = '';
+
+    if (daysDifference < 10 && daysDifference > 1) {
+      daysLeft = '0' + daysDifference + ' days left';
+    } else if (daysDifference === 1) {
+      daysLeft = '0' + daysDifference + ' day left';
+    }
+    else {
+      daysLeft = daysDifference + ' days left';
+    }
+
+    if (daysDifference < 0) {
+      daysLeft = 'Expired ' + Math.abs(daysDifference) + ' days ago';
+    }
+
+
     // Update daysLeft with daysDifference
-    setDaysLeft(daysDifference);
+    setDaysLeft(daysLeft);
 
     // Assign colors based on daysDifference
     switch (true) {
-      case (daysDifference >= 15):
+      case (daysDifference >= 7):
         if (userObject.colourBlind === 0) {
           setExpireColor('#7cffc0');
           setExpireColorBorder('#198e56');
@@ -51,7 +69,7 @@ const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProduc
           setExpireColorBorder('#3d8590');
         }
         break;
-      case (daysDifference < 15 && daysDifference > 3):
+      case (daysDifference < 7 && daysDifference > 3):
         if (userObject.colourBlind === 0) {
           setExpireColor('#ffd88b');
           setExpireColorBorder('#a73c00');
@@ -128,10 +146,6 @@ const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProduc
     borderColor: 'black',
     borderWidth: 2,
   }
-  const roundColorStyles = {
-    ...ProdContStyles.roundColor,
-    marginLeft: [20, 'auto'],
-  }
 
   // animate the opacity of the Create Recipe button
   const animatedCreateBtn = {
@@ -151,8 +165,8 @@ const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProduc
             <Text style={ProdContStyles.productBrand}>{product.brand}</Text>
           )}
           <View style={ProdContStyles.containerExpire}>
-            <Text style={ProdContStyles.daysLeft}> {daysLeft} days </Text>
-            <View style={[roundColorStyles, { backgroundColor: expireColor, borderColor: expireColorBorder }]}></View>
+            <View style={[ProdContStyles.roundColor, { backgroundColor: expireColor, borderColor: expireColorBorder }]}></View>
+            <Text style={ProdContStyles.daysLeft}> {daysLeft} </Text>
           </View>
           {expanded && (
             <TouchableOpacity style={ProdContStyles.createBtn} onPress={onGenerateRecipe}>

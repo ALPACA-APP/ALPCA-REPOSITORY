@@ -18,6 +18,7 @@ const ProdContStyles = StyleSheet.create({
   },
   containerExpire: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   containerButtons: {
     flexDirection: 'row',
@@ -48,10 +49,10 @@ const ProdContStyles = StyleSheet.create({
     fontSize: 11,
   },
   roundColor: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     borderRadius: 50,
-    marginLeft: 20,
+    marginLeft: 5,
     borderWidth: 1,
   },
   editBtn: {
