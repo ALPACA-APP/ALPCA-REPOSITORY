@@ -9,7 +9,7 @@ import ReciperViewer from './RecipeViewer';
 import AddProduct from './AddProduct';
 import UserSettings from './UserSettings';
 import MainView from './MainView';
-import { Animated, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Animated, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 
 
@@ -22,58 +22,95 @@ const screens = [
     {
         name: 'Products',
         component: Products,
-        icon: require('./assets/icons8-cuenco-de-arroz-96 (1).png'),
+        icon: require('./assets/icons8-rice-bowl-filled-100.png'),
     },
     {
         name: 'Recipes',
         component: RecipeStack,
-        icon: require('./assets/icons8-libro-de-cocina-100.png'),
+        icon: require('./assets/icons8-cookbook-filled-96.png'),
     },
     {
         name: 'UserSettings',
         component: UserSettings,
-        icon: require('./assets/icons8-ajustes-144.png'),
+        icon: require('./assets/icons8-settings-filled-100.png'),
     },
 ];
- 
+
 
 const bottomTabs = createBottomTabNavigator();
 
-const selectedColor = '#fff';
-const unselectedColor = 'black';
 
-const TabIconStyles = (isFocused, Icon) => (
-    <Image
-        source={Icon}
-        style={{
-            width: isFocused ? 45 : 35,
-            height: isFocused ? 45 : 35,
-            tintColor: isFocused ? selectedColor : unselectedColor,
-            margin: 10,
-            backgroundColor: isFocused ? '#333' : '#ccc',
-            borderRadius: 12,
-
-        }}
-    />
-);
-
-const screenOptionStyle = {
-    tabBarStyle: [{ 
-        height: '12%',
-        backgroundColor: '#ccc',
-        borderTopRightRadius: 70,
-        borderTopLeftRadius: 70,
-        paddingTop: 25,
-        paddingRight: 35,
-        paddingLeft: 35,
-        position: 'absolute',
-        bottom: 0,
-         
-    }], 
-  };
 
 
 export default function MainNavigation() {
+
+    const selectedColor = 'white';
+    const unselectedColor = 'black';
+
+
+    let TabIconStyles = (isFocused, Icon) => (
+        <View style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: isFocused ? '#000' : '#fff',
+            borderRadius: 100,
+            padding: 12,
+            flexDirection:'column'
+
+        }}>
+            <Animated.View style={{
+                backgroundColor: isFocused ? '#000' : 'transparent',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 5,
+                bottom: "-60%",
+                position: 'absolute',
+                width: "70%",
+                height: 5,
+                borderRadius: 10,
+            }} />
+
+            <Image
+                source={Icon}
+                style={{
+                    width: 35,
+                    height: 35,
+                    tintColor: isFocused ? selectedColor : unselectedColor,
+                    backgroundColor: 'transparent',
+                }}
+            />
+        </View>
+
+    );
+
+    const screenOptionStyle = {
+        tabBarStyle: [{
+            height: '10%',
+            width: '90%',
+            marginLeft: '5%',
+            backgroundColor: '#fff',
+            borderRadius: 20,
+            paddingRight: 10,
+            paddingLeft: 10,
+            position: 'absolute',
+            bottom: 15,
+            justifyContent: 'space-between',
+
+            // IOS shadow 
+            shadowColor: '#000',
+            shadowOffset: {
+                width: 0,
+                height: 2,
+            },
+            shadowOpacity: 0.25,
+
+            // Android shadow
+            elevation: 5,
+
+
+        }],
+    };
+
     return (
 
         <bottomTabs.Navigator
@@ -92,7 +129,7 @@ export default function MainNavigation() {
                         tabBarIcon: ({ focused }) => TabIconStyles(focused, screen.icon),
                         tabBarButton: (props) => (
                             <TouchableOpacity
-                                activeOpacity={0.1}
+                                activeOpacity={0.5}
                                 {...props}
                                 onPress={() => {
                                     props.onPress();

@@ -1,5 +1,5 @@
-import { SafeAreaView, ScrollView, View, Image, Animated, Text, TextInput, Platform} from "react-native";
-import React, { useState, useEffect} from "react";
+import { SafeAreaView, ScrollView, View, Image, Animated, Text, TextInput, Platform } from "react-native";
+import React, { useState, useEffect } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import ProductStyles from "./ProductStyles";
@@ -11,7 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { CONSTANTS } from './global.js';
 import loadingSpinner from "./assets/SpinLoader.gif";
 
-    const apiUrl = CONSTANTS.API_URL ;
+const apiUrl = CONSTANTS.API_URL;
 
 export default Product = ({ navigation }) => {
 
@@ -37,11 +37,11 @@ export default Product = ({ navigation }) => {
             if (userStored !== null) {
 
                 const response = await fetch(apiUrl + 'fetchAllProducts/' + userStored.uuid);
-    
+
                 if (!response.ok) {
                     throw new Error('Network request failed');
                 }
-    
+
                 const data = await response.json();
                 setUserObject(userStored);
                 setProductList(data);
@@ -53,7 +53,7 @@ export default Product = ({ navigation }) => {
         }
 
     };
-    
+
 
     useEffect(() => {
         getProducts();
@@ -65,9 +65,9 @@ export default Product = ({ navigation }) => {
 
     useFocusEffect(
         React.useCallback(() => {
-          getProducts();
+            getProducts();
         }, [])
-      );
+    );
 
     //Shows the whole product list when there is no text on the searchbar (without pressing ENTER)
     const handleChange = (searchText) => {
@@ -111,6 +111,18 @@ export default Product = ({ navigation }) => {
         inputRange: [0, 0.5, 1],
         outputRange: ['0%', '60%', '70%'],
     });
+
+    //! fix marronero for the modal staying visible after closing under the navbar
+    const ScaleVertical = animation.interpolate({
+        inputRange: [0, 0.1, 0.5, 1],
+        outputRange: [0, 1, 1, 1],
+    });
+
+    const transformVertical = animation.interpolate({
+        inputRange: [0, 0.1,0.5, 1],
+        outputRange: [100, 0, 0, 0],
+    });
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || expDate;
         setShowPicker(Platform.OS === 'ios'); // Only close if it's iOS platform
@@ -121,7 +133,7 @@ export default Product = ({ navigation }) => {
         setShowPicker(!showPicker);
     };
 
-    const handleEdit = (product) =>{
+    const handleEdit = (product) => {
         toggleAnimationToHalf();
         setProductName(product.name);
         dateFormat = formatDateString(product.exp_date);
@@ -139,7 +151,7 @@ export default Product = ({ navigation }) => {
         const formattedDate = inputDate.toLocaleDateString('en-GB');
         return formattedDate;
     };
-    const updateProducts = async () =>{
+    const updateProducts = async () => {
         const newId = id;
         const newUuid = productUid;
         const newName = productName;
@@ -148,7 +160,7 @@ export default Product = ({ navigation }) => {
 
         const response = await fetch(apiUrl + 'updateProducts', {
             method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 uuid: newUuid,
                 product_id: newId,
@@ -164,20 +176,20 @@ export default Product = ({ navigation }) => {
     };
 
     const setGreen = (colourBlind) => {
-        if(colourBlind === 0){
+        if (colourBlind === 0) {
             return '#7cffc0';
-        }else if (colourBlind === 1){
+        } else if (colourBlind === 1) {
             return '#ffdfd2';
-        }else if (colourBlind === 2){
+        } else if (colourBlind === 2) {
             return '#b0f0ff';
         }
     };
     const setRed = (colourBlind) => {
-        if(colourBlind === 0){
+        if (colourBlind === 0) {
             return '#ff7c7c';
-        }else if (colourBlind === 1){
+        } else if (colourBlind === 1) {
             return '#c39b73';
-        }else if (colourBlind === 2){
+        } else if (colourBlind === 2) {
             return '#ff7a83';
         }
     };
@@ -204,47 +216,47 @@ export default Product = ({ navigation }) => {
                     <ProductContainer key={product.id} product={product} onProductDelete={getProducts} onProductEdit={handleEdit} onGenerateRecipe={goToSelectIngredients} userObject={userObject} />
                 ))}
 
-                <View style={{ marginBottom: '25%' }} />
+                <View style={{ marginBottom: '40%' }} />
             </ScrollView>
 
-            { showPicker &&
+            {showPicker &&
                 <View style={ProductStyles.holePage}>
-                <View style={ProductStyles.calendarIos}>
-                    <DateTimePicker
-                        mode = 'date'
-                        display={Platform.OS === 'ios' ? 'inline' : 'default'}
-                        value = {expDate}
-                        onChange = {onChange}
-                    ></DateTimePicker>
-                </View> 
+                    <View style={ProductStyles.calendarIos}>
+                        <DateTimePicker
+                            mode='date'
+                            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                            value={expDate}
+                            onChange={onChange}
+                        ></DateTimePicker>
+                    </View>
                 </View>
             }
- 
-            <Animated.View style={[ProductStyles.ascendingBox, { height: heightInterpolate }, !modal ? {borderWidth: 0} : {borderWidth: 1}]}>
+
+            <Animated.View style={[ProductStyles.ascendingBox, { height: heightInterpolate, transform: [{translateY: transformVertical}]}, !modal ? { borderWidth: 0 } : { borderWidth: 1 }]}>
                 <Text style={ProductStyles.text}>Product Name</Text>
                 <View style={ProductStyles.topPart}>
-                <TextInput style={ProductStyles.name} onFocus={() => toggleAnimationFull()} onBlur={() => toggleAnimationToHalf()} onChangeText={(textName) => setProductName(textName)} value={productName}></TextInput>
-                <Text style={[ProductStyles.text, {marginTop:10}]}>Product Brand</Text>
-                <TextInput style={ProductStyles.name} onFocus={() => toggleAnimationFull()} onBlur={() => toggleAnimationToHalf()} onChangeText={(textBrand) => setBrand(textBrand)} value={brand}></TextInput>
-                <Text style={[ProductStyles.text, {marginTop:10}]}>Expiration Date</Text>
-                <View style={ProductStyles.calendarWrap}>
-                
-                    <Text style={ProductStyles.calendarText}>{formatBack(expDate)}</Text>
-                    
-                    {!showPicker &&
-                    <TouchableHighlight style={ProductStyles.calendarButton} onPress={toggleDatePicker}>
-                    <Image style={ProductStyles.icon} source={require('./assets/icons8-calendar-plus-100.png')} />
-                    </TouchableHighlight>}
-                </View>
+                    <TextInput style={ProductStyles.name} onFocus={() => toggleAnimationFull()} onBlur={() => toggleAnimationToHalf()} onChangeText={(textName) => setProductName(textName)} value={productName}></TextInput>
+                    <Text style={[ProductStyles.text, { marginTop: 10 }]}>Product Brand</Text>
+                    <TextInput style={ProductStyles.name} onFocus={() => toggleAnimationFull()} onBlur={() => toggleAnimationToHalf()} onChangeText={(textBrand) => setBrand(textBrand)} value={brand}></TextInput>
+                    <Text style={[ProductStyles.text, { marginTop: 10 }]}>Expiration Date</Text>
+                    <View style={ProductStyles.calendarWrap}>
+
+                        <Text style={ProductStyles.calendarText}>{formatBack(expDate)}</Text>
+
+                        {!showPicker &&
+                            <TouchableHighlight style={ProductStyles.calendarButton} onPress={toggleDatePicker}>
+                                <Image style={ProductStyles.icon} source={require('./assets/icons8-calendar-plus-100.png')} />
+                            </TouchableHighlight>}
+                    </View>
                 </View>
 
-                <View style={ProductStyles.buttonWrapper}> 
-                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor: setGreen(userObject.colourBlind)}]} onPress={() => {updateProducts()}}>
-                    <Text style={ProductStyles.buttonOption}>Save</Text>
-                </TouchableHighlight> 
-                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, {backgroundColor: setRed(userObject.colourBlind)}]} onPress={() => {toggleAnimationHide()}}>
-                    <Text style={ProductStyles.buttonOption}>Cancel</Text>
-                </TouchableHighlight>
+                <View style={ProductStyles.buttonWrapper}>
+                    <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, { backgroundColor: setGreen(userObject.colourBlind) }]} onPress={() => { updateProducts() }}>
+                        <Text>Save</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, { backgroundColor: setRed(userObject.colourBlind) }]} onPress={() => { toggleAnimationHide() }}>
+                        <Text>Cancel</Text>
+                    </TouchableHighlight>
                 </View>
             </Animated.View>
         </SafeAreaView>

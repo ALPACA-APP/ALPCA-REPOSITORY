@@ -49,17 +49,6 @@ const ProductStyles = StyleSheet.create({
         width: 50,
         height: 50,
     },
-    loaderWrapper: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    },
     buttonText: {
         color: '#fff',
         fontSize: 16,
@@ -162,22 +151,24 @@ const ProductStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    buttonBox:{ 
+    buttonBox: {
         margin: 20,
         width: 100,
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: 10, 
+        borderRadius: 10,
         borderColor: 'black',
-        borderWidth: 1, 
+        borderWidth: 1,
         //when touched the button will change color
         shadowColor: 'black',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 2,
         elevation: 5,
+
+
     },
 });
 
