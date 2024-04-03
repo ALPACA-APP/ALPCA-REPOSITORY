@@ -131,7 +131,7 @@ export default IngredientSelect = ({ navigation }) => {
             {
                 translateY: animated.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [100, 0]
+                    outputRange: [100, -15]
                 })
             }
         ],

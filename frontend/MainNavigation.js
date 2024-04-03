@@ -53,8 +53,9 @@ export default function MainNavigation() {
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: isFocused ? '#000' : '#fff',
-            borderRadius: 100,
+            borderRadius: 1000,
             padding: 12,
+            top: 10,
             flexDirection:'column'
 
         }}>
@@ -63,7 +64,7 @@ export default function MainNavigation() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginBottom: 5,
-                bottom: "-60%",
+                bottom: "-70%",
                 position: 'absolute',
                 width: "70%",
                 height: 5,
@@ -93,7 +94,7 @@ export default function MainNavigation() {
             paddingRight: 10,
             paddingLeft: 10,
             position: 'absolute',
-            bottom: 15,
+            bottom: 30,
             justifyContent: 'space-between',
             borderTopWidth: 1,
             borderWidth: 1,
