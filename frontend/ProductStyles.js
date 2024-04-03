@@ -166,9 +166,105 @@ const ProductStyles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 2,
         elevation: 5,
-
-
     },
+    
+    darkBackground: {
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 20,
+    },
+    confirmBox: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        paddingBottom: 30,
+        paddingTop: 30,
+        width: '80%',
+        position: 'absolute',
+        zIndex: 30,
+    },
+    logoutText: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    buttonsWrapper: {
+        marginTop: 20,
+        flexDirection: 'column',
+    },
+    confirmButton: {
+        color: '#000',
+        alignSelf: 'center',
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20,
+        borderColor: 'black',
+        borderWidth: 1,
+        width: '70%',
+        alignItems: 'center',
+    },
+    confirmText: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    cancelButton: {
+        backgroundColor: 'black',
+        color: '#fff',
+        alignSelf: 'center',
+        padding: 20,
+        borderRadius: 10,
+        width: '70%',
+        alignItems: 'center',
+    },
+    cancelText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+        borderColor: '#EBEBEB',
+        borderBottomWidth: 1,
+        borderTopWidth: 1,
+        marginTop: 20,
+        height: '14%',
+    },
+    leftContent: {
+        marginTop: 10,
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+    },
+    rightContent: {
+        marginTop: 10,
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+    },
+    sideImage: {
+        width: 40,
+        height: 40,
+        alignSelf: 'center',
+        tintColor: '#000000',
+    },
+    sideText: {
+        fontSize: 15,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        fontFamily: 'lexend-bold',
+    },
+    logoImage: {
+        width: 80,
+        height: 80,
+    }
 });
 
 export default ProductStyles;

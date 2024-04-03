@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
         borderColor: '#EBEBEB',
         borderBottomWidth: 1,
         borderTopWidth: 1,
-        marginTop: 20,
+        marginTop: 35,
         height: '14%',
     },
     leftContent: {

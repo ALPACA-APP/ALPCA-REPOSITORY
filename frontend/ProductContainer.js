@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { View, Image, Text, Animated } from 'react-native';
+import { View, Image, Text, Animated, TouchableHighlight, StyleSheet } from 'react-native';
 import ProdContStyles from './ProdContStyles';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { CONSTANTS } from './global.js';
@@ -20,6 +20,7 @@ const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProduc
   const [expireColorBorder, setExpireColorBorder] = useState('#ff7c7c');
   const [expanded, setExpanded] = useState(false);
   const animated = useRef(new Animated.Value(0)).current;
+  const [pressedDelete, setPressedDelete] = useState(false);
 
   function formatDateString(inputDate) {
     const [day, month, year] = inputDate.split('/');
@@ -101,16 +102,10 @@ const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProduc
     onProductEdit(product);
   };
 
+
+
   const handleDeleteProduct = async () => {
-    try {
-      const response = await fetch(apiUrl + 'deleteProducts/' + product.uuid + '/' + product.product_id, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      await onProductDelete();
-    } catch (error) {
-      console.error(error.message);
-    }
+    onProductDelete(product);
   };
 
 
@@ -156,35 +151,55 @@ const ProductContainer = ({ product, onProductDelete, onGenerateRecipe, onProduc
   }
 
   return (
-    <TouchableWithoutFeedback onPress={handleToggleHeight}>
-      <Animated.View style={[ProdContStyles.container, animatedContainer]} >
-        <Animated.Image style={[ProdContStyles.imageStyles, animatedImage]} source={{ uri: product.img_url }} />
-        <View style={ProdContStyles.containerMain}>
-          <Text style={ProdContStyles.productName}>{product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name}</Text>
-          {expanded && (
-            <Text style={ProdContStyles.productBrand}>{product.brand}</Text>
-          )}
-          <View style={ProdContStyles.containerExpire}>
-            <View style={[ProdContStyles.roundColor, { backgroundColor: expireColor, borderColor: expireColorBorder }]}></View>
-            <Text style={ProdContStyles.daysLeft}> {daysLeft} </Text>
+    <>
+    {pressedDelete &&
+                <TouchableHighlight style={styles.darkBackground} underlayColor='rgba(0,0,0,0.6)' onPress={() => { setPressedDelete(false) }}>
+                    <View style={styles.confirmBox}>
+                        <Text style={styles.logoutText}>Are you sure you want to log out?</Text>
+                        <View style={styles.buttonsWrapper}>
+                            <TouchableHighlight style={styles.confirmButton} onPress={() => { onGoBack() }}>
+                                <Text style={styles.confirmText}>Yes, Log Me Out</Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight style={styles.cancelButton} onPress={() => { setPressedDelete(false) }}>
+                                <Text style={styles.cancelText}>Nah, Just Kidding</Text>
+                            </TouchableHighlight>
+                        </View>
+                    </View>
+                </TouchableHighlight>
+      }
+      <TouchableWithoutFeedback onPress={handleToggleHeight}>
+        <Animated.View style={[ProdContStyles.container, animatedContainer]} >
+          <Animated.Image style={[ProdContStyles.imageStyles, animatedImage]} source={{ uri: product.img_url }} />
+          <View style={ProdContStyles.containerMain}>
+            <Text style={ProdContStyles.productName}>{product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name}</Text>
+            {expanded && (
+              <Text style={ProdContStyles.productBrand}>{product.brand}</Text>
+            )}
+            <View style={ProdContStyles.containerExpire}>
+              <View style={[ProdContStyles.roundColor, { backgroundColor: expireColor, borderColor: expireColorBorder }]}></View>
+              <Text style={ProdContStyles.daysLeft}> {daysLeft} </Text>
+            </View>
+            {expanded && (
+              <TouchableOpacity style={ProdContStyles.createBtn} onPress={onGenerateRecipe}>
+                <Animated.Text style={[ProdContStyles.createBtnText, animatedCreateBtn]}>+ Create recipe</Animated.Text>
+              </TouchableOpacity>
+            )}
           </View>
-          {expanded && (
-            <TouchableOpacity style={ProdContStyles.createBtn} onPress={onGenerateRecipe}>
-              <Animated.Text style={[ProdContStyles.createBtnText, animatedCreateBtn]}>+ Create recipe</Animated.Text>
+          <View style={ProdContStyles.containerButtons}>
+            <TouchableOpacity onPress={() => handleEditProduct(product)}>
+              <Image style={[ProdContStyles.editBtn]} source={require('./assets/icons8-editar-512.png')}></Image>
             </TouchableOpacity>
-          )}
-        </View>
-        <View style={ProdContStyles.containerButtons}>
-          <TouchableOpacity onPress={() => handleEditProduct(product)}>
-            <Image style={[ProdContStyles.editBtn]} source={require('./assets/icons8-editar-512.png')}></Image>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDeleteProduct(product)}>
-            <Image style={ProdContStyles.deleteBtn} source={require('./assets/icons8-basura-512.png')}></Image>
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
-    </TouchableWithoutFeedback>
+
+            <TouchableOpacity onPress={() => { handleDeleteProduct(product) }}>
+              <Image style={ProdContStyles.deleteBtn} source={require('./assets/icons8-basura-512.png')}></Image>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </TouchableWithoutFeedback>
+    </>
 
   );
 };
+
+
 export default ProductContainer;

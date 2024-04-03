@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Image, Animated, Text, TextInput, Platform } from "react-native";
+import { SafeAreaView, ScrollView, View, Image, Animated, Text, TextInput, Platform, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
@@ -28,6 +28,9 @@ export default Product = ({ navigation }) => {
     const [productUid, setProductUid] = useState(0);
     const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
     const [modal, setModal] = useState(false);
+    const [pressedDelete, setPressedDelete] = useState(false);
+    const [idDelte, setIdDelete] = useState(0);
+    const [uuidDelte, setuuIdDelete] = useState(0);
 
     const getProducts = async () => {
         try {
@@ -51,7 +54,6 @@ export default Product = ({ navigation }) => {
             console.error(error.message);
             setLoading(false);
         }
-
     };
 
 
@@ -142,6 +144,27 @@ export default Product = ({ navigation }) => {
         setId(product.product_id);
         setProductUid(product.uuid);
     };
+
+    const handleDelete = (product) => {
+        setPressedDelete(true);
+        setIdDelete(product.product_id);
+        setuuIdDelete(product.uuid);
+    };
+
+    const DeleteProduct = async () => {
+        setPressedDelete(false);
+        try {
+          const response = await fetch(apiUrl + 'deleteProducts/' + uuidDelte + '/' + idDelte, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+          });
+        } catch (error) {
+          console.error(error.message);
+        }
+        getProducts();
+    };
+
+
     const formatDateString = (inputDate) => {
         const [day, month, year] = inputDate.split('/');
         const formattedDate = new Date(`${year}-${month}-${day}`);
@@ -206,59 +229,95 @@ export default Product = ({ navigation }) => {
         );
     }
 
+
+
+
+
+ 
     return (
-        <SafeAreaView style={ProductStyles.container}>
-            <Header userObject={userObject} navigation={navigation} />
-            <SearchBar onChangeText={handleChange} />
-            <ScrollView style={ProductStyles.scrollView}>
-
-                {filteredProducts.map((product) => (
-                    <ProductContainer key={product.id} product={product} onProductDelete={getProducts} onProductEdit={handleEdit} onGenerateRecipe={goToSelectIngredients} userObject={userObject} />
-                ))}
-
-                <View style={{ marginBottom: '40%' }} />
-            </ScrollView>
-
-            {showPicker &&
-                <View style={ProductStyles.holePage}>
-                    <View style={ProductStyles.calendarIos}>
-                        <DateTimePicker
-                            mode='date'
-                            display={Platform.OS === 'ios' ? 'inline' : 'default'}
-                            value={expDate}
-                            onChange={onChange}
-                        ></DateTimePicker>
-                    </View>
-                </View>
-            }
-
-            <Animated.View style={[ProductStyles.ascendingBox, { height: heightInterpolate, transform: [{translateY: transformVertical}]}, !modal ? { borderWidth: 0 } : { borderWidth: 1 }]}>
-                <Text style={ProductStyles.text}>Product Name</Text>
-                <View style={ProductStyles.topPart}>
-                    <TextInput style={ProductStyles.name} onFocus={() => toggleAnimationFull()} onBlur={() => toggleAnimationToHalf()} onChangeText={(textName) => setProductName(textName)} value={productName}></TextInput>
-                    <Text style={[ProductStyles.text, { marginTop: 10 }]}>Product Brand</Text>
-                    <TextInput style={ProductStyles.name} onFocus={() => toggleAnimationFull()} onBlur={() => toggleAnimationToHalf()} onChangeText={(textBrand) => setBrand(textBrand)} value={brand}></TextInput>
-                    <Text style={[ProductStyles.text, { marginTop: 10 }]}>Expiration Date</Text>
-                    <View style={ProductStyles.calendarWrap}>
-
-                        <Text style={ProductStyles.calendarText}>{formatBack(expDate)}</Text>
-
-                        {!showPicker &&
-                            <TouchableHighlight style={ProductStyles.calendarButton} onPress={toggleDatePicker}>
-                                <Image style={ProductStyles.icon} source={require('./assets/icons8-calendar-plus-100.png')} />
-                            </TouchableHighlight>}
-                    </View>
-                </View>
-
-                <View style={ProductStyles.buttonWrapper}>
-                    <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, { backgroundColor: setGreen(userObject.colourBlind) }]} onPress={() => { updateProducts() }}>
-                        <Text>Save</Text>
+        <>
+            <View style={ProductStyles.container}>
+                {
+                    pressedDelete && //if pressedDelete is true, show the confirmation box
+                    <TouchableHighlight style={ProductStyles.darkBackground} underlayColor='rgba(0,0,0,0.6)' onPress={() => { setPressedDelete(false) }}>
+                        <View style={ProductStyles.confirmBox}>
+                            <Text style={ProductStyles.logoutText}>Are you sure you want to Delete it?</Text>
+                            <View style={ProductStyles.buttonsWrapper}>
+                                <TouchableHighlight style={ProductStyles.confirmButton} onPress={() => { DeleteProduct() }}>
+                                    <Text style={ProductStyles.confirmText}>Yes, Delete</Text>
+                                </TouchableHighlight>
+                                <TouchableHighlight style={ProductStyles.cancelButton} onPress={() => { setPressedDelete(false) }}>
+                                    <Text style={ProductStyles.cancelText}>Nah, Just Kidding</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </View>
                     </TouchableHighlight>
-                    <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, { backgroundColor: setRed(userObject.colourBlind) }]} onPress={() => { toggleAnimationHide() }}>
-                        <Text>Cancel</Text>
-                    </TouchableHighlight>
-                </View>
-            </Animated.View>
-        </SafeAreaView>
+                }
+                {
+                    !pressedDelete && //if pressedDelete is false, dont show the confirmation box
+                    <>
+                        <Header userObject={userObject} navigation={navigation} />
+                        <SearchBar onChangeText={handleChange} />
+                        <ScrollView style={ProductStyles.scrollView}>
+
+                            {filteredProducts.map((product) => (
+                                <ProductContainer key={product.id} product={product} onProductDelete={handleDelete} onProductEdit={handleEdit} onGenerateRecipe={goToSelectIngredients} userObject={userObject} />
+                            ))}
+
+                            <View style={{ marginBottom: '40%' }} />
+                        </ScrollView>
+
+                        {showPicker &&
+                            <View style={ProductStyles.holePage}>
+                                <View style={ProductStyles.calendarIos}>
+                                    <DateTimePicker
+                                        mode='date'
+                                        display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                                        value={expDate}
+                                        onChange={onChange}
+                                    ></DateTimePicker>
+                                </View>
+                            </View>
+                        }
+
+                        <Animated.View style={[ProductStyles.ascendingBox, { height: heightInterpolate, transform: [{translateY: transformVertical}]}, !modal ? { borderWidth: 0 } : { borderWidth: 1 }]}>
+                            <Text style={ProductStyles.text}>Product Name</Text>
+                            <View style={ProductStyles.topPart}>
+                                <TextInput style={ProductStyles.name} onFocus={() => toggleAnimationFull()} onBlur={() => toggleAnimationToHalf()} onChangeText={(textName) => setProductName(textName)} value={productName}></TextInput>
+                                <Text style={[ProductStyles.text, { marginTop: 10 }]}>Product Brand</Text>
+                                <TextInput style={ProductStyles.name} onFocus={() => toggleAnimationFull()} onBlur={() => toggleAnimationToHalf()} onChangeText={(textBrand) => setBrand(textBrand)} value={brand}></TextInput>
+                                <Text style={[ProductStyles.text, { marginTop: 10 }]}>Expiration Date</Text>
+                                <View style={ProductStyles.calendarWrap}>
+
+                                    <Text style={ProductStyles.calendarText}>{formatBack(expDate)}</Text>
+
+                                    {!showPicker &&
+                                        <TouchableHighlight style={ProductStyles.calendarButton} onPress={toggleDatePicker}>
+                                            <Image style={ProductStyles.icon} source={require('./assets/icons8-calendar-plus-100.png')} />
+                                        </TouchableHighlight>}
+                                </View>
+                            </View>
+
+                            <View style={ProductStyles.buttonWrapper}>
+                                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, { backgroundColor: setGreen(userObject.colourBlind) }]} onPress={() => { updateProducts() }}>
+                                    <Text>Save</Text>
+                                </TouchableHighlight>
+                                <TouchableHighlight underlayColor='rgba(20,20,20,0.25)' style={[ProductStyles.buttonBox, { backgroundColor: setRed(userObject.colourBlind) }]} onPress={() => { toggleAnimationHide() }}>
+                                    <Text>Cancel</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </Animated.View>
+                    </>
+                }
+                    
+
+                
+            </View>
+        </>
     );
 }
+
+
+const styles = StyleSheet.create({
+
+  });
