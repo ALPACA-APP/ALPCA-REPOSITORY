@@ -113,6 +113,10 @@ export default Product = ({ navigation }) => {
         inputRange: [0, 0.5, 1],
         outputRange: ['0%', '60%', '70%'],
     });
+    const heightInterpolateBack = animation.interpolate({
+        inputRange: [0, 0.5, 1],
+        outputRange: ['0%', '100%', '100%'],
+    });
 
     //! fix marronero for the modal staying visible after closing under the navbar
     const ScaleVertical = animation.interpolate({
@@ -306,6 +310,11 @@ export default Product = ({ navigation }) => {
                                     <Text>Cancel</Text>
                                 </TouchableHighlight>
                             </View>
+                        </Animated.View>
+                        <Animated.View style={[ProductStyles.ascendingBoxBack, { height: heightInterpolateBack, transform: [{translateY: transformVertical}]}]}>
+                            <TouchableHighlight underlayColor='rgba(0,0,0,0)' style={ProductStyles.ascendingBoxBackPress} onPress={() => { toggleAnimationHide() }}>
+                                
+                            </TouchableHighlight>
                         </Animated.View>
                     </>
                 }

@@ -93,6 +93,23 @@ const ProductStyles = StyleSheet.create({
         borderColor: 'black',
         zIndex: 1,
     },
+    ascendingBoxBack: {
+        position: 'absolute',
+        width: '100%', // Adjust the width as needed
+        height: '100%', // Adjust the height as needed
+        alignSelf: 'center', // Center horizontally
+        bottom: '0%', // Adjust the positioning as needed
+        backgroundColor: 'transparent',
+        borderRadius: 20,
+        borderColor: 'black',
+        zIndex: 0,
+    },
+
+    ascendingBoxBackPress: {
+        width: '100%', // Adjust the width as needed
+        height: '100%', // Adjust the height as needed
+    },
+
     text:{
         marginTop: 50,
         marginLeft: 50,
