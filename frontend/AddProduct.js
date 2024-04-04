@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from 'react-native-inset-shadow/src/styles';
 import { CONSTANTS } from './global.js';
+import frame from './assets/scanFrame.png';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -171,10 +172,13 @@ export default function App() {
   return (
     <>
       
-      <BarCodeScanner 
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={ScanStyles.absoluteFillObject}
-      ></BarCodeScanner>
+      <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={ScanStyles.absoluteFillObject}>
+        <View style = {ScanStyles.imageDiv}>
+          <Image source={frame}  style = {ScanStyles.imageFrame}></Image>
+        </View>
+        
+
+      </BarCodeScanner>
 
         { showPicker &&
         <View style={ScanStyles.holePage}>

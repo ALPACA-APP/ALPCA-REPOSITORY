@@ -51,11 +51,26 @@ const ScanStyles = StyleSheet.create({
         padding: 20,
     },
 
+    imageDiv:{
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    imageFrame:{
+        width: 400,
+        height: 400,
+    },
+
 
     absoluteFillObject: {
         position: 'absolute',
         width: '100%',
         height: '100%',
+        alignContent: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center',
     },
     ascendingBox: {
         position: 'absolute',
