@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import the pages
 import RecipeStack from './RecipeStack';
 import Products from './Products';
-import ProductSelect from './ProductSelect';
 import ReciperViewer from './RecipeViewer';
 import AddProduct from './AddProduct';
 import UserSettings from './UserSettings';
@@ -18,7 +17,7 @@ const screens = [
         name: 'Scan',
         component: AddProduct,
         icon: require('./assets/icons8-barcode-64.png'),
-    },
+    },  
     {
         name: 'Products',
         component: Products,
@@ -27,7 +26,7 @@ const screens = [
     {
         name: 'Recipes',
         component: RecipeStack,
-        icon: require('./assets/icons8-cookbook-filled-96.png'),
+        icon: require('./assets/icons8-libro-de-cocina-100.png'),
     },
     {
         name: 'UserSettings',

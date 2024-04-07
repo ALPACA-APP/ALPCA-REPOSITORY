@@ -77,7 +77,7 @@ const Header = ({ isLogout = "true",
                     <TouchableHighlight style={{ borderRadius: 5, width: "30%" }} underlayColor='rgba(20,20,20,0.05)' onPress={() => { setPressedLogout(true); }}>
                         <View style={styles.leftContent}>
                             <Image source={isLogout === "true" ? logout : leftArrow} style={styles.sideImage} />
-                            <Text style={styles.sideText}>Go Back</Text>
+                            <Text style={styles.sideText}>Logout</Text>
                         </View>
                     </TouchableHighlight>
                 }

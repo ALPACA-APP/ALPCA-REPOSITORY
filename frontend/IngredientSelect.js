@@ -253,18 +253,18 @@ export default IngredientSelect = ({ navigation }) => {
 
     if (isLoading) {
         return (
-            <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+            <View style={{ height: '100%', backgroundColor: 'white' }}>
                 <Header isLogout="false" onGoBack={() => { goBack(); }} userObject={userObject} />
                 <SearchBar onSearchSubmit={handleSearch} onChangeText={handleChange} />
                 <ScrollView style={ProductStyles.scrollView}>
                     <Image source={loadingSpinner} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         );
     }
 
     return (
-        <SafeAreaView style={ProductStyles.container}>
+        <View style={ProductStyles.container}>
             <Header isLogout="false" onGoBack={() => { goBack(); }} userObject={userObject} />
 
             <SearchBar onSearchSubmit={handleSearch} onChangeText={handleChange} />
@@ -282,7 +282,7 @@ export default IngredientSelect = ({ navigation }) => {
                 <View style={{ marginBottom: '50%' }} />
             </ScrollView>
 
-        </SafeAreaView>
+        </View>
     );
 
 }

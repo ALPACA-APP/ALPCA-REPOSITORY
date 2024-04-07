@@ -2,7 +2,8 @@ import { StyleSheet } from "react-native";
 
 const ProductStyles = StyleSheet.create({
     container: {
-        flex: 1,
+        width: "100%",
+        height: "100%",
         backgroundColor: "#fff",
     },
     scrollView: {
@@ -55,7 +56,7 @@ const ProductStyles = StyleSheet.create({
 
     },
     button: {
-        backgroundColor: '#0075FF',
+        backgroundColor: 'black',
         borderRadius: 25,
         padding: 10,
         width: '100%',
@@ -186,13 +187,24 @@ const ProductStyles = StyleSheet.create({
     },
     
     darkBackground: {
-        backgroundColor: 'rgba(0,0,0,0.6)',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
         width: '100%',
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 20,
+        position: 'absolute',
     },
+
+    darkBackground2: {
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+
     confirmBox: {
         backgroundColor: '#fff',
         borderRadius: 10,
@@ -201,6 +213,8 @@ const ProductStyles = StyleSheet.create({
         paddingTop: 30,
         width: '80%',
         position: 'absolute',
+        borderColor: 'black',
+        borderWidth: 1,
         zIndex: 30,
     },
     logoutText: {

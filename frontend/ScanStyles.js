@@ -61,6 +61,7 @@ const ScanStyles = StyleSheet.create({
     imageFrame:{
         width: 400,
         height: 400,
+        tintColor: 'rgb(0,0,0)',
     },
 
 

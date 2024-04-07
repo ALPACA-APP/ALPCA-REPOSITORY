@@ -156,13 +156,13 @@ const Recipes = ({ navigation }) => {
 
     if (loading) {
         return (
-            <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+            <View style={{ height: '100%', backgroundColor: 'white' }}>
                 <Header userObject={userObject} navigation={navigation} />
                 <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
                 <ScrollView style={RecipeStyles.scrollView}>
                     <Image source={loadingSpinner} style={{ width: 40, height: 40, alignSelf: 'center', marginTop: '50%' }} />
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         );
     }
 
@@ -192,7 +192,7 @@ const Recipes = ({ navigation }) => {
                 </TouchableHighlight>
             }
 
-            <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+            <View style={{ height: '100%', backgroundColor: 'white' }}>
                 <Header userObject={userObject} navigation={navigation} />
                 <SearchBar onSearchSubmit={searchSubmit} onChangeText={setText} />
                 <ScrollView style={RecipeStyles.scrollView}>
@@ -207,7 +207,7 @@ const Recipes = ({ navigation }) => {
                     <View style={{ marginBottom: '25%' }} />
                 </ScrollView>
 
-            </SafeAreaView >
+            </View >
         </>
     );
 }
@@ -307,18 +307,18 @@ const RecipeStyles = StyleSheet.create({
         padding: 20,
         borderRadius: 10,
         marginBottom: 20,
-        borderColor: 'red',
+        borderColor: 'black',
         borderWidth: 1,
         width: '70%',
         alignItems: 'center',
     },
     confirmText: {
-        color: 'red',
+        color: 'black',
         fontWeight: 'bold',
         fontSize: 16,
     },
     cancelButton: {
-        backgroundColor: 'red',
+        backgroundColor: 'black',
         color: '#fff',
         alignSelf: 'center',
         padding: 20,

@@ -7,7 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from 'react-native-inset-shadow/src/styles';
 import { CONSTANTS } from './global.js';
-import frame from './assets/scanFrame.png';
+import frame from './assets/scanner_frame.png';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);

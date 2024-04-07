@@ -156,7 +156,7 @@ export default RecipeViewer = ({ route, navigation }) => {
     }
 
     return (
-        <SafeAreaView style={{ height: '100%', backgroundColor: 'white' }}>
+        <View style={{ height: '100%', backgroundColor: 'white' }}>
             <Header isLogout="false" onGoBack={() => { goBack(); }} userObject={userObject} />
             <ScrollView style={RecipeViewerStyles.scrollContainer}>
                 <Animated.View style={[RecipeViewerStyles.titleContainer, AnimTextInputViewStyle]}>
@@ -186,6 +186,6 @@ export default RecipeViewer = ({ route, navigation }) => {
                 <Image source={loader} style={{ width: 40, height: 40 }} />
                 <Text style={{ marginTop: 10, color: 'white', fontSize: 25 }}>saving</Text>
             </View>}
-        </SafeAreaView>
+        </View>
     );
 }

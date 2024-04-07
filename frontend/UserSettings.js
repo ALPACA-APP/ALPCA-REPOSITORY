@@ -167,7 +167,7 @@ const UserSettings = ({navigation}) => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Header userObject={userObject} navigation={navigation}  />
 
             {<Animated.View style={animatedYtranslate}>
@@ -251,7 +251,7 @@ const UserSettings = ({navigation}) => {
                 </View>
 
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 
