@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, Animated } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import Checkmark from './assets/icons8-checkmark-100.png';
 import InsetShadow from 'react-native-inset-shadow';
@@ -13,7 +13,7 @@ const UserSettings = ({navigation}) => {
     const apiUrl = CONSTANTS.API_URL;
     const updateUserSettingsEndpoint = 'updateUserSettings/';
     const getUserEndpoint = 'getUser/';
-
+    const animated = useRef(new Animated.Value(0)).current;
 
     const [autoDeleteExpired, setAutoDeleteExpired] = useState(true);
     const [notifications, setNotifications] = useState(false);
@@ -23,33 +23,11 @@ const UserSettings = ({navigation}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [uuid, setUuid] = useState(''); // This should be set to the user's uuid when the user logs in
     const [userObject, setUserObject] = useState('');
-
-
-    const openPicker = () => {
-        setPickerVisible(true);
-    };
-
-    const closePicker = () => {
-        setPickerVisible(false);
-    };
-
-    const handleLanguageSelect = (value) => {
-        setLanguage(value);
-    };
-
-    const languages = [
-        { label: 'English', value: 0 },
-        { label: 'Spanish', value: 1 },
-        { label: 'Portuguese', value: 2 },
-    ];
+    let modified = false;
 
 
     const updateUserSettings = async () => {
-        // currently this method gets called on every change of a setting.
-        // This is not ideal, as it will make a lot of requests to the server.
-        // It would be better to only call this method when the user leaves the settings page.
-        // This can be done by using the useEffect hook to call this method when the component unmounts.
-        // But i am not sure how to do that in react native yet.
+        modified = false
 
         if (colorBlind === null || fontSize === null || language === null) {
             console.log('One or more settings are null, not updating');
@@ -73,6 +51,7 @@ const UserSettings = ({navigation}) => {
         }
         const userString = JSON.stringify(newUser);
         AsyncStorage.setItem('user', userString);
+        setUserObject(newUser);
 
         const response = await fetch(apiUrl + updateUserSettingsEndpoint,
             {
@@ -90,31 +69,11 @@ const UserSettings = ({navigation}) => {
                 }),
             });
 
-    };
-
-    const LoadSettings = async (uuid) => {
-        setIsLoading(true);
-        console.log('Loading settings');
-
-        try {
-            const response = await fetch(apiUrl + getUserEndpoint + uuid);
-            const data = await response.json();
-            // console.log(data);
-
-            // Assuming data is an array with a single object
-            const userData = data[0];
-
-            setNotifications(userData.notifications);
-            setAutoDeleteExpired(userData.autoDelete);
-            setColorBlind("" + userData.colourBlind);
-            setFontSize("" + userData.fontSize);
-            setLanguage("" + userData.language);
-
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
+            Animated.timing(animated, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true
+            }).start();
     };
 
     loadUserUuid = async () => {
@@ -125,7 +84,11 @@ const UserSettings = ({navigation}) => {
                 setUuid(""+userStored.uuid);
             }
             setUserObject(userStored);
-            LoadSettings(userStored.uuid);
+            setNotifications(userStored.notifications);
+            setAutoDeleteExpired(userStored.autoDelete);
+            setColorBlind(userStored.colourBlind);
+            setFontSize(userStored.fontSize);
+            setLanguage(userStored.language);
         } catch (error) {
             console.error(error);
         }
@@ -136,6 +99,63 @@ const UserSettings = ({navigation}) => {
         loadUserUuid();
     }, []);
 
+    const animatedYtranslate = {
+        transform: [
+            {
+                translateY: animated.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [100, -15]
+                })
+            }
+        ],
+        opacity: animated.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1],
+        }),
+
+        position: 'absolute',
+        bottom: '12%',
+        width: 80,
+        height: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+        //alignSelf: 'flex-end',
+        right: 15,
+        padding: 10,
+        zIndex: 100,
+        borderRadius: 100,
+    };
+
+    const checkVal = ()=>{
+        if (notifications !== userObject.notifications || autoDeleteExpired !== userObject.autoDelete || parseInt(colorBlind) !== userObject.colourBlind || parseInt(fontSize) !== userObject.fontSize || parseInt(language) !== userObject.language) {
+            modified = true;
+        } else if (notifications === userObject.notifications && autoDeleteExpired === userObject.autoDelete && parseInt(colorBlind) === userObject.colourBlind && parseInt(fontSize) === userObject.fontSize && parseInt(language) === userObject.language) {
+            modified = false;
+        }
+        
+        // console.log(userObject.notifications, userObject.autoDelete, userObject.colourBlind, userObject.fontSize, userObject.language);
+        // console.log(notifications, autoDeleteExpired, colorBlind, fontSize, language);
+        // console.log(modified)
+
+        if (modified) {
+            Animated.timing(animated, {
+                toValue: 1,
+                duration: 500,
+                useNativeDriver: true
+            }).start();
+        } else {
+            Animated.timing(animated, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true
+            }).start();
+        }
+    }
+
+    useEffect(() => {
+        checkVal();
+    }, [notifications, autoDeleteExpired, colorBlind, fontSize, language]);
+    
 
     if (isLoading) {
         return (
@@ -150,11 +170,17 @@ const UserSettings = ({navigation}) => {
         <SafeAreaView style={styles.container}>
             <Header userObject={userObject} navigation={navigation}  />
 
+            {<Animated.View style={animatedYtranslate}>
+                <TouchableOpacity style={styles.button} onPress={() => { updateUserSettings(); }}>
+                <Image source={require('./assets/icons8-guardar-100.png')} style={styles.saveIcon} />
+                </TouchableOpacity>
+            </Animated.View>}
+
             <View style={styles.content}>
 
                 <View style={styles.checkBoxInputContainer}>
                     <Text style={styles.settingLabel}>Notifications</Text>
-                    <TouchableOpacity onPress={() => { setNotifications(!notifications); updateUserSettings(); }}>
+                    <TouchableOpacity onPress={() => { setNotifications(!notifications)}}>
                         <View style={styles.toggle}>
                             {notifications && <Image source={Checkmark} style={styles.toggleInner} />}
                         </View>
@@ -164,7 +190,7 @@ const UserSettings = ({navigation}) => {
 
                 <View style={styles.checkBoxInputContainer}>
                     <Text style={styles.settingLabel}>Auto Delete Expired</Text>
-                    <TouchableOpacity onPress={() => { setAutoDeleteExpired(!autoDeleteExpired); updateUserSettings(); }}>
+                    <TouchableOpacity onPress={() => { setAutoDeleteExpired(!autoDeleteExpired)}}>
                         <View style={styles.toggle}>
                             {autoDeleteExpired && <Image source={Checkmark} style={styles.toggleInner} />}
                         </View>
@@ -179,7 +205,7 @@ const UserSettings = ({navigation}) => {
                             style={pickerSelectStyles}
                             placeholder={{}}
                             value={colorBlind}
-                            onValueChange={(value, index) => { setColorBlind(value); updateUserSettings(); }}
+                            onValueChange={(value, index) => { setColorBlind(value)}}
                             items={[
                                 { label: 'Default', value: '0' },
                                 { label: 'Deuteranopia', value: '1' },
@@ -197,7 +223,7 @@ const UserSettings = ({navigation}) => {
                             style={pickerSelectStyles}
                             placeholder={{}}
                             value={fontSize}
-                            onValueChange={(value, index) => { setFontSize(value); updateUserSettings(); }}
+                            onValueChange={(value, index) => { setFontSize(value)}}
                             items={[
                                 { label: 'Small', value: '0' },
                                 { label: 'Medium', value: '1' },
@@ -214,7 +240,7 @@ const UserSettings = ({navigation}) => {
                             style={pickerSelectStyles}
                             placeholder={{}}
                             value={language}
-                            onValueChange={(value) => { setLanguage(value); updateUserSettings(); }}
+                            onValueChange={(value) => { setLanguage(value)}}
                             items={[
                                 { label: 'English', value: '0' },
                                 { label: 'Spanish', value: '1' },
@@ -314,6 +340,22 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    },
+    saveIcon: {
+        width: '70%',
+        height: '70%',
+        tintColor: 'white',
+    },
+    button: {
+        backgroundColor: 'black',
+        borderRadius: 100,
+        padding: 10,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+
     },
 
 });
