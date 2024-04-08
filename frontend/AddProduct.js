@@ -56,6 +56,7 @@ export default function App({navigation}) {
       setUrl('');
       setDate(new Date());
       setShowPicker(false);
+      toggleAnimationHide();
 
       
       // Return a cleanup function to run when the screen loses focus (i.e., when you navigate away from it)
