@@ -8,8 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from 'react-native-inset-shadow/src/styles';
 import { CONSTANTS } from './global.js';
 import frame from './assets/scanner_frame.png';
+import {useFocusEffect} from '@react-navigation/native';
 
-export default function App() {
+export default function App({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [animation] = useState(new Animated.Value(0)); // Initialize animated value
@@ -19,6 +20,7 @@ export default function App() {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false); // State to manage date picker visibility
   const [userObject, setUserObject] = useState('');
+  const [barcodeActive, setBarcodeActive] = useState(false);
 
   
   const apiUrl = 'https://world.openfoodfacts.org/api/v2/product/';
@@ -36,8 +38,41 @@ export default function App() {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
 
+      setBarcodeActive(true);
+
     })();
   },[]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+
+      setBarcodeActive(true);
+      console.log('Screen was focused, barcode scanner is now active.');
+
+      //reset the scanned state
+      setScanned(false);
+      setProduct('');
+      setBrands('');
+      setUrl('');
+      setDate(new Date());
+      setShowPicker(false);
+
+      
+      // Return a cleanup function to run when the screen loses focus (i.e., when you navigate away from it)
+      return () => {
+        setBarcodeActive(false);
+        setScanned(false);
+        setProduct('');
+        setBrands('');
+        setUrl('');
+        setDate(new Date());
+        setShowPicker(false);
+        console.log('Screen was unfocused, barcode scanner is now inactive.');
+      };
+    }, [])
+  );
+
+
 
   const toggleAnimationHide = () => {
     Animated.timing(animation, {
@@ -172,13 +207,13 @@ export default function App() {
   return (
     <>
       
-      <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={ScanStyles.absoluteFillObject}>
+      {barcodeActive && <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={ScanStyles.absoluteFillObject}>
         <View style = {ScanStyles.imageDiv}>
           <Image source={frame}  style = {ScanStyles.imageFrame}></Image>
         </View>
         
 
-      </BarCodeScanner>
+      </BarCodeScanner>}
 
         { showPicker &&
         <View style={ScanStyles.holePage}>
