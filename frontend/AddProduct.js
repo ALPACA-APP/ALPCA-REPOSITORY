@@ -43,37 +43,10 @@ export default function App({navigation}) {
     })();
   },[]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-
-      setBarcodeActive(true);
-      console.log('Screen was focused, barcode scanner is now active.');
-
-      //reset the scanned state
-      setScanned(false);
-      setProduct('');
-      setBrands('');
-      setUrl('');
-      setDate(new Date());
-      setShowPicker(false);
-      toggleAnimationHide();
-
-      
-      // Return a cleanup function to run when the screen loses focus (i.e., when you navigate away from it)
-      return () => {
-        setBarcodeActive(false);
-        setScanned(false);
-        setProduct('');
-        setBrands('');
-        setUrl('');
-        setDate(new Date());
-        setShowPicker(false);
-        console.log('Screen was unfocused, barcode scanner is now inactive.');
-      };
-    }, [])
-  );
-
-
+  const heightInterpolate = animation.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ['0%', '60%', '70%'],
+  });
 
   const toggleAnimationHide = () => {
     Animated.timing(animation, {
@@ -96,10 +69,47 @@ export default function App({navigation}) {
       useNativeDriver: false, // This is required for layout animations
     }).start();
   };
-  const heightInterpolate = animation.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: ['0%', '60%', '70%'],
-  });
+
+  useFocusEffect(
+    React.useCallback(() => {
+
+      setBarcodeActive(true);
+      console.log('Screen was focused, barcode scanner is now active.');
+
+      //reset the scanned state
+      setScanned(false);
+      setProduct('');
+      setBrands('');
+      setUrl('');
+      setDate(new Date());
+      setShowPicker(false);
+
+      //set animation to 0
+      toggleAnimationHide();
+
+      
+      // Return a cleanup function to run when the screen loses focus (i.e., when you navigate away from it)
+      return () => {
+        setBarcodeActive(false);
+        setScanned(false);
+        setProduct('');
+        setBrands('');
+        setUrl('');
+        setDate(new Date());
+        setShowPicker(false);
+
+        //set animation to 0
+        toggleAnimationHide();
+
+        console.log('Screen was unfocused, barcode scanner is now inactive.');
+      };
+    }, [])
+  );
+
+
+
+
+
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
 
