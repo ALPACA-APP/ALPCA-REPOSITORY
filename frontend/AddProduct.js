@@ -141,6 +141,7 @@ export default function App({navigation}) {
       })
       .catch((error) => {
         console.error(error);
+        setScanned(false);
       });
   };
 
