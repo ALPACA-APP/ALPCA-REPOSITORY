@@ -14,18 +14,24 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-const resquestDevData = async () => {
+const resquestDevData = async (username) => {
     const { data, error } = await supabase
-        .from('dev')
+        .from('users')
         .select('*')
+        .eq('username', username)
     return data;
+    
 }
 
-app.get('/', (req, res) => {
-    //request to the database
-    resquestDevData().then((data) => {
+app.get("/api/getLogin/:username", async (req, res) => {
+
+    const username = req.params.username;
+    try {
+        const data = await resquestDevData(username);
         res.json(data);
-    }).catch((error) => { console.log(error) });
+    } catch (error) {
+        res.status(404).send("Error: User not found");
+    }
 });
 
 const reqUser = async (uuid) => {

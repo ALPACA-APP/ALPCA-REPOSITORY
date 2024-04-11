@@ -71,18 +71,36 @@ const Login = ({ navigation }) => {
       setLoading(true);
 
       //fetch the data from the api
-      const response = await fetch(apiUrl);
+      const response = await fetch(apiUrl + 'getLogin/' + username);
       const data = await response.json();
+
 
       //use the response data to check if the username and password are correct
       const resUsername = data[0].username;
-      const resPassword = data[0].password;
+      const resPassword = data[0].password_hash;
 
       const hashedPassword = sha256(password);
 
       //if they are correct, navigate to the main view
       if (username === resUsername && hashedPassword === resPassword) {
-        // store the UUID in the async storage to keep the user logged in.
+
+        //create the user object
+        const userObject = {
+          uuid: data[0].uuid,
+          username: data[0].username,
+          pasword_hash: data[0].password_hash,
+          notifications: data[0].notifications,
+          autoDelete: data[0].autoDelete,
+          colourBlind: data[0].colourBlind,
+          fontSize: data[0].fontSize,
+          language: data[0].language
+        }
+
+        //convert the user object to a string
+        const userString = JSON.stringify(userObject);
+        
+        //store the user data in async storage
+        AsyncStorage.setItem('user', userString);
         
         navigation.reset({
           index: 0,
@@ -103,18 +121,6 @@ const Login = ({ navigation }) => {
     setLoading(false);
   };
 
-//WE SHOULD TAKE THIS OFF AND PLACE IT INTO THE CHECKLOGIN
-  const userObject = {
-    uuid: '72165bb3-14e1-4b5e-9dbf-4316d26a9941',
-    username: 'a',
-    pasword_hash: 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb',
-    notifications: true,
-    autoDelete: true,
-    colourBlind: 0,
-    fontSize: 0,
-    language: 0
-  }
-  const userString = JSON.stringify(userObject);
 
   return (
     <SafeAreaView style={LoginStyles.container}>
@@ -160,14 +166,20 @@ const Login = ({ navigation }) => {
 
 
             <TouchableHighlight style={LoginStyles.button} onPress={() => {
-              //AsyncStorage.setItem('key', 'value')
+              
+              checkLogin();
 
+
+
+
+              /*/AsyncStorage.setItem('key', 'value')
+              
               AsyncStorage.setItem('user', userString);
 
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'MainNavigation' }],
-              })
+              }) */
             }}>
               <Text style={LoginStyles.buttonText}>Submit</Text>
             </TouchableHighlight>
