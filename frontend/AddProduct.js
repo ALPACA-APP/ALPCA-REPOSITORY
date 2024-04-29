@@ -43,6 +43,18 @@ export default function App({navigation}) {
     })();
   },[]);
 
+  const getUser = async () =>{
+    const userStoredString = await AsyncStorage.getItem('user');
+    const userStored = JSON.parse(userStoredString);
+    setUserObject(userStored);
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUser();
+    }, [])
+);
+
   const heightInterpolate = animation.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: ['0%', '60%', '70%'],
