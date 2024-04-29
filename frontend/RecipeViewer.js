@@ -27,12 +27,16 @@ export default RecipeViewer = ({ route, navigation }) => {
     }
 
     const getRecipe = async () => {
+        setIsLoading(true);
         try {
             const response = await fetch(apiUrl + 'GetRecipe/' + userObject.uuid + '/' + recipeId);
             const data = await response.json();
             setRecipe(data[0]);
         } catch (error) {
             console.error("[recipe viewer] Error: " + error);
+        }
+        finally {
+            setIsLoading(false);
         }
     }
 
@@ -158,7 +162,7 @@ export default RecipeViewer = ({ route, navigation }) => {
     return (
         <View style={{ height: '100%', backgroundColor: 'white' }}>
             <Header isLogout="false" onGoBack={() => { goBack(); }} userObject={userObject} />
-            <ScrollView style={RecipeViewerStyles.scrollContainer}>
+
                 <Animated.View style={[RecipeViewerStyles.titleContainer, AnimTextInputViewStyle]}>
                     <TextInput
                         multiline={true}
@@ -167,24 +171,23 @@ export default RecipeViewer = ({ route, navigation }) => {
                         onChangeText={(text) => { setRecipe({ ...recipe, title: text }); }}
                     >{recipe.title}</TextInput>
                 </Animated.View>
-                <Animated.View style={[AnimTextInputViewStyle]}>
+                {!isLoading && <Animated.View style={[AnimTextInputViewStyle]}>
                     <TextInput
                         multiline={true}
                         editable={isEditing}
                         style={[RecipeViewerStyles.contentText, accSizeContent]}
                         onChangeText={(text) => { setRecipe({ ...recipe, content: text }); }}
                     >{recipe.content}</TextInput>
-                </Animated.View>
+                </Animated.View>}
                 <View style={{ marginBottom: '55%' }} />
-            </ScrollView>
+
 
             <TouchableHighlight style={RecipeViewerStyles.floatingAcction} onPress={() => { setIsEditing(!isEditing) }}>
                 <Animated.Image source={renderIcon} style={[RecipeViewerStyles.floatingAcctionIcon, animatedSizedStyle]} />
             </TouchableHighlight>
 
-            {isLoading && <View style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.8)', justifyContent: 'center', alignItems: 'center' }}>
+            {isLoading && <View style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',  justifyContent: 'center', alignItems: 'center' }}>
                 <Image source={loader} style={{ width: 40, height: 40 }} />
-                <Text style={{ marginTop: 10, color: 'white', fontSize: 25 }}>saving</Text>
             </View>}
         </View>
     );

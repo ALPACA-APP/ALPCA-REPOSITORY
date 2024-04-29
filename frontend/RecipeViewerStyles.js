@@ -9,10 +9,12 @@ const RecipeViewerStyles = StyleSheet.create({
 
     titleContainer: {
         marginBottom: 20,
+        marginLeft: 10,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
+
     },
 
     titleText: {
@@ -25,8 +27,9 @@ const RecipeViewerStyles = StyleSheet.create({
     contentText: {
         color: 'black',
         width: '100%',
-        paddingHorizontal: 10,
+        paddingHorizontal: 30, 
         borderStyle: 'dashed',
+        paddingBottom: '100%',
     },
     floatingAcction: {
         position: 'absolute',
