@@ -40,3 +40,5 @@ cd frontend
 npx expo start
 ```
 When running this you will be shown a QR code that you can scan with the expo go app. You can try the app running on your local machine, shown on web browser and might be buggy, or from your phone, after scanning the QR code (ios scan from camera; android scan from the app)
+
+***Dont forget that if you are running on localhost your phone and pc must be in the same network*** 
